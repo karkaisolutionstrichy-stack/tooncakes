@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment | ToonCakes Trichy</title>
+  <meta name="description" content="Secure payment for your ToonCakes order. Pay online via Razorpay, UPI, or Cash on Delivery." />
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- ===== RAZORPAY SDK ===== -->
+  <!-- IMPORTANT: Replace YOUR_RAZORPAY_KEY_ID below with your actual Razorpay Key ID -->
+  <!-- Get it from: https://dashboard.razorpay.com/app/keys -->
+
+  <style>
+    /* ===== PAYMENT PAGE STYLES ===== */
+    .pay-wrapper {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0F0A1E 0%, #1E0A3C 50%, #3D0A5C 100%);
+      display: flex;
+      flex-direction: column;
+    }
+    .pay-header {
+      background: rgba(0,0,0,0.3);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .pay-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: white;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pay-secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+    }
+    .pay-secure-badge i { color: #22C55E; }
+
+    .pay-body {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 32px 16px 48px;
+    }
+    .pay-card {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 560px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* Order Summary top bar */
+    .pay-order-bar {
+      background: linear-gradient(135deg, var(--plum), var(--pink-dark));
+      color: white;
+      padding: 20px 24px;
+    }
+    .pay-order-bar .pay-order-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+      margin-bottom: 6px;
+    }
+    .pay-order-items {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .pay-amount-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pay-amount-label { font-size: 13px; opacity: 0.8; }
+    .pay-amount-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #FFD700;
+    }
+    .pay-advance-note {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    /* Method selector */
+    .pay-methods {
+      padding: 24px;
+    }
+    .pay-methods h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--plum);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .method-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 8px;
+      border-radius: 14px;
+      border: 2px solid var(--cream-dark);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .method-btn .method-icon {
+      font-size: 28px;
+    }
+    .method-btn .method-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .method-btn:hover { border-color: var(--pink); background: #FFF0F5; }
+    .method-btn.selected {
+      border-color: var(--pink);
+      background: #FFF0F5;
+      box-shadow: 0 0 0 4px rgba(232,53,109,0.12);
+    }
+    .method-btn.selected .method-label { color: var(--pink-dark); }
+
+    /* Payment panels */
+    .pay-panel { display: none; }
+    .pay-panel.active { display: block; }
+
+    /* Razorpay panel */
+    .razorpay-panel {
+      padding: 0 24px 24px;
+    }
+    .rpay-info {
+      background: linear-gradient(135deg, #F0FFF4, #E6FFF2);
+      border: 1.5px solid #86EFAC;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .rpay-info .info-icon { font-size: 22px; flex-shrink: 0; }
+    .rpay-info p { font-size: 13px; color: #166534; line-height: 1.5; margin: 0; }
+    .rpay-logos {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: var(--cream);
+      border-radius: 10px;
+    }
+    .rpay-logos span { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .rpay-method-pill {
+      background: white;
+      border: 1px solid var(--cream-dark);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* UPI panel */
+    .upi-panel {
+      padding: 0 24px 24px;
+    }
+    .upi-qr-box {
+      background: white;
+      border: 2px dashed var(--cream-dark);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .upi-qr-placeholder {
+      width: 180px;
+      height: 180px;
+      background: linear-gradient(135deg, #F5F5F5, #E8E8E8);
+      border-radius: 12px;
+      margin: 0 auto 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 2px solid #E0E0E0;
+      position: relative;
+      overflow: hidden;
+    }
+    /* QR code pattern simulation */
+    .upi-qr-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      background-image:
+        repeating-linear-gradient(0deg, #CCC 0px, #CCC 3px, transparent 3px, transparent 8px),
+        repeating-linear-gradient(90deg, #CCC 0px, #CCC 3px, transparent 3px, transparent 8px);
+      opacity: 0.4;
+      border-radius: 4px;
+    }
+    .upi-qr-placeholder .qr-center {
+      background: white;
+      border-radius: 8px;
+      padding: 6px 10px;
+      z-index: 1;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--plum);
+    }
+    .upi-id-box {
+      background: linear-gradient(135deg, #F5F0FF, #FFF0F5);
+      border: 1.5px solid rgba(106,21,69,0.2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .upi-id-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--plum);
+      font-family: 'Courier New', monospace;
+    }
+    .copy-upi-btn {
+      background: var(--plum);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .copy-upi-btn:hover { background: var(--pink-dark); }
+    .upi-apps-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .upi-app-chip {
+      background: white;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 50px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .upi-confirm-form { }
+    .upi-note {
+      background: #FFF9EC;
+      border: 1.5px solid #FCD34D;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: #92400E;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    /* COD panel */
+    .cod-panel {
+      padding: 0 24px 24px;
+    }
+    .cod-info-box {
+      background: linear-gradient(135deg, #FFF9EC, #FFFBF0);
+      border: 2px solid #FCD34D;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .cod-info-box .cod-icon { font-size: 48px; margin-bottom: 12px; }
+    .cod-info-box h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--plum);
+      margin-bottom: 8px;
+    }
+    .cod-info-box p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+    .cod-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .cod-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: white;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .cod-step .step-num {
+      width: 24px; height: 24px;
+      background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .cod-step p { font-size: 13px; color: var(--text); margin: 0; line-height: 1.4; }
+
+    /* Success screen */
+    #paySuccess {
+      display: none;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .success-circle {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #22C55E, #16A34A);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 8px 24px rgba(34,197,94,0.4);
+      animation: bounceIn 0.5s ease;
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0); }
+      60% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    #paySuccess h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--plum);
+      margin-bottom: 10px;
+    }
+    #paySuccess p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+    .success-ref-box {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .success-ref-box .ref-label { font-size: 12px; color: var(--text-muted); }
+    .success-ref-box .ref-value { font-size: 14px; font-weight: 700; color: var(--plum); font-family: monospace; }
+
+    /* Loading overlay */
+    #payLoading {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,10,30,0.8);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+      color: white;
+      font-size: 16px;
+      backdrop-filter: blur(6px);
+    }
+    #payLoading .spinner {
+      width: 48px; height: 48px;
+      border: 4px solid rgba(255,255,255,0.2);
+      border-top-color: var(--pink);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 500px) {
+      .method-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+      .method-btn { padding: 12px 6px; }
+      .method-btn .method-icon { font-size: 22px; }
+      .pay-amount-value { font-size: 26px; }
+      .pay-card { border-radius: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div id="payLoading">
+  <div class="spinner"></div>
+  <span>Processing payment…</span>
+</div>
+
+<div class="pay-wrapper">
+  <!-- Header -->
+  <div class="pay-header">
+    <a href="index.html" class="pay-logo">🎂 ToonCakes</a>
+    <div class="pay-secure-badge">
+      <i class="fas fa-lock"></i>
+      <span>Secure Checkout</span>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="pay-body">
+    <div class="pay-card">
+
+      <!-- ORDER SUMMARY BAR -->
+      <div class="pay-order-bar">
+        <div class="pay-order-title">📦 Your Order</div>
+        <div class="pay-order-items" id="payOrderItems">Loading order details…</div>
+
+        <!-- Itemised price breakdown (shown for delivery orders) -->
+        <div id="payBreakdown" style="display:none; font-size:13px; opacity:0.92; margin:10px 0 12px; border-top:1px solid rgba(255,255,255,0.2); padding-top:10px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+            <span>🎂 Cake Price</span>
+            <span id="payCakeAmt">—</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+            <span>🚚 Delivery Charge</span>
+            <span id="payDeliveryAmt">—</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; border-top:1px solid rgba(255,255,255,0.25); padding-top:7px;">
+            <span>Total</span>
+            <span id="payTotalLine">—</span>
+          </div>
+        </div>
+
+        <!-- ── COUPON CODE ── -->
+        <div id="couponSection" style="margin:10px 0 14px;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="text" id="couponInput"
+                   placeholder="Have a coupon code?"
+                   style="flex:1;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);
+                          border-radius:10px;padding:10px 14px;color:white;font-size:13px;
+                          font-family:'Poppins',sans-serif;outline:none;"
+                   oninput="this.value=this.value.toUpperCase()"
+                   onkeydown="if(event.key==='Enter')applyCoupon()" />
+            <button onclick="applyCoupon()"
+                    style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.4);
+                           color:white;border-radius:10px;padding:10px 16px;font-size:13px;
+                           font-weight:700;cursor:pointer;white-space:nowrap;
+                           font-family:'Poppins',sans-serif;transition:all 0.2s;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.3)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+              Apply
+            </button>
+          </div>
+          <div id="couponMsg" style="display:none;margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;"></div>
+        </div>
+
+        <div class="pay-amount-row">
+          <div>
+            <div class="pay-amount-label" id="payAmountLabel">Amount to Pay</div>
+            <div class="pay-advance-note" id="payAdvanceNote"></div>
+          </div>
+          <div class="pay-amount-value" id="payAmountDisplay">₹0</div>
+        </div>
+      </div>
+
+      <!-- SUCCESS SCREEN (hidden initially) -->
+      <div id="paySuccess">
+        <div class="success-circle">✓</div>
+        <h2>Payment Successful! 🎉</h2>
+        <p>Your order has been confirmed. We'll WhatsApp you with details shortly.</p>
+        <div class="success-ref-box">
+          <div>
+            <div class="ref-label">Order Reference</div>
+            <div class="ref-value" id="successRef">TC-000000</div>
+          </div>
+          <div>
+            <div class="ref-label">Amount Paid</div>
+            <div class="ref-value" id="successAmt">₹0</div>
+          </div>
+        </div>
+        <button onclick="notifyOwnerWhatsApp()" class="btn btn-whatsapp" style="width: 100%; justify-content: center; margin-bottom: 12px;">
+          <i class="fab fa-whatsapp"></i> &nbsp;Confirm Order on WhatsApp
+        </button>
+        <a href="index.html" class="btn btn-secondary" style="width: 100%; justify-content: center; text-decoration: none; display: flex;">
+          <i class="fas fa-home"></i> &nbsp;Back to Home
+        </a>
+        <!-- WhatsApp offers subscription CTA -->
+        <div id="waOptInPromo" style="display:none;margin-top:14px;background:#F0FFF4;
+             border:1.5px solid #86EFAC;border-radius:14px;padding:16px;text-align:center;">
+          <div style="font-size:14px;font-weight:700;color:#166534;margin-bottom:4px;">🎂 Love fresh cake deals?</div>
+          <div style="font-size:12px;color:#555;margin-bottom:12px;">Join our WhatsApp list for exclusive offers &amp; new flavours!</div>
+          <button onclick="subscribeWhatsApp()" class="btn btn-whatsapp"
+                  style="width:100%;justify-content:center;">
+            <i class="fab fa-whatsapp"></i> &nbsp;Get Offers on WhatsApp
+          </button>
+        </div>
+      </div>
+
+      <!-- PAYMENT METHODS -->
+      <div id="paymentMethods">
+        <div class="pay-methods">
+          <h3>Choose Payment Method</h3>
+          <div class="method-grid">
+            <button class="method-btn" onclick="selectMethod('razorpay')" id="btn-razorpay">
+              <span class="method-icon">💳</span>
+              <span class="method-label">Cards / Net Banking / Wallets</span>
+            </button>
+            <button class="method-btn" onclick="selectMethod('upi')" id="btn-upi">
+              <span class="method-icon">📱</span>
+              <span class="method-label">UPI / GPay / PhonePe</span>
+            </button>
+            <button class="method-btn" onclick="selectMethod('cod')" id="btn-cod">
+              <span class="method-icon">💵</span>
+              <span class="method-label">Cash on Delivery</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== RAZORPAY PANEL ===== -->
+        <div class="pay-panel razorpay-panel" id="panel-razorpay">
+          <div class="rpay-info">
+            <span class="info-icon">🔐</span>
+            <p>Pay securely with Razorpay — India's most trusted payment gateway. Supports all major cards, net banking, wallets, and UPI.</p>
+          </div>
+          <div class="rpay-logos">
+            <span>Accepted:</span>
+            <span class="rpay-method-pill">💳 Visa</span>
+            <span class="rpay-method-pill">💳 Mastercard</span>
+            <span class="rpay-method-pill">🏦 Net Banking</span>
+            <span class="rpay-method-pill">📱 UPI</span>
+            <span class="rpay-method-pill">👛 Paytm</span>
+            <span class="rpay-method-pill">📲 GPay</span>
+          </div>
+          <button onclick="initiateRazorpay()" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 16px;">
+            <i class="fas fa-lock"></i> &nbsp;Pay Securely — <span id="rpayBtnAmt">₹0</span>
+          </button>
+          <p style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 10px;">
+            🔒 256-bit SSL encrypted · Your card details are never stored
+          </p>
+        </div>
+
+        <!-- ===== UPI PANEL ===== -->
+        <div class="pay-panel upi-panel" id="panel-upi">
+          <div class="upi-qr-box">
+            <p style="font-size: 13px; font-weight: 600; color: var(--plum); margin-bottom: 12px;">Scan QR Code to Pay</p>
+            <!-- ===== REPLACE: Add your real UPI QR code image below ===== -->
+            <!-- <img src="your-upi-qr.png" alt="UPI QR Code" style="width:180px;height:180px;border-radius:12px;" /> -->
+            <div class="upi-qr-placeholder">
+              <div class="qr-center">🎂 ToonCakes</div>
+            </div>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 0;">
+              Scan with any UPI app<br/>
+              <strong style="color:var(--plum);">Amount: <span id="upiAmtDisplay">₹0</span></strong>
+            </p>
+          </div>
+
+          <p style="font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; text-align: center;">Or pay directly to UPI ID:</p>
+          <div class="upi-id-box">
+            <!-- ===== REPLACE: Add your real UPI ID below ===== -->
+            <span class="upi-id-text" id="upiIdDisplay">tooncakes@upi</span>
+            <button class="copy-upi-btn" onclick="copyUpiId()">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+          </div>
+          <p style="font-size: 11px; color: var(--text-muted); text-align: center; margin-bottom: 16px;">Copy this UPI ID and open your preferred app to pay</p>
+
+          <div class="upi-apps-row" style="justify-content: center;">
+            <span class="upi-app-chip">📱 Google Pay</span>
+            <span class="upi-app-chip">📲 PhonePe</span>
+            <span class="upi-app-chip">💰 Paytm</span>
+            <span class="upi-app-chip">🏦 BHIM</span>
+          </div>
+
+          <div class="upi-note">
+            ⚠️ After paying, please enter your UPI Transaction ID below and click "Confirm Payment" so we can verify your payment.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="upiTxnId">UPI Transaction ID / UTR Number <span>*</span></label>
+            <input type="text" class="form-control" id="upiTxnId" placeholder="e.g. 408111234567 or T2406181234567890" style="font-family: monospace;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="upiPayerName">Name on UPI Account <span>*</span></label>
+            <input type="text" class="form-control" id="upiPayerName" placeholder="Name as shown in your payment app" />
+          </div>
+          <div style="margin-top: 16px;">
+            <button onclick="confirmUpiPayment()" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 16px;">
+              <i class="fas fa-check-circle"></i> &nbsp;Confirm UPI Payment
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== COD PANEL ===== -->
+        <div class="pay-panel cod-panel" id="panel-cod">
+          <div class="cod-info-box">
+            <div class="cod-icon">💵</div>
+            <h4>Cash on Delivery</h4>
+            <p>Pay cash when your order is delivered or when you pick it up from our store. No online payment needed!</p>
+          </div>
+
+          <div class="cod-steps">
+            <div class="cod-step">
+              <div class="step-num">1</div>
+              <p>Place your order via WhatsApp — our team will confirm availability and final price.</p>
+            </div>
+            <div class="cod-step">
+              <div class="step-num">2</div>
+              <p>We bake your order fresh! You'll receive updates on WhatsApp.</p>
+            </div>
+            <div class="cod-step">
+              <div class="step-num">3</div>
+              <p>Pay cash at the time of delivery / pickup. Exact change appreciated 😊</p>
+            </div>
+          </div>
+
+          <div style="background: #FFF9EC; border: 1.5px solid #FCD34D; border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #92400E; margin-bottom: 20px; line-height: 1.5;">
+            ⚠️ <strong>Note:</strong> For bulk orders above ₹2,000 or custom cakes, a 50% advance payment may be required to confirm booking. Our team will let you know via WhatsApp.
+          </div>
+
+          <button onclick="confirmCOD()" class="btn btn-whatsapp" style="width: 100%; justify-content: center; font-size: 16px;">
+            <i class="fab fa-whatsapp"></i> &nbsp;Confirm Order via WhatsApp
+          </button>
+          <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 10px;">
+            We'll send you a confirmation message right away!
+          </p>
+        </div>
+
+      </div><!-- /paymentMethods -->
+    </div><!-- /pay-card -->
+  </div><!-- /pay-body -->
+</div><!-- /pay-wrapper -->
+
+<!-- ===== RAZORPAY SCRIPT (load only when needed) ===== -->
+<script>
+  // ============================================================
+  // CONFIGURATION — REPLACE THESE WITH YOUR ACTUAL VALUES
+  // ============================================================
+  const RAZORPAY_KEY = 'YOUR_RAZORPAY_KEY_ID'; // Get from razorpay.com dashboard
+  const UPI_ID = 'tooncakes@upi';               // Replace with your real UPI ID
+  const OWNER_WHATSAPP = '918610636589';         // Replace with your WhatsApp number
+  const BUSINESS_NAME = 'ToonCakes Trichy';
+  // ============================================================
+
+  // Parse order from URL hash
+  let ORDER = {};
+  try {
+    const hash = location.hash;
+    if (hash && hash.includes('#order=')) {
+      const encoded = hash.split('#order=')[1];
+      ORDER = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+    }
+  } catch (e) {
+    console.warn('Could not parse order data', e);
+  }
+
+  // Update UI with order details
+  window.addEventListener('DOMContentLoaded', () => {
+    const amount    = ORDER.amount || ORDER.total || 0;
+    const items     = ORDER.items || ORDER.cake || 'ToonCakes Order';
+    const shipFee   = ORDER.deliveryCharge || 0;
+    const cakeAmt   = ORDER.cakeAmount !== undefined ? ORDER.cakeAmount : (amount - shipFee);
+    const delivType = ORDER.deliveryType || '';
+
+    document.getElementById('payOrderItems').textContent = items;
+    document.getElementById('payAmountDisplay').textContent = '₹' + amount.toLocaleString('en-IN');
+    document.getElementById('rpayBtnAmt').textContent = '₹' + amount.toLocaleString('en-IN');
+    document.getElementById('upiAmtDisplay').textContent = '₹' + amount.toLocaleString('en-IN');
+    document.getElementById('upiIdDisplay').textContent = UPI_ID;
+
+    // Show itemised breakdown for cake delivery orders
+    if (ORDER.cakeAmount !== undefined && delivType === 'Home Delivery') {
+      const bd = document.getElementById('payBreakdown');
+      bd.style.display = 'block';
+      document.getElementById('payCakeAmt').textContent    = '₹' + cakeAmt.toLocaleString('en-IN');
+      document.getElementById('payDeliveryAmt').textContent = shipFee === 0 ? 'Free 🎉' : '₹' + shipFee;
+      document.getElementById('payTotalLine').textContent  = '₹' + amount.toLocaleString('en-IN');
+      if (ORDER.deliveryDistance) {
+        document.getElementById('payAdvanceNote').textContent =
+          '📏 ' + ORDER.deliveryDistance + ' km from ToonCakes';
+      }
+    }
+
+    if (ORDER.type === 'bulk') {
+      document.getElementById('payAmountLabel').textContent = '50% Advance Payment';
+      document.getElementById('payAdvanceNote').textContent = 'Balance paid on delivery';
+    } else {
+      document.getElementById('payAmountLabel').textContent = 'Total Amount';
+    }
+  });
+
+  // Select payment method
+  function selectMethod(method) {
+    document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('btn-' + method).classList.add('selected');
+    document.getElementById('panel-' + method).classList.add('active');
+  }
+
+  // ===== RAZORPAY =====
+  function loadRazorpayScript(cb) {
+    if (window.Razorpay) { cb(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.onload = cb;
+    s.onerror = () => alert('Could not load Razorpay. Please check your internet connection.');
+    document.head.appendChild(s);
+  }
+
+  function initiateRazorpay() {
+    const amount = (ORDER.amount || ORDER.total || 0);
+    if (amount <= 0) { alert('Invalid order amount. Please go back and try again.'); return; }
+
+    if (RAZORPAY_KEY === 'YOUR_RAZORPAY_KEY_ID') {
+      alert('⚠️ Razorpay is not configured yet.\n\nOwner: Please add your Razorpay Key ID in payment.html (search for YOUR_RAZORPAY_KEY_ID).\n\nFor now, please use UPI or WhatsApp to place your order.');
+      return;
+    }
+
+    showLoading(true);
+    loadRazorpayScript(() => {
+      showLoading(false);
+      const options = {
+        key: RAZORPAY_KEY,
+        amount: amount * 100, // Razorpay takes paise
+        currency: 'INR',
+        name: BUSINESS_NAME,
+        description: ORDER.note || ORDER.items || 'Cake Order',
+        image: '', // Add your logo URL here
+        prefill: {
+          name: ORDER.name || '',
+          contact: ORDER.phone || '',
+          email: ''
+        },
+        theme: { color: '#E8356D' },
+        handler: function(response) {
+          onPaymentSuccess('razorpay', response.razorpay_payment_id);
+        },
+        modal: {
+          ondismiss: function() { showLoading(false); }
+        }
+      };
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function(resp) {
+        showLoading(false);
+        alert('❌ Payment failed: ' + (resp.error.description || 'Please try again or use another method.'));
+      });
+      rzp.open();
+    });
+  }
+
+  // ===== UPI =====
+  function copyUpiId() {
+    navigator.clipboard.writeText(UPI_ID).then(() => {
+      const btn = document.querySelector('.copy-upi-btn');
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      btn.style.background = '#22C55E';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+        btn.style.background = '';
+      }, 2000);
+    }).catch(() => {
+      // Fallback
+      const el = document.createElement('textarea');
+      el.value = UPI_ID;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      alert('UPI ID copied: ' + UPI_ID);
+    });
+  }
+
+  function confirmUpiPayment() {
+    const txnId = document.getElementById('upiTxnId').value.trim();
+    const payerName = document.getElementById('upiPayerName').value.trim();
+    if (!txnId) { alert('Please enter your UPI Transaction ID / UTR number.'); return; }
+    if (!payerName) { alert('Please enter the name on your UPI account.'); return; }
+    onPaymentSuccess('upi', txnId, payerName);
+  }
+
+  // ===== WhatsApp helpers =====
+  function _getUserWaOptIn() {
+    try {
+      const sess = JSON.parse(localStorage.getItem('tc_user_session') || 'null');
+      if (!sess || Date.now() > sess.exp) return false;
+      const users = JSON.parse(localStorage.getItem('tc_users') || '[]');
+      const u = users.find(x => x.email === sess.email);
+      return u ? !!u.waOptIn : false;
+    } catch(e) { return false; }
+  }
+  function subscribeWhatsApp() {
+    const name = ORDER.name || 'Customer';
+    const msg  = `🎂 Hi ToonCakes! I'm ${name} and I'd love to receive exclusive cake offers and updates on WhatsApp. Please add me to your list! 🙏`;
+    window.open('https://wa.me/' + OWNER_WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  // ===== COD =====
+  function confirmCOD() {
+    const amount   = ORDER.amount || ORDER.total || 0;
+    const items    = ORDER.items || ORDER.cake || 'ToonCakes Order';
+    const name     = ORDER.name || 'Customer';
+    const phone    = ORDER.phone || '';
+    const occasion = ORDER.occasion || '';
+    const date     = ORDER.date || '';
+
+    const delivLine = ORDER.deliveryType === 'Home Delivery'
+      ? `\n🚚 *Delivery Charge:* ${ORDER.deliveryCharge === 0 ? 'Free' : '₹' + ORDER.deliveryCharge} (${ORDER.deliveryDistance} km)`
+        + `\n📍 *Address:* ${ORDER.address || 'N/A'}`
+      : ORDER.deliveryType === 'Pickup'
+        ? '\n🏪 *Pickup:* Self Pickup (no delivery charge)'
+        : '';
+
+    const waLine = _getUserWaOptIn() ? '\n📢 *WA Updates:* Customer opted in ✅' : '';
+    const msg = `🎂 *NEW ORDER — ToonCakes*\n\n👤 *Customer:* ${name}\n📞 *Phone:* ${phone}\n\n📦 *Order:* ${items}${occasion ? '\n🎉 *Occasion:* ' + occasion : ''}${date ? '\n📅 *Date:* ' + date : ''}${delivLine}${waLine}\n\n💵 *Payment:* Cash on Delivery\n💰 *Total Amount:* ₹${amount.toLocaleString('en-IN')}\n\nPlease confirm this order. Thank you! 🙏`;
+
+    window.open('https://wa.me/' + OWNER_WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
+
+    // Show success
+    onPaymentSuccess('cod', 'COD-' + Date.now().toString().slice(-6));
+  }
+
+  // ===== ON SUCCESS =====
+  function onPaymentSuccess(method, refId, payerName) {
+    const amount = ORDER.amount || ORDER.total || 0;
+    const ref = 'TC' + Date.now().toString().slice(-6);
+
+    // Store for WhatsApp notification
+    ORDER._payMethod = method;
+    ORDER._refId = refId || ref;
+    ORDER._payerName = payerName || ORDER.name || '';
+
+    document.getElementById('successRef').textContent = ref;
+    document.getElementById('successAmt').textContent = '₹' + amount.toLocaleString('en-IN');
+
+    // Tag order with logged-in user if available
+    let _sess = null;
+    try { const s = JSON.parse(localStorage.getItem('tc_user_session') || 'null'); if (s && Date.now() < s.exp) _sess = s; } catch(e){}
+
+    // Save order to localStorage for admin tracking
+    const orders = JSON.parse(localStorage.getItem('tc_orders') || '[]');
+    orders.push({
+      id: ref,
+      type: ORDER.type || 'order',
+      items: ORDER.items || ORDER.cake || ORDER.note || 'ToonCakes Order',
+      amount: amount,
+      payMethod: method,
+      payRef: refId || ref,
+      name: ORDER.name || '',
+      phone: ORDER.phone || '',
+      occasion: ORDER.occasion || '',
+      date: ORDER.date || '',
+      orderDate: new Date().toISOString(),
+      status: 'Order Placed',
+      statusHistory: [{ status: 'Order Placed', time: new Date().toISOString() }],
+      userEmail: _sess ? _sess.email : null,
+      userId:    _sess ? _sess.userId : null,
+    });
+    localStorage.setItem('tc_orders', JSON.stringify(orders));
+
+    // If this is a class or recipe order AND user is logged in → save enrollment
+    if (_sess && (ORDER.type === 'class' || ORDER.type === 'recipe')) {
+      const enrList = JSON.parse(localStorage.getItem('tc_enrollments') || '[]');
+      const alreadyIn = enrList.some(e =>
+        e.userEmail === _sess.email &&
+        e.type === ORDER.type &&
+        e.itemId === (ORDER.courseId || ref)
+      );
+      if (!alreadyIn) {
+        enrList.push({
+          id:         'ENR' + Date.now().toString().slice(-8),
+          userEmail:  _sess.email,
+          userId:     _sess.userId,
+          type:       ORDER.type,
+          itemId:     ORDER.courseId || ref,
+          itemName:   ORDER.items || ORDER.note || (ORDER.type === 'class' ? 'Baking Class' : 'Recipe PDF'),
+          isFree:     false,
+          price:      amount,
+          enrolledAt: new Date().toISOString(),
+          status:     'active',
+          progress:   0,
+          paymentRef: ref,
+        });
+        localStorage.setItem('tc_enrollments', JSON.stringify(enrList));
+      }
+    }
+
+    document.getElementById('paymentMethods').style.display = 'none';
+    document.getElementById('paySuccess').style.display = 'block';
+
+    // Auto-notify owner via WhatsApp for online payments
+    if (method === 'razorpay' || method === 'upi') {
+      setTimeout(() => notifyOwnerWhatsApp(), 800);
+    }
+    // Show WhatsApp offers subscription CTA
+    setTimeout(() => {
+      const promoEl = document.getElementById('waOptInPromo');
+      if (promoEl) promoEl.style.display = 'block';
+    }, 1200);
+  }
+
+  function notifyOwnerWhatsApp() {
+    const amount      = ORDER.amount || ORDER.total || 0;
+    const items       = ORDER.items || ORDER.cake || 'ToonCakes Order';
+    const ref         = ORDER._refId || document.getElementById('successRef').textContent;
+    const method      = ORDER._payMethod || 'Online';
+    const methodLabel = method === 'razorpay' ? '💳 Razorpay' : method === 'upi' ? '📱 UPI' : '💵 Cash on Delivery';
+
+    const delivLine = ORDER.deliveryType === 'Home Delivery'
+      ? `\n🚚 *Delivery:* ${ORDER.deliveryCharge === 0 ? 'Free' : '₹' + ORDER.deliveryCharge} (${ORDER.deliveryDistance} km)`
+        + `\n📍 *Address:* ${ORDER.address || 'N/A'}`
+      : ORDER.deliveryType === 'Pickup'
+        ? '\n🏪 *Pickup:* Self Pickup'
+        : '';
+
+    const couponLine = ORDER._couponCode ? `\n🎟️ *Coupon:* ${ORDER._couponCode} (−₹${ORDER._couponDiscount})` : '';
+    const waLine2    = _getUserWaOptIn() ? '\n📢 *WA Updates:* Customer opted in ✅' : '';
+    const msg = `🎉 *PAYMENT RECEIVED — ToonCakes*\n\n✅ *Payment Confirmed*\n\n👤 *Customer:* ${ORDER.name || 'N/A'}\n📞 *Phone:* ${ORDER.phone || 'N/A'}\n\n📦 *Order:* ${items}${ORDER.occasion ? '\n🎉 *Occasion:* ' + ORDER.occasion : ''}${ORDER.date ? '\n📅 *Event Date:* ' + ORDER.date : ''}${delivLine}${couponLine}${waLine2}\n\n💰 *Amount Paid:* ₹${amount.toLocaleString('en-IN')}\n${methodLabel}\n🔖 *Ref ID:* ${ref}\n\n${method === 'upi' ? '🔍 *UTR:* ' + ORDER._refId + '\n💁 *Payer:* ' + (ORDER._payerName || 'N/A') + '\n\n' : ''}Please prepare and confirm the order. 🙏`;
+
+    window.open('https://wa.me/' + OWNER_WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  // ===== COUPON =====
+  let _couponApplied = null;
+
+  function applyCoupon() {
+    const code = document.getElementById('couponInput').value.trim().toUpperCase();
+    const msg  = document.getElementById('couponMsg');
+    if (!code) { showCouponMsg('Please enter a coupon code.', false); return; }
+
+    const coupons = JSON.parse(localStorage.getItem('tc_coupons') || '[]');
+    const c = coupons.find(x => x.code.toUpperCase() === code && x.active);
+    if (!c) { showCouponMsg('❌ Invalid or expired coupon code.', false); return; }
+
+    // Expiry check
+    if (c.validUntil && new Date(c.validUntil) < new Date()) {
+      showCouponMsg('❌ This coupon has expired.', false); return;
+    }
+    // Max uses
+    if (c.maxUses > 0 && (c.usedCount || 0) >= c.maxUses) {
+      showCouponMsg('❌ This coupon has reached its usage limit.', false); return;
+    }
+    // Min order
+    const baseAmt = ORDER._baseAmount || ORDER.amount || ORDER.total || 0;
+    if (c.minOrder > 0 && baseAmt < c.minOrder) {
+      showCouponMsg(`❌ Min. order ₹${c.minOrder} required for this coupon (your order: ₹${baseAmt}).`, false); return;
+    }
+
+    // Calculate discount
+    let discount = 0;
+    if (c.type === 'percent') {
+      discount = Math.round(baseAmt * c.value / 100);
+    } else {
+      discount = c.value;
+    }
+    discount = Math.min(discount, baseAmt); // can't discount more than total
+
+    const newAmt = baseAmt - discount;
+    ORDER._baseAmount = ORDER._baseAmount || baseAmt; // preserve original
+    ORDER.amount = newAmt;
+    ORDER.total  = newAmt;
+    ORDER._couponCode    = code;
+    ORDER._couponDiscount = discount;
+    _couponApplied = c;
+
+    // Update all price displays
+    const fmtAmt = newAmt.toLocaleString('en-IN');
+    document.getElementById('payAmountDisplay').textContent = '₹' + fmtAmt;
+    document.getElementById('rpayBtnAmt').textContent       = '₹' + fmtAmt;
+    document.getElementById('upiAmtDisplay').textContent    = '₹' + fmtAmt;
+
+    const discountStr = c.type === 'percent' ? `${c.value}% off (−₹${discount})` : `−₹${discount}`;
+    showCouponMsg(`✅ Coupon applied! ${discountStr}. New total: ₹${fmtAmt}`, true);
+    document.getElementById('couponInput').disabled = true;
+  }
+
+  function showCouponMsg(text, success) {
+    const el = document.getElementById('couponMsg');
+    el.textContent  = text;
+    el.style.display = 'block';
+    el.style.background = success ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)';
+    el.style.color      = success ? '#86EFAC' : '#FCA5A5';
+  }
+
+  // ===== LOADING =====
+  function showLoading(show) {
+    document.getElementById('payLoading').style.display = show ? 'flex' : 'none';
+  }
+</script>
+
+<script src="site-nav.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>

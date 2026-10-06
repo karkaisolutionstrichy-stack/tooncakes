@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bulk Orders | ToonCakes Trichy | Eggless Cakes & Desserts for Events</title>
+  <meta name="description" content="Order eggless cakes and desserts in bulk for weddings, corporate events, birthdays, and celebrations in Trichy. Special bulk discounts up to 15%." />
+  <meta name="keywords" content="bulk cake order Trichy, bulk dessert order, corporate cake order Trichy, wedding cake bulk, party dessert order Tiruchirappalli, bulk eggless cake" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ===== BULK ORDER PAGE STYLES ===== */
+    .bulk-hero {
+      background: linear-gradient(135deg, #0F0A1E 0%, #1E0A3C 40%, #4A1560 70%, #6A1545 100%);
+      color: white;
+      padding: 80px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .bulk-hero::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(232,53,109,0.18) 0%, transparent 70%);
+      top: -150px; right: -100px;
+      border-radius: 50%;
+    }
+    .bulk-hero::after {
+      content: '';
+      position: absolute;
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+      bottom: -80px; left: -60px;
+      border-radius: 50%;
+    }
+    .bulk-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      margin-bottom: 14px;
+      position: relative; z-index: 1;
+    }
+    .bulk-hero p {
+      font-size: 16px;
+      opacity: 0.85;
+      max-width: 560px;
+      margin: 0 auto 28px;
+      position: relative; z-index: 1;
+    }
+    .bulk-hero-badges {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      position: relative; z-index: 1;
+    }
+    .bulk-hero-badge {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Discount tiers strip */
+    .discount-strip {
+      background: linear-gradient(90deg, var(--plum), var(--pink-dark), var(--plum));
+      padding: 20px 24px;
+    }
+    .discount-tiers {
+      display: flex;
+      gap: 0;
+      max-width: 780px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+    .discount-tier {
+      flex: 1;
+      text-align: center;
+      padding: 18px 10px;
+      background: rgba(255,255,255,0.08);
+      border-right: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      transition: background 0.2s;
+    }
+    .discount-tier:last-child { border-right: none; }
+    .discount-tier.highlight {
+      background: rgba(232,53,109,0.35);
+    }
+    .discount-tier .tier-qty {
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0.85;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .discount-tier .tier-pct {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .discount-tier .tier-label {
+      font-size: 11px;
+      opacity: 0.75;
+    }
+
+    /* Occasions grid */
+    .occasions-select-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .occasion-option {
+      display: none;
+    }
+    .occasion-option + label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 2px solid var(--cream-dark);
+      border-radius: 14px;
+      padding: 16px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+    }
+    .occasion-option + label .occ-emoji {
+      font-size: 28px;
+    }
+    .occasion-option:checked + label {
+      border-color: var(--pink);
+      background: #FFF0F5;
+      color: var(--pink);
+      box-shadow: 0 0 0 4px rgba(232,53,109,0.12);
+    }
+
+    /* Item builder */
+    .item-builder {
+      background: white;
+      border-radius: 16px;
+      border: 2px solid var(--cream-dark);
+      overflow: hidden;
+    }
+    .item-builder-header {
+      background: linear-gradient(135deg, var(--plum), var(--pink-dark));
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+    }
+    .item-row {
+      display: grid;
+      grid-template-columns: 1fr 140px 80px 80px;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--cream-dark);
+      align-items: center;
+    }
+    .item-row:last-child { border-bottom: none; }
+    .item-row-head {
+      display: grid;
+      grid-template-columns: 1fr 140px 80px 80px;
+      gap: 10px;
+      padding: 10px 16px;
+      background: #F9F0FF;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--plum);
+    }
+    .item-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .item-emoji-badge {
+      font-size: 22px;
+    }
+    .item-name-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .item-unit { font-size: 11px; color: var(--text-muted); }
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qty-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid var(--cream-dark);
+      background: white;
+      color: var(--plum);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+    .qty-btn:hover { background: var(--pink); border-color: var(--pink); color: white; }
+    .qty-input {
+      width: 42px;
+      text-align: center;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 8px;
+      padding: 5px 4px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+    }
+    .qty-input:focus { border-color: var(--pink); outline: none; }
+    .item-unit-price { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+    .item-subtotal { font-size: 14px; font-weight: 700; color: var(--pink); }
+
+    /* Summary box */
+    .bulk-summary {
+      background: linear-gradient(135deg, #FFF0F5, #FFF9F5);
+      border: 2px solid rgba(232,53,109,0.25);
+      border-radius: 16px;
+      padding: 24px;
+      position: sticky;
+      top: 90px;
+    }
+    .bulk-summary h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--plum);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px dashed rgba(106,21,69,0.2);
+    }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(232,53,109,0.1);
+    }
+    .summary-line:last-of-type { border-bottom: none; }
+    .summary-line .label { color: var(--text-muted); }
+    .summary-line .value { font-weight: 600; color: var(--text); }
+    .summary-discount-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(34,197,94,0.1);
+      border-radius: 8px;
+      margin: 8px 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: #16A34A;
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0 0;
+      border-top: 2px solid rgba(232,53,109,0.2);
+      margin-top: 4px;
+    }
+    .summary-total .total-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--plum);
+    }
+    .summary-total .total-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--pink);
+    }
+    .discount-badge-pill {
+      display: inline-block;
+      background: linear-gradient(135deg, #22C55E, #16A34A);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      margin-left: 8px;
+    }
+
+    /* Bulk layout */
+    .bulk-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .bulk-layout { grid-template-columns: 1fr; }
+      .bulk-summary { position: static; }
+    }
+
+    /* Features band */
+    .bulk-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bulk-feature-card {
+      background: white;
+      border-radius: 14px;
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+      border: 1.5px solid var(--cream-dark);
+    }
+    .bulk-feature-card .feat-icon {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+    .bulk-feature-card strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--plum);
+      margin-bottom: 4px;
+    }
+    .bulk-feature-card span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Form card */
+    .form-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+      border: 1.5px solid var(--cream-dark);
+    }
+    .form-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--plum);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-card h3 .step-num {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+      color: white;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Item categories tabs */
+    .item-cat-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .item-cat-tab {
+      padding: 7px 16px;
+      border-radius: 50px;
+      border: 1.5px solid var(--cream-dark);
+      background: white;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .item-cat-tab.active, .item-cat-tab:hover {
+      background: var(--plum);
+      border-color: var(--plum);
+      color: white;
+    }
+    .item-section { display: none; }
+    .item-section.visible { display: block; }
+
+    @media (max-width: 600px) {
+      .item-row, .item-row-head {
+        grid-template-columns: 1fr 110px 70px 70px;
+        gap: 6px;
+        font-size: 12px;
+      }
+      .item-name-text { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== NAVIGATION ====== -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <span class="logo-icon"><img src="Toon%20Cakes%20Logo.png" alt="ToonCakes Logo" /></span>
+    <span class="logo-text">
+      <span class="logo-name">ToonCakes</span>
+      <span class="logo-tag">100% Eggless · Trichy</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="cakes.html">Our Cakes</a></li>
+    <li><a href="desserts.html">Desserts</a></li>
+    <li><a href="bulk-order.html" class="active">Bulk Orders</a></li>
+    <li><a href="classes.html">Classes</a></li>
+    <li><a href="recipes.html">Recipes</a></li>
+    <li><a href="https://wa.me/918610636589" class="nav-cta" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html"><i class="fas fa-home"></i> Home</a>
+  <a href="cakes.html"><i class="fas fa-birthday-cake"></i> Our Cakes</a>
+  <a href="desserts.html"><i class="fas fa-cookie-bite"></i> Desserts</a>
+  <a href="bulk-order.html"><i class="fas fa-boxes"></i> Bulk Orders</a>
+  <a href="classes.html"><i class="fas fa-chalkboard-teacher"></i> Classes</a>
+  <a href="recipes.html"><i class="fas fa-book-open"></i> Recipes</a>
+  <a href="review.html"><i class="fas fa-star"></i> Leave a Review</a>
+  <a href="https://wa.me/918610636589" style="color: #25D366;" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+</div>
+
+<!-- ====== HERO ====== -->
+<section class="bulk-hero">
+  <div style="font-size: 52px; margin-bottom: 16px; position: relative; z-index: 1;">🎉</div>
+  <h1>Bulk Orders for Every Celebration</h1>
+  <p>Weddings, corporate events, birthdays, baby showers — order 100% eggless cakes &amp; desserts in bulk with special discounts.</p>
+  <div class="bulk-hero-badges">
+    <span class="bulk-hero-badge">🥚 100% Eggless</span>
+    <span class="bulk-hero-badge">💰 Up to 15% Off</span>
+    <span class="bulk-hero-badge">🚚 Delivery in Trichy</span>
+    <span class="bulk-hero-badge">📞 Dedicated Support</span>
+  </div>
+</section>
+
+<!-- ====== DISCOUNT TIERS ====== -->
+<div class="discount-strip">
+  <div class="discount-tiers">
+    <div class="discount-tier">
+      <div class="tier-qty">10–19 pcs / kg</div>
+      <div class="tier-pct">3%</div>
+      <div class="tier-label">Discount</div>
+    </div>
+    <div class="discount-tier">
+      <div class="tier-qty">20–49 pcs / kg</div>
+      <div class="tier-pct">5%</div>
+      <div class="tier-label">Discount</div>
+    </div>
+    <div class="discount-tier highlight">
+      <div class="tier-qty">50–99 pcs / kg</div>
+      <div class="tier-pct">10%</div>
+      <div class="tier-label">Best Value</div>
+    </div>
+    <div class="discount-tier" style="background: rgba(245,166,35,0.25);">
+      <div class="tier-qty">100+ pcs / kg</div>
+      <div class="tier-pct" style="color: #FFD700;">15%</div>
+      <div class="tier-label">Maximum Savings</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== MAIN SECTION ====== -->
+<section class="section" style="background: var(--cream);">
+  <div class="container">
+
+    <!-- Features band -->
+    <div class="bulk-features">
+      <div class="bulk-feature-card">
+        <div class="feat-icon">🎂</div>
+        <strong>All Occasions</strong>
+        <span>Weddings, birthdays, corporate, baby showers</span>
+      </div>
+      <div class="bulk-feature-card">
+        <div class="feat-icon">🥚</div>
+        <strong>100% Eggless</strong>
+        <span>Safe for all guests — jain, vegetarian, everyone</span>
+      </div>
+      <div class="bulk-feature-card">
+        <div class="feat-icon">⏰</div>
+        <strong>Advance Booking</strong>
+        <span>Book 3+ days ahead for guaranteed availability</span>
+      </div>
+      <div class="bulk-feature-card">
+        <div class="feat-icon">📦</div>
+        <strong>Custom Packaging</strong>
+        <span>Branded boxes with your event name on request</span>
+      </div>
+      <div class="bulk-feature-card">
+        <div class="feat-icon">🚚</div>
+        <strong>Trichy Delivery</strong>
+        <span>Free delivery for orders above ₹2,000</span>
+      </div>
+    </div>
+
+    <div class="bulk-layout">
+      <!-- LEFT: Form -->
+      <div>
+
+        <!-- Step 1: Occasion -->
+        <div class="form-card">
+          <h3><span class="step-num">1</span> Select Your Occasion</h3>
+          <div class="occasions-select-grid">
+            <input type="radio" name="bulkOccasion" id="occ1" value="Wedding" class="occasion-option" onchange="updateSummary()" />
+            <label for="occ1"><span class="occ-emoji">💍</span>Wedding</label>
+
+            <input type="radio" name="bulkOccasion" id="occ2" value="Birthday Party" class="occasion-option" onchange="updateSummary()" />
+            <label for="occ2"><span class="occ-emoji">🎂</span>Birthday Party</label>
+
+            <input type="radio" name="bulkOccasion" id="occ3" value="Corporate Event" class="occasion-option" onchange="updateSummary()" />
+            <label for="occ3"><span class="occ-emoji">🏢</span>Corporate Event</label>
+
+            <input type="radio" name="bulkOccasion" id="occ4" value="Baby Shower" class="occasion-option" onchange="updateSummary()" />
+            <label for="occ4"><span class="occ-emoji">🍼</span>Baby Shower</label>
+
+            <input type="radio" name="bulkOccasion" id="occ5" value="Anniversary Celebration" class="occasion-option" onchange="updateSummary()" />
+            <label for="occ5"><span class="occ-emoji">❤️</span>Anniversary</label>
+
+            <input type="radio" name="bulkOccasion" id="occ6" value="Festive Order" class="occasion-option" onchange="updateSummary()" />
+            <label for="occ6"><span class="occ-emoji">🎉</span>Festival</label>
+
+            <input type="radio" name="bulkOccasion" id="occ7" value="School / College Event" class="occasion-option" onchange="updateSummary()" />
+            <label for="occ7"><span class="occ-emoji">🎓</span>School / College</label>
+
+            <input type="radio" name="bulkOccasion" id="occ8" value="Other Event" class="occasion-option" onchange="updateSummary()" checked />
+            <label for="occ8"><span class="occ-emoji">✨</span>Other</label>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="eventDate">Event Date <span>*</span></label>
+            <input type="date" class="form-control" id="eventDate" onchange="updateSummary()" />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="guestCount">Approximate Number of Guests</label>
+            <input type="number" class="form-control" id="guestCount" placeholder="e.g. 100" min="1" onchange="updateSummary()" />
+          </div>
+        </div>
+
+        <!-- Step 2: Item Selector -->
+        <div class="form-card">
+          <h3><span class="step-num">2</span> Choose Items &amp; Quantities</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Select quantities below. Leave at 0 to skip an item. Discount applies automatically based on total quantity.</p>
+
+          <!-- Category tabs -->
+          <div class="item-cat-tabs">
+            <button class="item-cat-tab active" onclick="switchItemCat('cakes', this)">🎂 Cakes</button>
+            <button class="item-cat-tab" onclick="switchItemCat('brownies', this)">🍫 Brownies</button>
+            <button class="item-cat-tab" onclick="switchItemCat('cookies', this)">🍪 Cookies</button>
+            <button class="item-cat-tab" onclick="switchItemCat('donuts', this)">🍩 Donuts</button>
+            <button class="item-cat-tab" onclick="switchItemCat('jars', this)">🫙 Jar Desserts</button>
+            <button class="item-cat-tab" onclick="switchItemCat('others', this)">🍰 Others</button>
+          </div>
+
+          <!-- CAKES -->
+          <div class="item-section visible" id="cat-cakes">
+            <div class="item-builder">
+              <div class="item-row-head">
+                <div>Item</div><div>Quantity (kg)</div><div>Rate/kg</div><div>Subtotal</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🎂</span><div><div class="item-name-text">Vanilla Sponge Cake</div><span class="item-unit">per kg</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('c1',-1)">−</button><input class="qty-input" id="c1" type="number" value="0" min="0" step="0.5" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('c1',1)">+</button></div>
+                <div class="item-unit-price" id="c1p">₹600</div>
+                <div class="item-subtotal" id="c1s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍫</span><div><div class="item-name-text">Chocolate Truffle Cake</div><span class="item-unit">per kg</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('c2',-1)">−</button><input class="qty-input" id="c2" type="number" value="0" min="0" step="0.5" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('c2',1)">+</button></div>
+                <div class="item-unit-price" id="c2p">₹650</div>
+                <div class="item-subtotal" id="c2s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍓</span><div><div class="item-name-text">Strawberry Cake</div><span class="item-unit">per kg</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('c3',-1)">−</button><input class="qty-input" id="c3" type="number" value="0" min="0" step="0.5" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('c3',1)">+</button></div>
+                <div class="item-unit-price" id="c3p">₹620</div>
+                <div class="item-subtotal" id="c3s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🌸</span><div><div class="item-name-text">Butterscotch Cake</div><span class="item-unit">per kg</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('c4',-1)">−</button><input class="qty-input" id="c4" type="number" value="0" min="0" step="0.5" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('c4',1)">+</button></div>
+                <div class="item-unit-price" id="c4p">₹600</div>
+                <div class="item-subtotal" id="c4s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🥭</span><div><div class="item-name-text">Mango Cake</div><span class="item-unit">per kg</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('c5',-1)">−</button><input class="qty-input" id="c5" type="number" value="0" min="0" step="0.5" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('c5',1)">+</button></div>
+                <div class="item-unit-price" id="c5p">₹630</div>
+                <div class="item-subtotal" id="c5s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🔴</span><div><div class="item-name-text">Red Velvet Cake</div><span class="item-unit">per kg</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('c6',-1)">−</button><input class="qty-input" id="c6" type="number" value="0" min="0" step="0.5" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('c6',1)">+</button></div>
+                <div class="item-unit-price" id="c6p">₹680</div>
+                <div class="item-subtotal" id="c6s">₹0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BROWNIES -->
+          <div class="item-section" id="cat-brownies">
+            <div class="item-builder">
+              <div class="item-row-head">
+                <div>Item</div><div>Quantity (pieces)</div><div>Rate/pc</div><div>Subtotal</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍫</span><div><div class="item-name-text">Classic Fudge Brownie</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('b1',-1)">−</button><input class="qty-input" id="b1" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('b1',1)">+</button></div>
+                <div class="item-unit-price" id="b1p">₹80</div>
+                <div class="item-subtotal" id="b1s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🌰</span><div><div class="item-name-text">Walnut Brownie</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('b2',-1)">−</button><input class="qty-input" id="b2" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('b2',1)">+</button></div>
+                <div class="item-unit-price" id="b2p">₹90</div>
+                <div class="item-subtotal" id="b2s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🫙</span><div><div class="item-name-text">Nutella Swirl Brownie</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('b3',-1)">−</button><input class="qty-input" id="b3" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('b3',1)">+</button></div>
+                <div class="item-unit-price" id="b3p">₹100</div>
+                <div class="item-subtotal" id="b3s">₹0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COOKIES -->
+          <div class="item-section" id="cat-cookies">
+            <div class="item-builder">
+              <div class="item-row-head">
+                <div>Item</div><div>Quantity (pieces)</div><div>Rate/pc</div><div>Subtotal</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍪</span><div><div class="item-name-text">Choco Chip Cookie</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('k1',-1)">−</button><input class="qty-input" id="k1" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('k1',1)">+</button></div>
+                <div class="item-unit-price" id="k1p">₹60</div>
+                <div class="item-subtotal" id="k1s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍫</span><div><div class="item-name-text">Double Choco Cookie</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('k2',-1)">−</button><input class="qty-input" id="k2" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('k2',1)">+</button></div>
+                <div class="item-unit-price" id="k2p">₹70</div>
+                <div class="item-subtotal" id="k2s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🌿</span><div><div class="item-name-text">Snickerdoodle Cookie</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('k3',-1)">−</button><input class="qty-input" id="k3" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('k3',1)">+</button></div>
+                <div class="item-unit-price" id="k3p">₹65</div>
+                <div class="item-subtotal" id="k3s">₹0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DONUTS -->
+          <div class="item-section" id="cat-donuts">
+            <div class="item-builder">
+              <div class="item-row-head">
+                <div>Item</div><div>Quantity (pieces)</div><div>Rate/pc</div><div>Subtotal</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍩</span><div><div class="item-name-text">Classic Glazed Donut</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('d1',-1)">−</button><input class="qty-input" id="d1" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('d1',1)">+</button></div>
+                <div class="item-unit-price" id="d1p">₹70</div>
+                <div class="item-subtotal" id="d1s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍫</span><div><div class="item-name-text">Chocolate Frosted Donut</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('d2',-1)">−</button><input class="qty-input" id="d2" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('d2',1)">+</button></div>
+                <div class="item-unit-price" id="d2p">₹80</div>
+                <div class="item-subtotal" id="d2s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🌈</span><div><div class="item-name-text">Rainbow Sprinkle Donut</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('d3',-1)">−</button><input class="qty-input" id="d3" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('d3',1)">+</button></div>
+                <div class="item-unit-price" id="d3p">₹85</div>
+                <div class="item-subtotal" id="d3s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🫙</span><div><div class="item-name-text">Nutella Stuffed Donut</div><span class="item-unit">per piece</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('d4',-1)">−</button><input class="qty-input" id="d4" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('d4',1)">+</button></div>
+                <div class="item-unit-price" id="d4p">₹100</div>
+                <div class="item-subtotal" id="d4s">₹0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- JAR DESSERTS -->
+          <div class="item-section" id="cat-jars">
+            <div class="item-builder">
+              <div class="item-row-head">
+                <div>Item</div><div>Quantity (jars)</div><div>Rate/jar</div><div>Subtotal</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍫</span><div><div class="item-name-text">Brownie Jar</div><span class="item-unit">per jar</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('j1',-1)">−</button><input class="qty-input" id="j1" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('j1',1)">+</button></div>
+                <div class="item-unit-price" id="j1p">₹150</div>
+                <div class="item-subtotal" id="j1s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🧁</span><div><div class="item-name-text">Cheesecake Jar</div><span class="item-unit">per jar</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('j2',-1)">−</button><input class="qty-input" id="j2" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('j2',1)">+</button></div>
+                <div class="item-unit-price" id="j2p">₹170</div>
+                <div class="item-subtotal" id="j2s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">☕</span><div><div class="item-name-text">Tiramisu Jar</div><span class="item-unit">per jar</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('j3',-1)">−</button><input class="qty-input" id="j3" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('j3',1)">+</button></div>
+                <div class="item-unit-price" id="j3p">₹160</div>
+                <div class="item-subtotal" id="j3s">₹0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OTHERS -->
+          <div class="item-section" id="cat-others">
+            <div class="item-builder">
+              <div class="item-row-head">
+                <div>Item</div><div>Quantity</div><div>Rate</div><div>Subtotal</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍰</span><div><div class="item-name-text">Tiramisu (serving)</div><span class="item-unit">per serving</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('o1',-1)">−</button><input class="qty-input" id="o1" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('o1',1)">+</button></div>
+                <div class="item-unit-price" id="o1p">₹180</div>
+                <div class="item-subtotal" id="o1s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🍮</span><div><div class="item-name-text">Tres Leches (kg)</div><span class="item-unit">per kg</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('o2',-1)">−</button><input class="qty-input" id="o2" type="number" value="0" min="0" step="0.5" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('o2',1)">+</button></div>
+                <div class="item-unit-price" id="o2p">₹750</div>
+                <div class="item-subtotal" id="o2s">₹0</div>
+              </div>
+              <div class="item-row">
+                <div class="item-name-cell"><span class="item-emoji-badge">🧁</span><div><div class="item-name-text">Cheesecake (serving)</div><span class="item-unit">per serving</span></div></div>
+                <div class="qty-control"><button class="qty-btn" onclick="changeQty('o3',-1)">−</button><input class="qty-input" id="o3" type="number" value="0" min="0" onchange="updateSummary()" /><button class="qty-btn" onclick="changeQty('o3',1)">+</button></div>
+                <div class="item-unit-price" id="o3p">₹160</div>
+                <div class="item-subtotal" id="o3s">₹0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Special Instructions -->
+        <div class="form-card">
+          <h3><span class="step-num">3</span> Special Instructions</h3>
+          <div class="form-group">
+            <label class="form-label" for="bulkFlavor">Preferred Flavors / Theme</label>
+            <input type="text" class="form-control" id="bulkFlavor" placeholder="e.g. All chocolate, mix of vanilla and strawberry, floral theme..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="packagingPref">Packaging Preference</label>
+            <select class="form-control" id="packagingPref">
+              <option value="Standard packaging">Standard packaging</option>
+              <option value="Premium gift boxes">Premium gift boxes (+extra cost)</option>
+              <option value="Custom branded boxes">Custom branded boxes (min 50 units, +extra cost)</option>
+              <option value="Eco-friendly packaging">Eco-friendly packaging</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="bulkNotes">Additional Notes</label>
+            <textarea class="form-control" id="bulkNotes" rows="3" placeholder="Any dietary requirements, delivery instructions, customization requests..."></textarea>
+          </div>
+        </div>
+
+        <!-- Step 4: Contact Details -->
+        <div class="form-card">
+          <h3><span class="step-num">4</span> Your Contact Details</h3>
+          <div class="form-group">
+            <label class="form-label" for="bulkName">Full Name <span>*</span></label>
+            <input type="text" class="form-control" id="bulkName" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bulkPhone">WhatsApp / Phone Number <span>*</span></label>
+            <input type="tel" class="form-control" id="bulkPhone" placeholder="10-digit mobile number, e.g. 98765 43210" inputmode="tel" maxlength="16" autocomplete="tel" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bulkEmail">Email Address (optional)</label>
+            <input type="email" class="form-control" id="bulkEmail" placeholder="yourname@email.com" />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="bulkAddress">Delivery Address</label>
+            <textarea class="form-control" id="bulkAddress" rows="2" placeholder="Full delivery address in Trichy..."></textarea>
+          </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="notice-box" style="margin-bottom: 20px;">
+          <span class="notice-icon">💡</span>
+          <div>Submitting will open WhatsApp with your full bulk order summary. Our team will confirm availability, finalize pricing, and guide you on advance payment. For orders above ₹5,000, 50% advance is required at booking.</div>
+        </div>
+
+        <!-- Submit buttons -->
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button onclick="submitBulkOrder()" class="btn btn-whatsapp" style="flex: 1; justify-content: center; font-size: 16px; min-width: 200px;">
+            <i class="fab fa-whatsapp"></i> &nbsp;Send Bulk Order via WhatsApp
+          </button>
+          <button onclick="submitBulkPayment()" class="btn btn-primary" style="flex: 1; justify-content: center; font-size: 16px; min-width: 200px;">
+            <i class="fas fa-credit-card"></i> &nbsp;Pay Advance Online
+          </button>
+        </div>
+        <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 12px;">
+          🔒 Your details are shared securely. We do not store your data on servers.
+        </p>
+
+      </div>
+
+      <!-- RIGHT: Sticky Summary -->
+      <div>
+        <div class="bulk-summary">
+          <h3>🧾 Order Summary</h3>
+
+          <div id="summaryItemsList">
+            <p style="font-size: 13px; color: var(--text-muted); text-align: center; padding: 12px 0;">Add items above to see your summary</p>
+          </div>
+
+          <div class="summary-line" style="margin-top: 8px;">
+            <span class="label">Subtotal</span>
+            <span class="value" id="summarySubtotal">₹0</span>
+          </div>
+          <div class="summary-line" id="discountLine" style="display:none;">
+            <span class="label">Discount</span>
+            <span class="value" id="summaryDiscountAmt" style="color: #16A34A;">−₹0</span>
+          </div>
+          <div class="summary-discount-line" id="discountBadgeRow" style="display:none;">
+            <span>🎉 Bulk Discount Applied!</span>
+            <span id="discountPctLabel"></span>
+          </div>
+
+          <div class="summary-total">
+            <span class="total-label">Total</span>
+            <span class="total-price" id="summaryTotal">₹0</span>
+          </div>
+
+          <div style="margin-top: 16px; padding: 12px; background: rgba(245,166,35,0.12); border-radius: 10px; font-size: 12px; color: var(--text-muted); text-align: center;">
+            ⚡ Final price confirmed after WhatsApp order<br/>
+            📦 Advance payment secures your booking
+          </div>
+
+          <div style="margin-top: 14px;">
+            <div class="summary-line">
+              <span class="label">📅 Event Date</span>
+              <span class="value" id="summaryDate">—</span>
+            </div>
+            <div class="summary-line">
+              <span class="label">🎉 Occasion</span>
+              <span class="value" id="summaryOccasion">—</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; text-align: center;">
+            <a href="https://wa.me/918610636589" target="_blank" style="font-size: 13px; color: var(--green); font-weight: 600; text-decoration: none;"><i class="fab fa-whatsapp"></i> Quick chat with us first</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== PAST BULK ORDERS (Social Proof) ====== -->
+<section class="section" style="background: white;">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Trusted by Many</span>
+      <h2 class="section-title">Events We've Catered</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 32px;">
+      <div style="background: linear-gradient(135deg, #FFF0F5, #FFF9F5); border-radius: 16px; padding: 24px; text-align: center; border: 1.5px solid rgba(232,53,109,0.15);">
+        <div style="font-size: 36px; margin-bottom: 10px;">💍</div>
+        <strong style="display: block; font-size: 16px; font-family: 'Playfair Display', serif; margin-bottom: 6px;">Weddings</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Multi-tier wedding cakes + dessert tables for 100–500 guests</p>
+      </div>
+      <div style="background: linear-gradient(135deg, #F0F9FF, #F5F9FF); border-radius: 16px; padding: 24px; text-align: center; border: 1.5px solid rgba(59,130,246,0.15);">
+        <div style="font-size: 36px; margin-bottom: 10px;">🏢</div>
+        <strong style="display: block; font-size: 16px; font-family: 'Playfair Display', serif; margin-bottom: 6px;">Corporate Events</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Branded cakes, gift boxes, and dessert assortments for offices</p>
+      </div>
+      <div style="background: linear-gradient(135deg, #FFFBEB, #FFFDF5); border-radius: 16px; padding: 24px; text-align: center; border: 1.5px solid rgba(245,166,35,0.2);">
+        <div style="font-size: 36px; margin-bottom: 10px;">🎓</div>
+        <strong style="display: block; font-size: 16px; font-family: 'Playfair Display', serif; margin-bottom: 6px;">School Events</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Cupcakes, cookies, and dessert platters for annual days & farewell</p>
+      </div>
+      <div style="background: linear-gradient(135deg, #F0FFF4, #F5FFF9); border-radius: 16px; padding: 24px; text-align: center; border: 1.5px solid rgba(34,197,94,0.15);">
+        <div style="font-size: 36px; margin-bottom: 10px;">🍼</div>
+        <strong style="display: block; font-size: 16px; font-family: 'Playfair Display', serif; margin-bottom: 6px;">Baby Showers</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Themed dessert stations and personalized mini cakes</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/918610636589?text=Hi%20ToonCakes!%20I'm%20interested%20in%20a%20bulk%20order." class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- ====== FOOTER ====== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><span>🎂</span> ToonCakes</div>
+        <p>Trichy's favourite 100% eggless cake studio. Made with love, zero eggs.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/tooncakestrichy/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/918610636589" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://share.google/VXE60txL4wqdslQ7z" target="_blank" aria-label="Google Business"><i class="fab fa-google"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="cakes.html">Our Cakes</a></li>
+          <li><a href="desserts.html">Desserts</a></li>
+          <li><a href="bulk-order.html">Bulk Orders</a></li>
+          <li><a href="customize.html">Custom Cakes</a></li>
+          <li><a href="classes.html">Baking Classes</a></li>
+          <li><a href="recipes.html">Recipe PDFs</a></li>
+          <li><a href="review.html">⭐ Leave a Review</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Contact</h4>
+        <ul class="footer-links">
+          <li><i class="fab fa-whatsapp"></i> +91 8610636589</li>
+          <li><i class="fas fa-envelope"></i> tooncakes@email.com</li>
+          <li><i class="fas fa-map-marker-alt"></i> Trichy, Tamil Nadu</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 ToonCakes Trichy. All Rights Reserved. | 100% Eggless Cakes &amp; Desserts</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ===== NAV =====
+  function toggleNav() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const nav = document.getElementById('mobileNav');
+    if (nav.classList.contains('open') && !e.target.closest('.navbar')) nav.classList.remove('open');
+  });
+
+  // ===== ITEM CATEGORY SWITCHER =====
+  function switchItemCat(cat, btn) {
+    document.querySelectorAll('.item-section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.item-cat-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('cat-' + cat).classList.add('visible');
+    btn.classList.add('active');
+  }
+
+  // ===== ITEM PRICES =====
+  const PRICES = {
+    c1: 600, c2: 650, c3: 620, c4: 600, c5: 630, c6: 680,
+    b1: 80,  b2: 90,  b3: 100,
+    k1: 60,  k2: 70,  k3: 65,
+    d1: 70,  d2: 80,  d3: 85,  d4: 100,
+    j1: 150, j2: 170, j3: 160,
+    o1: 180, o2: 750, o3: 160
+  };
+  const NAMES = {
+    c1: 'Vanilla Sponge Cake', c2: 'Chocolate Truffle Cake', c3: 'Strawberry Cake',
+    c4: 'Butterscotch Cake', c5: 'Mango Cake', c6: 'Red Velvet Cake',
+    b1: 'Classic Fudge Brownie', b2: 'Walnut Brownie', b3: 'Nutella Swirl Brownie',
+    k1: 'Choco Chip Cookie', k2: 'Double Choco Cookie', k3: 'Snickerdoodle Cookie',
+    d1: 'Classic Glazed Donut', d2: 'Chocolate Frosted Donut', d3: 'Rainbow Sprinkle Donut', d4: 'Nutella Stuffed Donut',
+    j1: 'Brownie Jar', j2: 'Cheesecake Jar', j3: 'Tiramisu Jar',
+    o1: 'Tiramisu (serving)', o2: 'Tres Leches (kg)', o3: 'Cheesecake (serving)'
+  };
+
+  function changeQty(id, delta) {
+    const input = document.getElementById(id);
+    const step = parseFloat(input.step) || 1;
+    let val = parseFloat(input.value) || 0;
+    val = Math.max(0, val + delta * step);
+    val = Math.round(val * 10) / 10;
+    input.value = val;
+    updateSummary();
+  }
+
+  // ===== DISCOUNT LOGIC =====
+  function getDiscountRate(total) {
+    if (total >= 100) return 0.15;
+    if (total >= 50) return 0.10;
+    if (total >= 20) return 0.05;
+    if (total >= 10) return 0.03;
+    return 0;
+  }
+
+  // ===== UPDATE SUMMARY =====
+  function updateSummary() {
+    let subtotal = 0;
+    let totalQty = 0;
+    const lineItems = [];
+
+    Object.keys(PRICES).forEach(id => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      const qty = parseFloat(input.value) || 0;
+      const price = PRICES[id];
+      const sub = qty * price;
+      // Update row subtotal
+      const subEl = document.getElementById(id + 's');
+      if (subEl) subEl.textContent = '₹' + sub.toLocaleString('en-IN');
+      if (qty > 0) {
+        subtotal += sub;
+        totalQty += qty;
+        lineItems.push({ name: NAMES[id], qty, price, sub });
+      }
+    });
+
+    const discRate = getDiscountRate(totalQty);
+    const discAmt = Math.round(subtotal * discRate);
+    const total = subtotal - discAmt;
+
+    // Update summary panel
+    document.getElementById('summarySubtotal').textContent = '₹' + subtotal.toLocaleString('en-IN');
+    document.getElementById('summaryTotal').textContent = '₹' + total.toLocaleString('en-IN');
+
+    if (discAmt > 0) {
+      document.getElementById('discountLine').style.display = 'flex';
+      document.getElementById('discountBadgeRow').style.display = 'flex';
+      document.getElementById('summaryDiscountAmt').textContent = '−₹' + discAmt.toLocaleString('en-IN');
+      document.getElementById('discountPctLabel').textContent = (discRate * 100) + '% OFF';
+    } else {
+      document.getElementById('discountLine').style.display = 'none';
+      document.getElementById('discountBadgeRow').style.display = 'none';
+    }
+
+    // Build items list
+    const listEl = document.getElementById('summaryItemsList');
+    if (lineItems.length === 0) {
+      listEl.innerHTML = '<p style="font-size:13px;color:var(--text-muted);text-align:center;padding:12px 0;">Add items above to see your summary</p>';
+    } else {
+      listEl.innerHTML = lineItems.map(item =>
+        `<div class="summary-line"><span class="label">${item.name} × ${item.qty}</span><span class="value">₹${item.sub.toLocaleString('en-IN')}</span></div>`
+      ).join('');
+    }
+
+    // Date & occasion
+    const dateVal = document.getElementById('eventDate').value;
+    document.getElementById('summaryDate').textContent = dateVal || '—';
+    const occInput = document.querySelector('input[name="bulkOccasion"]:checked');
+    document.getElementById('summaryOccasion').textContent = occInput ? occInput.value : '—';
+  }
+
+  // ===== SUBMIT =====
+  function buildOrderText() {
+    const items = [];
+    Object.keys(PRICES).forEach(id => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      const qty = parseFloat(input.value) || 0;
+      if (qty > 0) items.push(`  • ${NAMES[id]}: ${qty} × ₹${PRICES[id]} = ₹${(qty * PRICES[id]).toLocaleString('en-IN')}`);
+    });
+    if (items.length === 0) { alert('Please add at least one item to your order.'); return null; }
+
+    const occasion = (document.querySelector('input[name="bulkOccasion"]:checked') || {}).value || 'Not specified';
+    const eventDate = document.getElementById('eventDate').value || 'Not specified';
+    const guestCount = document.getElementById('guestCount').value || 'Not specified';
+    const flavor = document.getElementById('bulkFlavor').value || 'No preference';
+    const packaging = document.getElementById('packagingPref').value;
+    const notes = document.getElementById('bulkNotes').value || 'None';
+    const name = document.getElementById('bulkName').value;
+    const phone = document.getElementById('bulkPhone').value;
+    const email = document.getElementById('bulkEmail').value || 'Not provided';
+    const address = document.getElementById('bulkAddress').value || 'To be confirmed';
+
+    if (eventDate !== 'Not specified' && eventDate < bulkMinDate()) {
+      alert('Bulk orders need at least 3 days\' notice.\n\nPlease choose an event date from ' + bulkMinDate().split('-').reverse().join('-') + ' onwards, or call / WhatsApp us for urgent orders.');
+      document.getElementById('eventDate').focus(); return null;
+    }
+    if (!name.trim()) { alert('Please enter your name.'); return null; }
+    if (!phone.trim()) { alert('Please enter your phone number.'); return null; }
+    if (!bulkCleanMobile(phone)) {
+      alert('Please enter a valid 10-digit mobile number (for example 98765 43210).');
+      document.getElementById('bulkPhone').focus(); return null;
+    }
+
+    let subtotal = 0;
+    let totalQty = 0;
+    Object.keys(PRICES).forEach(id => {
+      const qty = parseFloat((document.getElementById(id) || {}).value) || 0;
+      subtotal += qty * PRICES[id];
+      totalQty += qty;
+    });
+    const discRate = getDiscountRate(totalQty);
+    const discAmt = Math.round(subtotal * discRate);
+    const total = subtotal - discAmt;
+
+    return `🎉 *BULK ORDER ENQUIRY — ToonCakes*
+═══════════════════════════
+*👤 Customer Details*
+Name: ${name}
+Phone: ${phone}
+Email: ${email}
+Address: ${address}
+
+*🎊 Event Details*
+Occasion: ${occasion}
+Event Date: ${eventDate}
+Guests: ${guestCount}
+
+*📦 Order Items*
+${items.join('\n')}
+
+*💰 Pricing*
+Subtotal: ₹${subtotal.toLocaleString('en-IN')}
+${discAmt > 0 ? `Bulk Discount (${discRate * 100}%): −₹${discAmt.toLocaleString('en-IN')}\n` : ''}Total: ₹${total.toLocaleString('en-IN')}
+
+*🎁 Special Requests*
+Flavor/Theme: ${flavor}
+Packaging: ${packaging}
+Notes: ${notes}
+═══════════════════════════
+Please confirm availability and payment details. Thank you! 🙏`;
+  }
+
+  // Earliest allowed event date: 3 days from today (bulk orders need advance notice), local India date
+  function bulkMinDate() {
+    const d = new Date();
+    d.setDate(d.getDate() + 3);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  // "98765 43210" / "+91 98765-43210" / "098765 43210" → "9876543210"; anything else → null
+  function bulkCleanMobile(raw) {
+    let digits = String(raw || '').replace(/\D/g, '');
+    if (digits.length === 12 && digits.startsWith('91')) digits = digits.slice(2);
+    if (digits.length === 11 && digits.startsWith('0'))  digits = digits.slice(1);
+    return /^[6-9]\d{9}$/.test(digits) ? digits : null;
+  }
+  document.getElementById('eventDate').min = bulkMinDate();
+
+  function submitBulkOrder() {
+    const text = buildOrderText();
+    if (!text) return;
+    window.open('https://wa.me/918610636589?text=' + encodeURIComponent(text), '_blank');
+  }
+
+  function submitBulkPayment() {
+    const text = buildOrderText();
+    if (!text) return;
+
+    // Calculate total
+    let subtotal = 0;
+    let totalQty = 0;
+    const orderItems = [];
+    Object.keys(PRICES).forEach(id => {
+      const qty = parseFloat((document.getElementById(id) || {}).value) || 0;
+      subtotal += qty * PRICES[id];
+      totalQty += qty;
+      if (qty > 0) orderItems.push(`${NAMES[id]} × ${qty}`);
+    });
+    const discRate = getDiscountRate(totalQty);
+    const total = subtotal - Math.round(subtotal * discRate);
+    const advance = Math.round(total * 0.5); // 50% advance
+
+    const name = document.getElementById('bulkName').value;
+    const phone = document.getElementById('bulkPhone').value;
+    const occasion = (document.querySelector('input[name="bulkOccasion"]:checked') || {}).value || '';
+    const eventDate = document.getElementById('eventDate').value || '';
+
+    const orderData = {
+      type: 'bulk',
+      items: orderItems.join(', '),
+      total: total,
+      amount: advance, // Pay 50% advance
+      name: name,
+      phone: phone,
+      occasion: occasion,
+      date: eventDate,
+      note: `Bulk Order Advance (50%) — ${occasion}`
+    };
+
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(orderData))));
+    window.location.href = 'payment.html#order=' + encoded;
+  }
+
+  // Init
+  updateSummary();
+</script>
+
+<script src="site-nav.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>

@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baking Classes Trichy | ToonCakes | Free & Paid Eggless Baking Courses</title>
+  <meta name="description" content="Join ToonCakes baking classes in Trichy. Learn eggless cake baking from scratch. Free beginner sessions & paid advanced courses. Online & in-person. Enrol now!" />
+  <meta name="keywords" content="baking classes Trichy, eggless baking class Tiruchirappalli, cake baking course Trichy, learn baking Trichy, online baking class Tamil Nadu, baking workshop Trichy, cake decoration class Trichy, free baking class Trichy" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<script src="seed-data.js"></script>
+  <script src="user-auth.js"></script>
+  <script src="reviews.js"></script>
+</head>
+<body>
+
+<!-- ====== NAVIGATION ====== -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <span class="logo-icon"><img src="Toon%20Cakes%20Logo.png" alt="ToonCakes Logo" /></span>
+    <span class="logo-text">
+      <span class="logo-name">ToonCakes</span>
+      <span class="logo-tag">100% Eggless · Trichy</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="cakes.html">Our Cakes</a></li>
+    <li><a href="desserts.html">Desserts</a></li>
+    <li><a href="bulk-order.html">Bulk Orders</a></li>
+    <li><a href="customize.html">Customize</a></li>
+    <li><a href="classes.html" class="active">Classes</a></li>
+    <li><a href="recipes.html">Recipes</a></li>
+    <li>
+      <button id="tcUserNavBtn"
+              style="background:linear-gradient(135deg,#6A1545,#E8356D);color:white;border:none;
+                     border-radius:50px;padding:8px 18px;font-size:13px;font-weight:700;
+                     cursor:pointer;font-family:'Poppins',sans-serif;
+                     display:flex;align-items:center;gap:5px;white-space:nowrap;">
+        🔑 Login
+      </button>
+    </li>
+    <li><a href="https://wa.me/918610636589" class="nav-cta" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Home</a>
+  <a href="cakes.html">🎂 Our Cakes</a>
+  <a href="desserts.html">🍫 Desserts</a>
+  <a href="bulk-order.html">📦 Bulk Orders</a>
+  <a href="customize.html">🎨 Customize</a>
+  <a href="classes.html">👩‍🍳 Classes</a>
+  <a href="recipes.html">📄 Recipes</a>
+  <a href="index.html#contact">📞 Contact</a>
+  <a href="review.html">⭐ Leave a Review</a>
+  <a href="https://wa.me/918610636589" target="_blank">💬 WhatsApp</a>
+</div>
+
+<!-- ====== HERO ====== -->
+<section class="hero" style="min-height: 60vh; padding: 70px 24px;">
+  <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; width: 100%; position: relative; z-index: 2;">
+    <div>
+      <div class="hero-badge">👩‍🍳 Trichy's Favourite Baking Studio</div>
+      <div style="display:inline-flex; align-items:center; gap:8px; margin-bottom:14px; background:rgba(34,197,94,0.15); border:1.5px solid rgba(74,222,128,0.5); border-radius:50px; padding:7px 16px;">
+        <span class="veg-mark"></span>
+        <span style="color:#BBF7D0; font-size:12px; font-weight:700;">All baking is 100% Pure Veg &amp; Eggless</span>
+      </div>
+      <h1 class="hero-title" style="font-size: clamp(30px, 4.5vw, 52px);">
+        Learn to Bake<br /><span class="accent">Like a Pro!</span>
+      </h1>
+      <p class="hero-text">
+        From complete beginners to aspiring professionals — our eggless baking classes in Trichy will teach you everything you need to create stunning cakes at home or start your own baking business!
+      </p>
+      <div class="hero-buttons">
+        <a href="#classes-list" class="btn btn-gold">🎓 View All Classes</a>
+        <a href="#enrol-form" class="btn btn-outline-white">📝 Enrol Now</a>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+      <div style="background: rgba(34,197,94,0.18); border: 1.5px solid rgba(74,222,128,0.5); border-radius: 16px; padding: 24px; backdrop-filter: blur(10px); text-align: center;">
+        <div style="font-size: 32px; margin-bottom: 8px; display:flex; align-items:center; justify-content:center;"><span class="veg-mark" style="width:32px; height:32px; border-width:3px;"></span></div>
+        <strong style="color: #BBF7D0; font-size: 14px;">100% Pure Veg</strong>
+        <p style="color: rgba(255,255,255,0.75); font-size: 12px; margin-top: 4px;">All recipes taught are eggless</p>
+      </div>
+      <div style="background: rgba(255,255,255,0.15); border-radius: 16px; padding: 24px; backdrop-filter: blur(10px); text-align: center;">
+        <div style="font-size: 40px; margin-bottom: 8px;">🎓</div>
+        <strong style="color: white; font-size: 14px;">Certificate</strong>
+        <p style="color: rgba(255,255,255,0.75); font-size: 12px; margin-top: 4px;">Get certified on completion</p>
+      </div>
+      <div style="background: rgba(255,255,255,0.15); border-radius: 16px; padding: 24px; backdrop-filter: blur(10px); text-align: center;">
+        <div style="font-size: 40px; margin-bottom: 8px;">💻</div>
+        <strong style="color: white; font-size: 14px;">Online & Offline</strong>
+        <p style="color: rgba(255,255,255,0.75); font-size: 12px; margin-top: 4px;">Learn from anywhere!</p>
+      </div>
+      <div style="background: rgba(255,255,255,0.15); border-radius: 16px; padding: 24px; backdrop-filter: blur(10px); text-align: center;">
+        <div style="font-size: 40px; margin-bottom: 8px;">✅</div>
+        <strong style="color: white; font-size: 14px;">Free Sessions</strong>
+        <p style="color: rgba(255,255,255,0.75); font-size: 12px; margin-top: 4px;">Beginners start for FREE</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a> <span>/</span> Baking Classes
+  </div>
+</div>
+
+<!-- ====== FREE vs PAID NOTICE ====== -->
+<div style="background: var(--white); padding: 28px 24px; border-bottom: 1px solid var(--cream-dark);">
+  <div class="container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; margin: 0 auto;">
+    <div style="background: #DCFCE7; border-radius: 14px; padding: 20px 24px; border-left: 5px solid #22C55E;">
+      <div style="font-size: 28px; margin-bottom: 8px;">🆓</div>
+      <strong style="color: #166534; font-size: 15px; display: block; margin-bottom: 6px;">FREE Classes</strong>
+      <p style="font-size: 13px; color: #15803D;">Perfect for beginners — no cost, no commitment. Limited seats. Learn the basics of eggless baking!</p>
+    </div>
+    <div style="background: #FEF3C7; border-radius: 14px; padding: 20px 24px; border-left: 5px solid var(--gold);">
+      <div style="font-size: 28px; margin-bottom: 8px;">💰</div>
+      <strong style="color: var(--gold-dark); font-size: 15px; display: block; margin-bottom: 6px;">PAID Classes</strong>
+      <p style="font-size: 13px; color: #B45309;">Advanced techniques, professional decoration, fondant work & business skills. Certification included!</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CLASSES LIST ====== -->
+<section class="section" id="classes-list">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">All Classes</div>
+      <h2 class="section-title">Choose Your <span>Baking Journey</span></h2>
+      <p class="section-subtitle">Whether you're baking for family or planning to start a business — we have the right class for you.</p>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-tabs" style="margin-bottom: 36px;">
+      <button class="filter-tab active" onclick="filterClasses('all', this)">All Classes</button>
+      <button class="filter-tab" onclick="filterClasses('free', this)">🆓 Free Classes</button>
+      <button class="filter-tab" onclick="filterClasses('paid', this)">💰 Paid Classes</button>
+      <button class="filter-tab" onclick="filterClasses('online', this)">💻 Online</button>
+      <button class="filter-tab" onclick="filterClasses('inperson', this)">🏠 In-Person</button>
+    </div>
+
+    <div class="classes-grid" id="classesGrid">
+
+      <!-- FREE CLASS 1 -->
+      <div class="class-card" data-type="free online inperson">
+        <div class="class-card-header">
+          <span class="class-type-badge badge-free">FREE</span>
+          <div class="class-title">Beginner Basics — Eggless Baking</div>
+          <p style="color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 6px;">Perfect for absolute beginners. Learn the fundamentals!</p>
+          <div class="class-emoji">🍰</div>
+        </div>
+        <div class="class-card-body">
+          <ul class="class-features">
+            <li>What is eggless baking &amp; why it works</li>
+            <li>Basic baking tools you need at home</li>
+            <li>Make a simple vanilla sponge cake</li>
+            <li>Basic cream frosting technique</li>
+            <li>Q&amp;A with the instructor</li>
+          </ul>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="background: #DCFCE7; color: #166534; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">💻 Online</span>
+            <span style="background: #EDE9FE; color: #5B21B6; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">🏠 In-Person</span>
+            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">⏱ 2 Hours</span>
+          </div>
+          <div class="class-price free-price">FREE</div>
+          <button onclick="enrolClass('Beginner Basics — Eggless Baking', 'FREE')" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 14px; padding: 12px;">
+            📝 Reserve My Seat (Free)
+          </button>
+        </div>
+      </div>
+
+      <!-- FREE CLASS 2 -->
+      <div class="class-card" data-type="free online">
+        <div class="class-card-header">
+          <span class="class-type-badge badge-free">FREE</span>
+          <div class="class-title">Simple Chocolate Cake — Live Demo</div>
+          <p style="color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 6px;">Watch and learn a live baking demonstration!</p>
+          <div class="class-emoji">🍫</div>
+        </div>
+        <div class="class-card-body">
+          <ul class="class-features">
+            <li>Eggless chocolate sponge recipe</li>
+            <li>Ganache preparation tips</li>
+            <li>Simple piping and decoration</li>
+            <li>Common mistakes to avoid</li>
+            <li>Live demo — watch and bake along!</li>
+          </ul>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="background: #DCFCE7; color: #166534; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">💻 Online Only</span>
+            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">⏱ 1.5 Hours</span>
+          </div>
+          <div class="class-price free-price">FREE</div>
+          <button onclick="enrolClass('Simple Chocolate Cake Live Demo', 'FREE')" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 14px; padding: 12px;">
+            📝 Reserve My Seat (Free)
+          </button>
+        </div>
+      </div>
+
+      <!-- PAID CLASS 1 -->
+      <div class="class-card" data-type="paid online inperson">
+        <div class="class-card-header">
+          <span class="class-type-badge badge-paid">PAID</span>
+          <div class="class-title">Advanced Eggless Baking — Full Course</div>
+          <p style="color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 6px;">Master 10+ eggless cake recipes with professional techniques!</p>
+          <div class="class-emoji">🎓</div>
+        </div>
+        <div class="class-card-body">
+          <ul class="class-features">
+            <li>10+ eggless cake recipes (chocolate, red velvet, cheesecake &amp; more)</li>
+            <li>Professional frosting &amp; piping techniques</li>
+            <li>Fondant basics &amp; figurine making</li>
+            <li>Cake layering &amp; filling secrets</li>
+            <li>Decoration for birthdays &amp; weddings</li>
+            <li>Recipes PDF included</li>
+            <li>Certificate of completion</li>
+          </ul>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="background: #DCFCE7; color: #166534; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">💻 Online</span>
+            <span style="background: #EDE9FE; color: #5B21B6; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">🏠 In-Person</span>
+            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">⏱ 5 Days</span>
+          </div>
+          <div class="class-price">₹2,499</div>
+          <button onclick="enrolClass('Advanced Eggless Baking Full Course', 2499)" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 14px; padding: 12px;">
+            🔒 Enrol &amp; Pay — ₹2,499
+          </button>
+        </div>
+      </div>
+
+      <!-- PAID CLASS 2 -->
+      <div class="class-card" data-type="paid inperson">
+        <div class="class-card-header">
+          <span class="class-type-badge badge-paid">PAID</span>
+          <div class="class-title">Cake Decoration Masterclass</div>
+          <p style="color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 6px;">Become a cake decoration expert with hands-on training!</p>
+          <div class="class-emoji">🎨</div>
+        </div>
+        <div class="class-card-body">
+          <ul class="class-features">
+            <li>Fondant covering &amp; smoothing</li>
+            <li>Edible flower making</li>
+            <li>Rosette &amp; ruffles piping</li>
+            <li>Drip cake &amp; mirror glaze</li>
+            <li>Fondant figurines &amp; toppers</li>
+            <li>Metallic &amp; gold leaf effects</li>
+            <li>Certificate of completion</li>
+          </ul>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="background: #EDE9FE; color: #5B21B6; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">🏠 In-Person Only</span>
+            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">⏱ 3 Days</span>
+          </div>
+          <div class="class-price">₹1,999</div>
+          <button onclick="enrolClass('Cake Decoration Masterclass', 1999)" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 14px; padding: 12px;">
+            🔒 Enrol &amp; Pay — ₹1,999
+          </button>
+        </div>
+      </div>
+
+      <!-- PAID CLASS 3 -->
+      <div class="class-card" data-type="paid online">
+        <div class="class-card-header">
+          <span class="class-type-badge badge-paid">PAID</span>
+          <div class="class-title">Start Your Cake Business — Entrepreneur Course</div>
+          <p style="color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 6px;">Turn your baking passion into a profitable business!</p>
+          <div class="class-emoji">💼</div>
+        </div>
+        <div class="class-card-body">
+          <ul class="class-features">
+            <li>Professional cake recipe development</li>
+            <li>Pricing &amp; costing your cakes</li>
+            <li>Instagram &amp; social media marketing</li>
+            <li>WhatsApp business for cake orders</li>
+            <li>Packaging &amp; delivery best practices</li>
+            <li>Building your customer base</li>
+            <li>1-on-1 mentorship session included</li>
+          </ul>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="background: #DCFCE7; color: #166534; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">💻 Online</span>
+            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">⏱ 7 Days</span>
+          </div>
+          <div class="class-price">₹3,999</div>
+          <button onclick="enrolClass('Start Your Cake Business Entrepreneur Course', 3999)" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 14px; padding: 12px;">
+            🔒 Enrol &amp; Pay — ₹3,999
+          </button>
+        </div>
+      </div>
+
+      <!-- PAID CLASS 4 -->
+      <div class="class-card" data-type="paid online inperson">
+        <div class="class-card-header">
+          <span class="class-type-badge badge-paid">PAID</span>
+          <div class="class-title">One-Day Baking Workshop</div>
+          <p style="color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 6px;">Learn 3 eggless cakes in a single fun-filled day!</p>
+          <div class="class-emoji">🍰</div>
+        </div>
+        <div class="class-card-body">
+          <ul class="class-features">
+            <li>Bake 3 different eggless cakes</li>
+            <li>Frosting &amp; basic decoration included</li>
+            <li>Take your baked cakes home</li>
+            <li>All ingredients provided</li>
+            <li>Recipe cards to take home</li>
+            <li>Great for groups &amp; friends!</li>
+          </ul>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span style="background: #DCFCE7; color: #166534; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">💻 Online</span>
+            <span style="background: #EDE9FE; color: #5B21B6; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">🏠 In-Person</span>
+            <span style="background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;">⏱ Full Day (6 hrs)</span>
+          </div>
+          <div class="class-price">₹1,299</div>
+          <button onclick="enrolClass('One-Day Baking Workshop', 1299)" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 14px; padding: 12px;">
+            🔒 Enrol &amp; Pay — ₹1,299
+          </button>
+        </div>
+      </div>
+
+    </div><!-- end classes-grid -->
+  </div>
+</section>
+
+<!-- ====== ENROL FORM ====== -->
+<section class="section" id="enrol-form" style="background: var(--cream-dark);">
+  <div class="container" style="max-width: 680px;">
+    <div class="section-header">
+      <div class="section-badge">Enrol Now</div>
+      <h2 class="section-title">Reserve Your <span>Spot Today</span></h2>
+      <p class="section-subtitle">Fill in your details and we'll contact you to confirm your class schedule and payment (if applicable).</p>
+    </div>
+
+    <div style="background: var(--white); border-radius: var(--radius); padding: 36px; box-shadow: var(--shadow);">
+
+      <div class="form-group">
+        <label class="form-label" for="enrolName">Full Name <span>*</span></label>
+        <input type="text" class="form-control" id="enrolName" placeholder="Your full name" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="enrolPhone">WhatsApp Number <span>*</span></label>
+        <input type="tel" class="form-control" id="enrolPhone" placeholder="+91 86106 36589" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="enrolClass">Interested Class <span>*</span></label>
+        <select class="form-control" id="enrolClass" required>
+          <option value="">-- Select a Class --</option>
+          <option>🆓 Beginner Basics — Eggless Baking (FREE)</option>
+          <option>🆓 Simple Chocolate Cake Live Demo (FREE)</option>
+          <option>💰 Advanced Eggless Baking Full Course — ₹2,499</option>
+          <option>💰 Cake Decoration Masterclass — ₹1,999</option>
+          <option>💰 Start Your Cake Business Course — ₹3,999</option>
+          <option>💰 One-Day Baking Workshop — ₹1,299</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="enrolMode">Class Mode Preference</label>
+        <select class="form-control" id="enrolMode">
+          <option value="Online">💻 Online (Live via video call)</option>
+          <option value="In-Person">🏠 In-Person (at our Trichy studio)</option>
+          <option value="No preference">No preference — whatever is available</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="enrolExperience">Your Baking Experience Level</label>
+        <select class="form-control" id="enrolExperience">
+          <option value="Complete beginner">🌱 Complete Beginner — Never baked before</option>
+          <option value="Some experience">🍰 Some Experience — Baked a few times at home</option>
+          <option value="Intermediate">🎂 Intermediate — Can bake basic cakes</option>
+          <option value="Advanced">🎓 Advanced — Looking to go professional</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="enrolNote">Any Questions or Special Requests?</label>
+        <textarea class="form-control" id="enrolNote" rows="3" placeholder="E.g. Can I attend with a friend? Do you provide ingredients? Can I join next month?"></textarea>
+      </div>
+
+      <div class="notice-box">
+        <span class="notice-icon">🔒</span>
+        <div>For <strong>free classes</strong> — submit your details and we'll confirm your slot. For <strong>paid classes</strong> — you'll be redirected to secure payment to confirm your booking.</div>
+      </div>
+
+      <!-- Enrol success screen (hidden) -->
+      <div id="enrolSuccess" style="display:none; text-align:center; padding:24px 0;">
+        <div style="font-size:52px; margin-bottom:12px;">🎉</div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:22px; color:var(--plum); margin-bottom:10px;">Seat Reserved!</h3>
+        <p style="font-size:14px; color:var(--text-muted);">We've received your registration for <strong id="enrolSuccessClass"></strong>. We'll contact you on your WhatsApp number within 24 hours to confirm your slot and share class details. See you soon! 👩‍🍳</p>
+      </div>
+
+      <button onclick="submitEnrol()" id="enrolBtn" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 17px; margin-top: 8px; padding: 16px;">
+        <i class="fas fa-graduation-cap"></i> &nbsp;Confirm My Enrolment
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ====== WHY LEARN WITH US ====== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">Why Choose Us</div>
+      <h2 class="section-title">Why Learn Baking <span>at ToonCakes?</span></h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; text-align: center;">
+      <div style="background: var(--white); border-radius: var(--radius); padding: 30px 20px; box-shadow: var(--shadow);">
+        <div style="font-size: 44px; margin-bottom: 12px;">👩‍🍳</div>
+        <strong style="font-size: 15px; display: block; margin-bottom: 8px;">Expert Instructor</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Learn from an experienced eggless cake specialist with years of professional baking experience in Trichy.</p>
+      </div>
+      <div style="background: var(--white); border-radius: var(--radius); padding: 30px 20px; box-shadow: var(--shadow);">
+        <div style="font-size: 44px; margin-bottom: 12px;">🤝</div>
+        <strong style="font-size: 15px; display: block; margin-bottom: 8px;">Small Batch Classes</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Small groups ensure personal attention. You won't get lost in a crowd — we teach each student properly.</p>
+      </div>
+      <div style="background: var(--white); border-radius: var(--radius); padding: 30px 20px; box-shadow: var(--shadow);">
+        <div style="font-size: 44px; margin-bottom: 12px;">📜</div>
+        <strong style="font-size: 15px; display: block; margin-bottom: 8px;">Certification</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Receive a ToonCakes certificate of completion to showcase your new baking skill professionally.</p>
+      </div>
+      <div style="background: var(--white); border-radius: var(--radius); padding: 30px 20px; box-shadow: var(--shadow);">
+        <div style="font-size: 44px; margin-bottom: 12px;">📄</div>
+        <strong style="font-size: 15px; display: block; margin-bottom: 8px;">Recipe PDF Included</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">All paid class students receive detailed recipe PDFs to practice at home after the class.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<a href="https://wa.me/918610636589?text=Hi%20ToonCakes!%20I%20have%20a%20question%20about%20baking%20classes." class="whatsapp-float" target="_blank" title="Contact Us on WhatsApp" aria-label="Contact Us"><i class="fab fa-whatsapp"></i></a>
+
+<script>
+  function toggleMobileNav() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+
+  function filterClasses(type, btn) {
+    if (btn) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    document.querySelectorAll('.class-card').forEach(card => {
+      const types = card.dataset.type || '';
+      card.style.display = (type === 'all' || types.includes(type)) ? 'block' : 'none';
+    });
+  }
+
+  // Enrol class button click
+  // price: 'FREE' for free classes, number (e.g. 2499) for paid classes
+  function enrolClass(className, price) {
+    if (price !== 'FREE' && typeof price === 'number' && price > 0) {
+      // Paid class → redirect to payment page
+      const orderData = {
+        type: 'class',
+        items: className + ' (Baking Class)',
+        amount: price,
+        total: price,
+        note: 'Baking Class: ' + className
+      };
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(orderData))));
+      window.location.href = 'payment.html#order=' + encoded;
+      return;
+    }
+    // Free class → scroll to form and pre-fill dropdown
+    const select = document.getElementById('enrolClass');
+    for (let opt of select.options) {
+      if (opt.text.toLowerCase().includes(className.toLowerCase().slice(0, 18))) {
+        opt.selected = true;
+        break;
+      }
+    }
+    document.getElementById('enrol-form').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function submitEnrol() {
+    const name       = document.getElementById('enrolName').value.trim();
+    const phone      = document.getElementById('enrolPhone').value.trim();
+    const cls        = document.getElementById('enrolClass').value;
+    const mode       = document.getElementById('enrolMode').value;
+    const experience = document.getElementById('enrolExperience').value;
+    const note       = document.getElementById('enrolNote').value.trim();
+
+    if (!name)  { alert('Please enter your name!'); return; }
+    if (!phone) { alert('Please enter your WhatsApp number!'); return; }
+    if (!cls)   { alert('Please select a class!'); return; }
+
+    // Check if it's a paid class via dropdown value
+    const isPaid = cls.includes('₹');
+    if (isPaid) {
+      // Extract price from dropdown text e.g. "... — ₹2,499"
+      const match = cls.match(/₹([\d,]+)/);
+      const price = match ? parseInt(match[1].replace(/,/g, '')) : 0;
+      const className = cls.replace(/^[^\s]+ /, '').split(' —')[0];
+      if (price > 0) {
+        const orderData = {
+          type: 'class',
+          items: cls.replace(/^[^\s]+ /, ''),
+          amount: price,
+          total: price,
+          name: name,
+          phone: phone,
+          note: 'Baking Class: ' + cls
+        };
+        const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(orderData))));
+        window.location.href = 'payment.html#order=' + encoded;
+        return;
+      }
+    }
+
+    // Free class — save registration to localStorage and show success
+    const registrations = JSON.parse(localStorage.getItem('tc_registrations') || '[]');
+    registrations.push({
+      id: 'REG' + Date.now().toString().slice(-6),
+      name, phone, cls, mode, experience,
+      note: note || '',
+      date: new Date().toISOString(),
+      status: 'pending'
+    });
+    localStorage.setItem('tc_registrations', JSON.stringify(registrations));
+
+    // Show success UI
+    document.getElementById('enrolBtn').style.display = 'none';
+    document.getElementById('enrolSuccess').style.display = 'block';
+    document.getElementById('enrolSuccessClass').textContent = cls;
+  }
+</script>
+
+<!-- ============================================================
+     COURSE ENROLMENT MODAL
+============================================================ -->
+<div id="classEnrolModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;overflow-y:auto;padding:20px;">
+  <div style="background:white;border-radius:20px;max-width:480px;margin:40px auto;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,0.3);position:relative;">
+    <button onclick="closeClassModals()" style="position:absolute;top:16px;right:16px;background:#F3F4F6;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;">✕</button>
+    <div id="ceModalIcon" style="font-size:36px;margin-bottom:8px;text-align:center;"></div>
+    <h3 id="ceModalTitle" style="font-family:'Playfair Display',serif;font-size:20px;color:#2D0B20;text-align:center;margin-bottom:4px;"></h3>
+    <p  id="ceModalSub"   style="font-size:13px;color:#6B7280;text-align:center;margin-bottom:24px;"></p>
+    <div id="ceEnrolForm">
+      <div style="margin-bottom:14px;">
+        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px;">Your Name *</label>
+        <input id="ceNameInput" class="form-control" placeholder="e.g. Priya Sharma" />
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px;">WhatsApp Number *</label>
+        <input id="cePhoneInput" class="form-control" placeholder="e.g. 9876543210" type="tel" />
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px;">Experience Level</label>
+        <select id="ceExpInput" class="form-control">
+          <option value="Beginner">Beginner — never baked before</option>
+          <option value="Hobbyist">Hobbyist — bake occasionally at home</option>
+          <option value="Intermediate">Intermediate — some experience</option>
+          <option value="Advanced">Advanced — bake regularly</option>
+        </select>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px;">Any questions? (optional)</label>
+        <textarea id="ceNoteInput" class="form-control" rows="2" placeholder="Questions, dietary needs, etc."></textarea>
+      </div>
+      <button id="ceSubmitBtn" onclick="submitClassEnrol()" class="btn btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:14px;">📝 Confirm Enrolment</button>
+    </div>
+    <div id="ceSuccessMsg" style="display:none;text-align:center;padding:16px 0;">
+      <div style="font-size:48px;margin-bottom:12px;">🎉</div>
+      <h4 style="font-family:'Playfair Display',serif;font-size:18px;color:#2D0B20;margin-bottom:8px;">You're Enrolled!</h4>
+      <p id="ceSuccessText" style="font-size:14px;color:#6B7280;line-height:1.6;"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     COURSE CONTENT ACCESS MODAL — Udemy-style full-screen
+============================================================ -->
+<div id="classAccessModal" style="display:none;position:fixed;inset:0;z-index:900;overflow-y:auto;background:#f3f4f6;">
+  <div style="min-height:100vh;">
+
+    <!-- ── Sticky top nav ── -->
+    <div style="background:#1c1d1f;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,0.4);">
+      <button onclick="closeClassModals()" style="background:transparent;border:1.5px solid rgba(255,255,255,0.35);color:white;border-radius:6px;padding:7px 16px;font-size:13px;cursor:pointer;font-weight:600;">← Back to Classes</button>
+      <span style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:700;letter-spacing:.3px;">🎂 ToonCakes Trichy</span>
+    </div>
+
+    <!-- ── Dark hero ── -->
+    <div style="background:#1c1d1f;padding:32px 20px 44px;">
+      <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;">
+
+        <!-- left: meta -->
+        <div style="flex:1;min-width:260px;">
+          <div id="caBreadcrumb" style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:10px;letter-spacing:.5px;text-transform:uppercase;"></div>
+          <h1 id="caHeroTitle" style="font-family:'Playfair Display',serif;font-size:26px;color:white;margin:0 0 10px;line-height:1.35;font-weight:700;"></h1>
+          <p  id="caHeroDesc"  style="font-size:14px;color:#d1d5db;margin:0 0 16px;line-height:1.65;"></p>
+          <div id="caHeroMeta" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;"></div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.5);">Created by <strong style="color:#f9a8d4;">ToonCakes Trichy</strong></div>
+        </div>
+
+        <!-- right: preview card -->
+        <div id="caPreviewCard" style="width:300px;min-width:260px;flex-shrink:0;background:white;border-radius:10px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.55);"></div>
+      </div>
+    </div>
+
+    <!-- ── White body ── -->
+    <div style="max-width:900px;margin:0 auto;padding:32px 20px 48px;" id="caContent"></div>
+
+  </div>
+</div>
+
+<script>
+// ============================================================
+// Admin-added courses — inject cards + Udemy-model enrol flow
+// ============================================================
+let _ceCurrentCourse = null;
+
+function openClassEnrolModal(courseId) {
+  // ── Auth check — direct isLoggedIn() avoids infinite recursion ──
+  if (!TC_AUTH.isLoggedIn()) {
+    // Remember which class to open after login
+    localStorage.setItem('tc_pending_class', courseId);
+    TC_AUTH.requireLogin('Please log in or create a free account to enrol in classes and access course content.');
+    return;
+  }
+  localStorage.removeItem('tc_pending_class');
+
+  const courses = JSON.parse(localStorage.getItem('tc_menu_classes') || '[]');
+  const c = courses.find(x => x.id === courseId);
+  if (!c) { alert('Class not found — please refresh the page and try again.'); return; }
+  _ceCurrentCourse = c;
+
+  // ── Already enrolled? Skip the form and jump straight to content ──
+  if (TC_AUTH.isEnrolled('class', courseId)) {
+    openClassAccessModal(c, null, true);
+    return;
+  }
+
+  const isFree = !c.price || c.price === 0;
+  const isRec  = c.courseType !== 'live';
+
+  document.getElementById('ceModalIcon').textContent  = isRec ? '📹' : '🔴';
+  document.getElementById('ceModalTitle').textContent = c.name;
+  document.getElementById('ceModalSub').textContent   =
+    isRec
+      ? (isFree ? 'Free recorded course — access videos & PDFs instantly after enrolment.' : `₹${c.price} — access all videos & PDFs after payment confirmation.`)
+      : (isFree ? 'Free live session — register to reserve your seat.' : `₹${c.price} — register & pay to confirm your live session seat.`);
+
+  document.getElementById('ceSubmitBtn').textContent = isFree
+    ? (isRec ? '📹 Enrol & Access Now' : '📝 Reserve My Seat (Free)')
+    : `💳 Proceed to Pay — ₹${c.price}`;
+
+  document.getElementById('ceEnrolForm').style.display  = 'block';
+  document.getElementById('ceSuccessMsg').style.display = 'none';
+  document.getElementById('ceNameInput').value  = '';
+  document.getElementById('cePhoneInput').value = '';
+  document.getElementById('ceNoteInput').value  = '';
+  document.getElementById('classEnrolModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function submitClassEnrol() {
+  const name  = document.getElementById('ceNameInput').value.trim();
+  const phone = document.getElementById('cePhoneInput').value.trim();
+  const exp   = document.getElementById('ceExpInput').value;
+  const note  = document.getElementById('ceNoteInput').value.trim();
+  const c     = _ceCurrentCourse;
+
+  if (!name)  { alert('Please enter your name.'); return; }
+  if (!phone) { alert('Please enter your WhatsApp number.'); return; }
+  if (!c)     return;
+
+  const isFree = !c.price || c.price === 0;
+  const isRec  = c.courseType !== 'live';
+
+  // Save registration
+  const regs = JSON.parse(localStorage.getItem('tc_registrations') || '[]');
+  regs.push({
+    id: 'REG' + Date.now().toString().slice(-6),
+    name, phone, cls: c.name, courseId: c.id, courseType: c.courseType,
+    experience: exp, note, date: new Date().toISOString(), status: 'pending'
+  });
+  localStorage.setItem('tc_registrations', JSON.stringify(regs));
+
+  if (!isFree) {
+    // Paid — redirect to payment
+    const orderData = {
+      type: 'class', courseId: c.id, items: c.name + ' (Baking Course)',
+      amount: c.price, total: c.price, name, phone,
+      note: 'Course: ' + c.name
+    };
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(orderData))));
+    window.location.href = 'payment.html#order=' + encoded;
+    return;
+  }
+
+  // Save enrollment to user account if logged in
+  if (typeof TC_AUTH !== 'undefined' && TC_AUTH.isLoggedIn()) {
+    TC_AUTH.saveEnrollment({
+      type:     'class',
+      itemId:   c.id,
+      itemName: c.name,
+      isFree:   true,
+      price:    0,
+    });
+  }
+
+  // Free
+  if (isRec) {
+    // Recorded free — show content immediately
+    document.getElementById('classEnrolModal').style.display = 'none';
+    openClassAccessModal(c, name);
+  } else {
+    // Free live — show confirmation
+    document.getElementById('ceEnrolForm').style.display  = 'none';
+    document.getElementById('ceSuccessMsg').style.display = 'block';
+    document.getElementById('ceSuccessText').textContent  =
+      `Hi ${name.split(' ')[0]}! 🎉 You're registered for "${c.name}". We'll WhatsApp your joining details to ${phone} before the session. See you there!`;
+  }
+}
+
+function openClassAccessModal(c, studentName, alreadyEnrolled) {
+  const isFree = !c.price || c.price === 0;
+  const isRec  = c.courseType !== 'live';
+  const videos = c.videos || [];
+  const pdfs   = c.pdfs   || [];
+  const vCount = videos.length;
+  const pCount = pdfs.length;
+
+  // ── Hero left ──
+  document.getElementById('caBreadcrumb').textContent =
+    'Baking Classes  ›  ' + (isRec ? 'Recorded Courses' : 'Live Sessions') + '  ›  ' + c.name;
+  document.getElementById('caHeroTitle').textContent = c.name;
+  document.getElementById('caHeroDesc').textContent  = c.desc || '';
+
+  const { avg: cAvg, count: cCount } = tcRatingSummary('class', c.id);
+
+  const metaEl = document.getElementById('caHeroMeta');
+  metaEl.innerHTML = '';
+  [
+    [isRec ? '📹 Recorded Course' : '🔴 Live Session'],
+    isFree ? ['🆓 Free Access'] : ['💳 ₹' + c.price],
+    c.duration ? ['⏱ ' + c.duration] : null,
+    vCount ? ['📹 ' + vCount + ' Video' + (vCount > 1 ? 's' : '')] : null,
+    pCount ? ['📄 ' + pCount + ' PDF' + (pCount > 1 ? 's' : '')] : null,
+  ].filter(Boolean).forEach(([label]) => {
+    const s = document.createElement('span');
+    s.style.cssText = 'background:rgba(255,255,255,0.12);color:white;font-size:12px;font-weight:600;padding:5px 12px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);';
+    s.textContent = label;
+    metaEl.appendChild(s);
+  });
+
+  // Rating row in hero
+  if (cCount > 0) {
+    const rDiv = document.createElement('div');
+    rDiv.style.cssText = 'display:flex;align-items:center;gap:8px;margin-top:6px;flex-basis:100%;';
+    rDiv.innerHTML = `<span style="font-size:16px;font-weight:800;color:#F59E0B;">${cAvg}</span>${tcStarsHtml(cAvg, 16)}<span style="font-size:13px;color:rgba(255,255,255,0.6);">(${cCount} rating${cCount !== 1 ? 's' : ''})</span>`;
+    metaEl.appendChild(rDiv);
+  }
+
+  // ── Preview card (right) ──
+  const ytFirst  = vCount ? (videos[0].url || '').match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/) : null;
+  const thumbUrl = c.image || (ytFirst ? `https://img.youtube.com/vi/${ytFirst[1]}/hqdefault.jpg` : '');
+  const statusColor = alreadyEnrolled ? '#4C1D95' : '#166534';
+  const statusBg    = alreadyEnrolled ? '#EDE9FE' : '#DCFCE7';
+  const statusBdr   = alreadyEnrolled ? '#C4B5FD' : '#86EFAC';
+  const statusText  = alreadyEnrolled ? "✅ You're already enrolled!" : "🎉 You're now enrolled!";
+
+  document.getElementById('caPreviewCard').innerHTML = `
+    ${thumbUrl
+      ? `<div style="background:#000;position:relative;">
+           <img src="${thumbUrl}" alt="${c.name}" style="width:100%;display:block;opacity:.88;max-height:170px;object-fit:cover;" />
+           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+             <div style="width:52px;height:52px;background:rgba(255,255,255,0.92);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">▶</div>
+           </div>
+         </div>`
+      : `<div style="background:linear-gradient(135deg,#2D0B20,#6A1545);height:140px;display:flex;align-items:center;justify-content:center;font-size:56px;">🎂</div>`}
+    <div style="padding:20px;">
+      <div style="font-size:24px;font-weight:800;color:#111;margin-bottom:2px;">${isFree ? 'FREE' : '₹' + c.price}</div>
+      ${cCount > 0 ? `<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">${tcStarsHtml(cAvg, 14)}<span style="font-size:12px;color:#6B7280;">${cAvg} · ${cCount} rating${cCount !== 1 ? 's' : ''}</span></div>` : ''}
+      <div style="font-size:12px;color:#6B7280;margin-bottom:14px;">${isFree ? 'Full access · no payment needed' : 'One-time payment · lifetime access'}</div>
+      <div style="background:${statusBg};border:1.5px solid ${statusBdr};border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:${statusColor};margin-bottom:16px;text-align:center;">
+        ${statusText}
+      </div>
+      <div style="font-size:13px;font-weight:700;color:#111;margin-bottom:10px;">This course includes:</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px;">
+        ${vCount ? `<li style="font-size:13px;color:#374151;display:flex;align-items:center;gap:9px;"><span>📹</span>${vCount} on-demand video${vCount > 1 ? 's' : ''}</li>` : ''}
+        ${pCount ? `<li style="font-size:13px;color:#374151;display:flex;align-items:center;gap:9px;"><span>📄</span>${pCount} downloadable PDF${pCount > 1 ? 's' : ''}</li>` : ''}
+        <li style="font-size:13px;color:#374151;display:flex;align-items:center;gap:9px;"><span>📱</span>Access on mobile &amp; desktop</li>
+        ${!isFree ? `<li style="font-size:13px;color:#374151;display:flex;align-items:center;gap:9px;"><span>🏆</span>Certificate of completion</li>` : ''}
+        <li style="font-size:13px;color:#374151;display:flex;align-items:center;gap:9px;"><span>♾</span>Full lifetime access</li>
+      </ul>
+    </div>`;
+
+  // ── Body content ──
+  let html = '';
+
+  // Status banner
+  if (alreadyEnrolled) {
+    html += `<div style="background:#EDE9FE;border-radius:12px;padding:16px 20px;margin-bottom:28px;font-size:14px;color:#4C1D95;border:1.5px solid #C4B5FD;display:flex;align-items:flex-start;gap:12px;">
+      <span style="font-size:26px;flex-shrink:0;">✅</span>
+      <div>
+        <strong style="font-size:15px;display:block;margin-bottom:3px;">You're already enrolled in this course!</strong>
+        <span style="font-size:13px;color:#5B21B6;">Jump right in below — all your content is ready.
+          <a href="user-dashboard.html" style="color:#6A1545;font-weight:700;text-decoration:underline;margin-left:4px;">Go to Dashboard →</a>
+        </span>
+      </div>
+    </div>`;
+  } else if (studentName) {
+    html += `<div style="background:#DCFCE7;border-radius:12px;padding:16px 20px;margin-bottom:28px;font-size:14px;color:#166534;border:1.5px solid #86EFAC;display:flex;align-items:flex-start;gap:12px;">
+      <span style="font-size:26px;flex-shrink:0;">🎉</span>
+      <div>
+        <strong style="font-size:15px;display:block;margin-bottom:3px;">Welcome, ${studentName.split(' ')[0]}! Your course is now unlocked.</strong>
+        <span style="font-size:13px;">Watch the videos and download the PDFs below. Happy baking! 🧁</span>
+      </div>
+    </div>`;
+  }
+
+  // What you'll learn
+  if (c.topics) {
+    const topics = c.topics.split(',').map(t => t.trim()).filter(Boolean);
+    if (topics.length) {
+      html += `<div style="border:1.5px solid #E5E7EB;border-radius:12px;padding:24px;margin-bottom:28px;background:white;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:#111;margin:0 0 16px;">📚 What you'll learn</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+          ${topics.map(t => `<div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#374151;"><span style="color:#16A34A;font-size:16px;flex-shrink:0;line-height:1.2;">✓</span>${t}</div>`).join('')}
+        </div>
+      </div>`;
+    }
+  }
+
+  // Course content — collapsible video list
+  if (vCount) {
+    html += `<div style="margin-bottom:28px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:#111;margin:0 0 6px;">📹 Course Content</h3>
+      <p style="font-size:13px;color:#6B7280;margin:0 0 14px;">${vCount} lesson${vCount>1?'s':''} · ${c.duration || 'watch anytime'}</p>
+      <div style="border:1.5px solid #E5E7EB;border-radius:12px;overflow:hidden;background:white;">`;
+
+    videos.forEach((v, i) => {
+      const ytId   = (v.url || '').match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+      const vTitle = (v.title && !v.title.startsWith('http')) ? v.title : ('Lesson ' + (i + 1));
+      html += `<details style="border-bottom:${i < vCount-1 ? '1.5px solid #F3F4F6' : 'none'};">
+        <summary style="padding:14px 18px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:#111;background:#FAFAFA;user-select:none;">
+          <span style="width:26px;height:26px;background:#EDE9FE;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#5B21B6;flex-shrink:0;">${i + 1}</span>
+          ${vTitle}
+          <span style="margin-left:auto;font-size:11px;color:#9CA3AF;font-weight:500;white-space:nowrap;">▶ Play</span>
+        </summary>
+        <div>`;
+      if (ytId) {
+        html += `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+            <iframe src="https://www.youtube.com/embed/${ytId[1]}?rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <a href="${v.url}" target="_blank" rel="noopener"
+             style="display:flex;align-items:center;gap:8px;padding:8px 18px;font-size:11px;color:#6B7280;text-decoration:none;background:#F9FAFB;border-top:1px solid #F3F4F6;">
+            ▶ Can't play? Watch on YouTube <span style="margin-left:auto;color:#E8356D;font-weight:700;">↗</span>
+          </a>`;
+      } else {
+        html += `<a href="${v.url}" target="_blank" rel="noopener"
+            style="display:flex;align-items:center;gap:10px;padding:14px 18px;text-decoration:none;color:#5B21B6;font-size:14px;font-weight:600;">
+            📹 Open Video <span style="margin-left:auto;font-size:12px;">↗</span></a>`;
+      }
+      html += `</div></details>`;
+    });
+    html += `</div></div>`;
+  }
+
+  // PDF resources
+  if (pCount) {
+    html += `<div style="margin-bottom:28px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:#111;margin:0 0 14px;">📄 PDF Resources</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;">`;
+    pdfs.forEach((p, i) => {
+      const pTitle = (p.title && !p.title.startsWith('http')) ? p.title : ('PDF Resource ' + (i + 1));
+      html += `<a href="${p.url}" target="_blank" rel="noopener"
+        style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:#E0F2FE;border-radius:12px;text-decoration:none;color:#0369A1;font-weight:600;font-size:14px;border:1.5px solid #BAE6FD;">
+        <span style="font-size:22px;">📄</span>
+        <span style="flex:1;">${pTitle}</span>
+        <span style="background:#0369A1;color:white;border-radius:6px;padding:4px 12px;font-size:12px;white-space:nowrap;">Download ↓</span>
+      </a>`;
+    });
+    html += `</div></div>`;
+  }
+
+  if (!vCount && !pCount) {
+    html += `<div style="background:white;border-radius:12px;text-align:center;padding:48px 24px;color:#6B7280;margin-bottom:28px;">
+      <div style="font-size:48px;margin-bottom:12px;">⏳</div>
+      <p style="font-size:15px;margin:0;">Course content will be uploaded soon.<br>We'll WhatsApp you when it's ready!</p>
+    </div>`;
+  }
+
+  // More classes you might like
+  const allCourses = JSON.parse(localStorage.getItem('tc_menu_classes') || '[]').filter(x => x.active && x.id !== c.id);
+  if (allCourses.length) {
+    html += `<div style="border-top:1.5px solid #E5E7EB;padding-top:28px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:18px;color:#111;margin:0 0 16px;">🎓 More Classes You Might Like</h3>
+      <div style="display:flex;flex-direction:column;gap:12px;">`;
+    allCourses.slice(0, 4).forEach(x => {
+      const xFree              = !x.price || x.price === 0;
+      const xEnrolled          = TC_AUTH.isLoggedIn() && TC_AUTH.isEnrolled('class', x.id);
+      const xYtFirst           = (x.videos || []).length ? (x.videos[0].url || '').match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/) : null;
+      const xThumb             = x.image || (xYtFirst ? `https://img.youtube.com/vi/${xYtFirst[1]}/mqdefault.jpg` : '');
+      const { avg: xAvg, count: xCount } = tcRatingSummary('class', x.id);
+      html += `<div onclick="closeClassModals();setTimeout(()=>openClassEnrolModal('${x.id}'),120);"
+        style="display:flex;gap:14px;align-items:center;padding:14px;border:1.5px solid #E5E7EB;border-radius:12px;cursor:pointer;background:white;"
+        onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='white'">
+        <div style="width:80px;height:56px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-size:24px;">
+          ${xThumb ? `<img src="${xThumb}" style="width:100%;height:100%;object-fit:cover;" />` : '🎂'}
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${x.name}</div>
+          ${xCount > 0 ? `<div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;">${tcStarsHtml(xAvg,11)}<span style="font-size:11px;color:#6B7280;">${xAvg} (${xCount})</span></div>` : ''}
+          <div style="font-size:12px;color:#6B7280;">${x.courseType !== 'live' ? '📹 Recorded' : '🔴 Live'} · ${xFree ? 'FREE' : '₹' + x.price}</div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:${xEnrolled ? '#16A34A' : '#6A1545'};flex-shrink:0;">
+          ${xEnrolled ? '✅ Enrolled' : (xFree ? 'Enrol Free →' : '₹' + x.price + ' →')}
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  }
+
+  // Reviews section (only enrolled users can write; everyone can read)
+  const canReview = alreadyEnrolled || !!studentName;
+  html += tcBuildReviewSection('class', c.id, canReview);
+
+  document.getElementById('caContent').innerHTML = html;
+  document.getElementById('classAccessModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeClassModals() {
+  document.getElementById('classEnrolModal').style.display  = 'none';
+  document.getElementById('classAccessModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Inject admin-added class cards (new Udemy model)
+(function injectAdminClasses() {
+  const courses = JSON.parse(localStorage.getItem('tc_menu_classes') || '[]').filter(c => c.active);
+  if (!courses.length) return;
+  const grid = document.getElementById('classesGrid');
+  if (!grid) return;
+  grid.innerHTML = ''; // Replace hardcoded cards — all items now come from Menu Manager
+  const fragment = document.createDocumentFragment();
+
+  courses.forEach(c => {
+    const isFree   = !c.price || c.price === 0;
+    const isRec    = c.courseType !== 'live';
+    const typeStr  = (isFree ? 'free ' : 'paid ') + (isRec ? 'recorded' : 'live');
+    const vCount   = (c.videos || []).length;
+    const pCount   = (c.pdfs   || []).length;
+    const enrolled = TC_AUTH.isLoggedIn() && TC_AUTH.isEnrolled('class', c.id);
+    const { avg: cCardAvg, count: cCardCount } = tcRatingSummary('class', c.id);
+
+    const el = document.createElement('div');
+    el.className = 'class-card';
+    el.dataset.type = typeStr;
+
+    const btnLabel = enrolled
+      ? '✅ Enrolled — Access Again'
+      : (isRec ? (isFree ? '📹 Enrol & Watch Now' : `💳 Buy Course — ₹${c.price}`) : (isFree ? '📝 Reserve Seat (Free)' : `💳 Register — ₹${c.price}`));
+    const btnStyle = enrolled
+      ? 'width:100%;justify-content:center;font-size:14px;padding:12px;background:#16A34A;border-color:#16A34A;'
+      : 'width:100%;justify-content:center;font-size:14px;padding:12px;';
+
+    el.innerHTML = `
+      <div class="class-card-header" style="${c.image ? `background:url('${c.image}') center/cover no-repeat; min-height:180px;` : ''}">
+        <span class="class-type-badge ${isFree ? 'badge-free' : 'badge-paid'}">${isFree ? 'FREE' : '₹' + c.price}</span>
+        <span style="display:inline-block;background:${isRec ? 'rgba(59,130,246,0.85)' : 'rgba(220,38,38,0.85)'};color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;margin-left:6px;">
+          ${isRec ? '📹 Recorded' : '🔴 Live Session'}
+        </span>
+        <div class="class-title" style="margin-top:8px;">${c.name}</div>
+        <p style="color:rgba(255,255,255,0.88);font-size:13px;margin-top:6px;">${c.desc}</p>
+      </div>
+      <div class="class-card-body">
+        ${c.topics ? `<ul class="class-features">${c.topics.split(',').slice(0,4).map(t => `<li>${t.trim()}</li>`).join('')}</ul>` : ''}
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+          ${c.duration ? `<span style="background:#FEF3C7;color:#92400E;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;">⏱ ${c.duration}</span>` : ''}
+          ${isRec && vCount ? `<span style="background:#EDE9FE;color:#5B21B6;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;">📹 ${vCount} Video${vCount > 1 ? 's' : ''}</span>` : ''}
+          ${isRec && pCount ? `<span style="background:#E0F2FE;color:#0369A1;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;">📄 ${pCount} PDF${pCount > 1 ? 's' : ''}</span>` : ''}
+          ${!isRec && c.seats ? `<span style="background:#DBEAFE;color:#1D4ED8;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;">🪑 ${c.seats} Seats</span>` : ''}
+          ${!isRec && c.schedule ? `<span style="background:#DCFCE7;color:#166534;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;">📅 ${c.schedule}</span>` : ''}
+        </div>
+        <div class="class-price ${isFree ? 'free-price' : ''}">${isFree ? 'FREE' : '₹' + c.price}</div>
+        ${cCardCount > 0
+          ? `<div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
+               <span style="font-size:14px;font-weight:800;color:#F59E0B;">${cCardAvg}</span>
+               ${tcStarsHtml(cCardAvg, 13)}
+               <span style="font-size:11px;color:#6B7280;">(${cCardCount})</span>
+             </div>`
+          : `<div style="font-size:11px;color:#9CA3AF;margin-bottom:12px;">No reviews yet</div>`}
+        <button onclick="openClassEnrolModal('${c.id}')" class="btn btn-primary" style="${btnStyle}">
+          ${btnLabel}
+        </button>
+      </div>`;
+    fragment.appendChild(el);
+  });
+  grid.appendChild(fragment);
+  if (typeof filterClasses === 'function') filterClasses('all', null);
+
+  // Auto-open pending class modal if user just returned from login
+  if (TC_AUTH.isLoggedIn()) {
+    const pending = localStorage.getItem('tc_pending_class');
+    if (pending) {
+      localStorage.removeItem('tc_pending_class');
+      setTimeout(() => openClassEnrolModal(pending), 350);
+    }
+  }
+})();
+</script>
+<script src="site-nav.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>

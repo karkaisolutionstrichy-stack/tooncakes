@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Cake | ToonCakes Trichy | Eggless Cake Order Online</title>
+  <meta name="description" content="Order your 100% eggless cake from ToonCakes Trichy. Choose size, add your cake message, and place your order instantly via WhatsApp." />
+  <meta name="keywords" content="order eggless cake Trichy, buy cake online Tiruchirappalli, cake delivery Trichy, WhatsApp cake order Trichy" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #deliveryMap { height: 280px; border-radius: 12px; border: 2px solid var(--cream-dark); margin-bottom: 12px; }
+    .delivery-info-box { display: flex; gap: 16px; align-items: center; background: #F0FFF4; border: 2px solid #86EFAC; border-radius: 10px; padding: 12px 16px; margin-bottom: 12px; flex-wrap: wrap; }
+    .delivery-info-box.charged { background: #FFFBF0; border-color: #FCD34D; }
+    .delivery-warn-box { background: #FFF5F5; border: 2px solid #FCA5A5; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; font-size: 13px; line-height: 1.6; color: #B91C1C; }
+    .search-results-drop { background: white; border: 2px solid var(--cream-dark); border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); max-height: 200px; overflow-y: auto; margin-bottom: 10px; }
+    .search-result-item { padding: 10px 14px; cursor: pointer; font-size: 13px; border-bottom: 1px solid var(--cream-dark); transition: background 0.15s; }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: var(--cream); }
+    .leaflet-container { font-family: 'Poppins', sans-serif; }
+  </style>
+</head>
+<body>
+
+<!-- ====== NAVIGATION ====== -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <span class="logo-icon"><img src="Toon%20Cakes%20Logo.png" alt="ToonCakes Logo" /></span>
+    <span class="logo-text">
+      <span class="logo-name">ToonCakes</span>
+      <span class="logo-tag">100% Eggless · Trichy</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="cakes.html" class="active">Our Cakes</a></li>
+    <li><a href="desserts.html">Desserts</a></li>
+    <li><a href="bulk-order.html">Bulk Orders</a></li>
+    <li><a href="customize.html">Customize</a></li>
+    <li><a href="classes.html">Classes</a></li>
+    <li><a href="recipes.html">Recipes</a></li>
+    <li><a href="https://wa.me/918610636589" class="nav-cta" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Home</a>
+  <a href="cakes.html">🎂 Our Cakes</a>
+  <a href="desserts.html">🍫 Desserts</a>
+  <a href="bulk-order.html">📦 Bulk Orders</a>
+  <a href="customize.html">🎨 Customize</a>
+  <a href="classes.html">👩‍🍳 Classes</a>
+  <a href="recipes.html">📄 Recipes</a>
+  <a href="index.html#contact">📞 Contact</a>
+  <a href="review.html">⭐ Leave a Review</a>
+  <a href="https://wa.me/918610636589" target="_blank">💬 WhatsApp Order</a>
+</div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a> <span>/</span>
+    <a href="cakes.html">Our Cakes</a> <span>/</span>
+    <span id="bc-cake-name">Order Cake</span>
+  </div>
+</div>
+
+<!-- ====== ORDER PAGE ====== -->
+<section class="section">
+  <div class="container">
+
+    <div class="section-header" style="margin-bottom: 36px;">
+      <div class="section-badge">Place Your Order</div>
+      <h1 class="section-title" id="order-heading">Order Your <span>Eggless Cake</span></h1>
+      <p class="section-subtitle">Fill in the details below and place your order via WhatsApp. We'll confirm within minutes!</p>
+    </div>
+
+    <div class="order-layout">
+
+      <!-- ===== LEFT: CAKE PREVIEW ===== -->
+      <div class="order-cake-preview">
+        <img id="cake-img" src="" alt="" style="display:none;width:100%;max-width:280px;height:200px;border-radius:14px;object-fit:cover;box-shadow:0 4px 20px rgba(0,0,0,0.14);margin-bottom:10px;" />
+        <span class="order-cake-emoji" id="cake-emoji">🎂</span>
+        <div class="order-cake-name" id="cake-display-name">Classic Chocolate Birthday Cake</div>
+        <div class="order-cake-price" id="cake-display-price">₹699 / kg</div>
+        <div class="eggless-badge">🥚 100% Eggless</div>
+
+        <!-- Price Calculator -->
+        <div class="price-calculator">
+          <div class="price-row">
+            <span>Price per kg</span>
+            <span id="calc-per-kg">₹699</span>
+          </div>
+          <div class="price-row">
+            <span>Weight selected</span>
+            <span id="calc-weight">1 kg</span>
+          </div>
+          <div class="price-row">
+            <span>Delivery charge</span>
+            <span id="calc-delivery">As applicable</span>
+          </div>
+          <div class="price-row total">
+            <span>Est. Total</span>
+            <span id="calc-total">₹699</span>
+          </div>
+        </div>
+
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px; line-height: 1.6;">
+          Final price confirmed on WhatsApp.<br />
+          📍 Delivery charge added after you pin your location on the map.
+        </p>
+
+        <a href="cakes.html" style="display: block; margin-top: 16px; font-size: 13px; color: var(--pink); text-decoration: none;">
+          ← Back to Cake Menu
+        </a>
+      </div>
+
+      <!-- ===== RIGHT: ORDER FORM ===== -->
+      <div class="order-form-section">
+        <h2 class="form-title">🛒 Cake Order Details</h2>
+
+        <!-- WEIGHT / KG SELECTION -->
+        <div class="form-group">
+          <label class="form-label">Select Cake Weight <span>*</span></label>
+          <div class="kg-selector" id="kgSelector">
+            <div class="kg-option" onclick="selectKg(this, 0.5)">
+              <span class="kg-val">0.5 kg</span>
+              <span class="kg-price" id="p-0.5">₹—</span>
+            </div>
+            <div class="kg-option selected" onclick="selectKg(this, 1)">
+              <span class="kg-val">1 kg</span>
+              <span class="kg-price" id="p-1">₹—</span>
+            </div>
+            <div class="kg-option" onclick="selectKg(this, 1.5)">
+              <span class="kg-val">1.5 kg</span>
+              <span class="kg-price" id="p-1.5">₹—</span>
+            </div>
+            <div class="kg-option" onclick="selectKg(this, 2)">
+              <span class="kg-val">2 kg</span>
+              <span class="kg-price" id="p-2">₹—</span>
+            </div>
+            <div class="kg-option" onclick="selectKg(this, 2.5)">
+              <span class="kg-val">2.5 kg</span>
+              <span class="kg-price" id="p-2.5">₹—</span>
+            </div>
+            <div class="kg-option" onclick="selectKg(this, 3)">
+              <span class="kg-val">3 kg +</span>
+              <span class="kg-price" style="font-size: 10px;">Contact us</span>
+            </div>
+          </div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+            🍰 0.5 kg serves 4–6 people &nbsp;|&nbsp; 1 kg serves 10–12 &nbsp;|&nbsp; 2 kg serves 22–25
+          </p>
+        </div>
+
+        <!-- CAKE MESSAGE -->
+        <div class="form-group">
+          <label class="form-label" for="cakeMessage">
+            Message on Cake
+            <span style="font-size: 11px; font-weight: 400; color: var(--text-muted);">(Optional — write what you want printed)</span>
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            id="cakeMessage"
+            placeholder='e.g. "Happy Birthday Priya! 🎉" or "Happy Anniversary Amma &amp; Appa"'
+            maxlength="60"
+          />
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Max 60 characters. Leave blank if no message needed.</p>
+        </div>
+
+        <!-- CUSTOMIZATION CTA BOX -->
+        <div class="customize-cta-box">
+          <h4>🎨 Want a Special Design or Theme?</h4>
+          <p>Need a specific photo, character, theme, tier, or unique decoration? Our custom cake team can make it happen!</p>
+          <a href="customize.html" class="btn btn-primary" style="font-size: 14px; padding: 12px 28px;">
+            🎨 Go to Custom Cake Section
+          </a>
+          <p class="customize-note">For customization — prices vary based on design complexity. Click above to get a quote.</p>
+        </div>
+
+        <!-- DELIVERY DATE -->
+        <div class="form-group">
+          <label class="form-label" for="deliveryDate">Delivery / Pickup Date <span>*</span></label>
+          <input type="date" class="form-control" id="deliveryDate" required />
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">⏰ Orders need minimum 24 hours advance. For custom cakes, 3–5 days.</p>
+        </div>
+
+        <!-- DELIVERY TIME -->
+        <div class="form-group">
+          <label class="form-label" for="deliveryTime">Preferred Time <span>*</span></label>
+          <select class="form-control" id="deliveryTime" required>
+            <option value="">-- Select Time --</option>
+            <option value="Morning (9AM - 12PM)">🌅 Morning (9 AM – 12 PM)</option>
+            <option value="Afternoon (12PM - 4PM)">☀️ Afternoon (12 PM – 4 PM)</option>
+            <option value="Evening (4PM - 7PM)">🌆 Evening (4 PM – 7 PM)</option>
+            <option value="Night (7PM - 9PM)">🌙 Night (7 PM – 9 PM)</option>
+          </select>
+        </div>
+
+        <!-- DELIVERY OR PICKUP -->
+        <div class="form-group">
+          <label class="form-label">Delivery or Pickup? <span>*</span></label>
+          <div style="display: flex; gap: 12px;">
+            <label style="flex: 1; display: flex; align-items: center; gap: 10px; background: var(--cream); border: 2px solid var(--cream-dark); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; font-size: 14px; font-weight: 500;">
+              <input type="radio" name="deliveryType" value="Home Delivery" id="radioDelivery" style="accent-color: var(--pink);" checked onchange="toggleDeliveryAddress()" />
+              🚚 Home Delivery
+            </label>
+            <label style="flex: 1; display: flex; align-items: center; gap: 10px; background: var(--cream); border: 2px solid var(--cream-dark); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; font-size: 14px; font-weight: 500;">
+              <input type="radio" name="deliveryType" value="Pickup" id="radioPickup" style="accent-color: var(--pink);" onchange="toggleDeliveryAddress()" />
+              🏪 Self Pickup
+            </label>
+          </div>
+        </div>
+
+        <!-- DELIVERY ADDRESS + MAP PICKER (shown only for delivery) -->
+        <div class="form-group" id="addressGroup">
+          <label class="form-label">📍 Select Your Delivery Location <span>*</span></label>
+
+          <!-- How-to instructions -->
+          <div style="background:linear-gradient(135deg,#F5F0FF,#FFF0F5);border:1.5px solid rgba(106,21,69,0.15);border-radius:12px;padding:14px 16px;margin-bottom:14px;">
+            <div style="font-size:12px;font-weight:700;color:var(--plum);margin-bottom:10px;letter-spacing:0.3px;">HOW TO SELECT YOUR DELIVERY LOCATION</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;">
+                <span style="background:var(--plum);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;">1</span>
+                <div><strong>Search</strong> — Type your area name (e.g. Thillai Nagar, Srirangam) in the search box below and pick your location from the results.</div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;">
+                <span style="background:var(--plum);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;">2</span>
+                <div><strong>Click the map</strong> — Tap anywhere on the map to drop your 📍 pin. You can drag the pin to adjust it to your exact doorstep.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search bar -->
+          <div style="display:flex; gap:8px; margin-bottom:10px;">
+            <input
+              type="text"
+              id="mapSearchInput"
+              class="form-control"
+              placeholder="Search your area (e.g. Thillai Nagar, Srirangam, KK Nagar…)"
+              style="flex:1;"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation();}"
+            />
+            <button
+              type="button"
+              onclick="searchLocation()"
+              style="background:var(--plum);color:white;border:none;border-radius:10px;padding:10px 16px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;font-family:'Poppins',sans-serif;flex-shrink:0;"
+            >🔍 Search</button>
+          </div>
+          <div id="searchResultsBox" class="search-results-drop" style="display:none;"></div>
+
+          <!-- Leaflet map -->
+          <div id="deliveryMap"></div>
+          <p style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">
+            🎂 = ToonCakes location &nbsp;|&nbsp; 📍 = Your delivery pin &nbsp;|&nbsp; Drag the 📍 pin to fine-tune
+          </p>
+
+          <!-- Lat/Long fallback (collapsible) -->
+          <div style="margin-bottom:12px;">
+            <button
+              type="button"
+              onclick="toggleCoordsPanel()"
+              id="coordsToggleBtn"
+              style="background:none;border:1.5px dashed var(--cream-dark);border-radius:10px;padding:10px 16px;width:100%;text-align:left;cursor:pointer;font-family:'Poppins',sans-serif;font-size:13px;color:var(--text-muted);display:flex;align-items:center;justify-content:space-between;"
+            >
+              <span>📡 Can't find your location on the map? Enter coordinates instead</span>
+              <span id="coordsToggleIcon" style="font-size:16px;font-weight:700;transition:transform 0.2s;">＋</span>
+            </button>
+            <div id="coordsPanel" style="display:none;background:var(--cream);border:1.5px solid var(--cream-dark);border-top:none;border-radius:0 0 10px 10px;padding:14px;">
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.6;">
+                💡 <strong>How to get your coordinates:</strong> Open Google Maps on your phone → tap &amp; hold on your home location → the coordinates appear at the top of the screen. Copy and paste them here.
+              </p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <input
+                  type="number"
+                  id="coordLat"
+                  class="form-control"
+                  placeholder="Latitude (e.g. 10.8234)"
+                  step="any"
+                  style="flex:1;min-width:130px;"
+                />
+                <input
+                  type="number"
+                  id="coordLng"
+                  class="form-control"
+                  placeholder="Longitude (e.g. 78.7154)"
+                  step="any"
+                  style="flex:1;min-width:130px;"
+                />
+                <button
+                  type="button"
+                  onclick="pinByCoords()"
+                  style="background:var(--pink);color:white;border:none;border-radius:10px;padding:10px 16px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;font-family:'Poppins',sans-serif;flex-shrink:0;"
+                >📍 Pin My Location</button>
+              </div>
+              <div id="coordError" style="display:none;font-size:12px;color:#EF4444;margin-top:8px;"></div>
+            </div>
+          </div>
+
+          <!-- Distance & charge info (shown after pin is placed) -->
+          <div id="deliveryInfoBox" class="delivery-info-box" style="display:none;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:22px;">📏</span>
+              <div>
+                <div style="font-size:11px; color:#166534; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Distance</div>
+                <div style="font-size:15px; font-weight:700; color:#166534;" id="distDisplay">—</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:22px;">🚚</span>
+              <div>
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#92400E;">Delivery Charge</div>
+                <div style="font-size:15px; font-weight:700;" id="chargeDisplay">—</div>
+              </div>
+            </div>
+            <div style="font-size:11px; color:var(--text-muted); line-height:1.5; flex:1;">
+              Straight-line distance from ToonCakes kitchen to your pin.
+            </div>
+          </div>
+
+          <!-- >25 km warning — WhatsApp only -->
+          <div id="whatsappOnlyBox" class="delivery-warn-box" style="display:none;">
+            <strong>⚠️ Online delivery not available for your location.</strong><br/>
+            Your pin is more than 25 km from ToonCakes. For far-distance orders please reach us on WhatsApp and we'll arrange delivery personally.<br/>
+            <a
+              href="https://wa.me/918610636589?text=Hi%20ToonCakes!%20I%20want%20to%20order%20a%20cake%20for%20delivery%20(location%20is%20more%20than%2025%20km%20away)."
+              target="_blank"
+              style="display:inline-block;margin-top:10px;background:#25D366;color:white;padding:8px 18px;border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;"
+            >💬 Order on WhatsApp →</a>
+          </div>
+
+          <!-- Full address text field -->
+          <label class="form-label" for="deliveryAddress" style="margin-top:4px;">Full Delivery Address <span>*</span></label>
+          <textarea
+            class="form-control"
+            id="deliveryAddress"
+            rows="3"
+            placeholder="Full address with landmark, area, Trichy — e.g. 15, Nehru Nagar, near SBI bank, Thillai Nagar, Trichy"
+          ></textarea>
+          <p style="font-size:12px; color:var(--text-muted); margin-top:6px;">Pin your spot on the map above, then type your full address here for the delivery team.</p>
+        </div>
+
+        <!-- CUSTOMER NAME -->
+        <div class="form-group">
+          <label class="form-label" for="customerName">Your Name <span>*</span></label>
+          <input type="text" class="form-control" id="customerName" placeholder="Your full name" required />
+        </div>
+
+        <!-- PHONE -->
+        <div class="form-group">
+          <label class="form-label" for="customerPhone">WhatsApp / Phone Number <span>*</span></label>
+          <input type="tel" class="form-control" id="customerPhone" placeholder="10-digit mobile number, e.g. 98765 43210" inputmode="tel" maxlength="16" autocomplete="tel" required />
+        </div>
+
+        <!-- SPECIAL NOTES -->
+        <div class="form-group">
+          <label class="form-label" for="specialNotes">Any Other Instructions?</label>
+          <textarea
+            class="form-control"
+            id="specialNotes"
+            rows="3"
+            placeholder="e.g. Allergies, special packaging, gift wrap, number of layers, etc."
+          ></textarea>
+        </div>
+
+        <!-- NOTICE -->
+        <div class="notice-box">
+          <span class="notice-icon">🔒</span>
+          <div>Your order is confirmed only after payment. We accept UPI, all major cards, net banking, and Cash on Delivery. Order updates will be sent to your WhatsApp after you pay.</div>
+        </div>
+
+        <!-- SUBMIT BUTTON -->
+        <button onclick="payOnline()" id="orderSubmitBtn" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 17px; margin-top: 8px; padding: 18px;">
+          <i class="fas fa-lock"></i> &nbsp;Confirm &amp; Pay for Order
+        </button>
+
+        <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 12px;">
+          🛡️ 100% Secure · No data stored · Order tracked on WhatsApp
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====== WHY ORDER FROM US ====== -->
+<section class="section" style="background: var(--cream-dark); padding: 50px 24px;">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; text-align: center;">
+      <div>
+        <div style="font-size: 40px; margin-bottom: 10px;">🥚</div>
+        <strong style="display: block; font-size: 15px; margin-bottom: 6px;">100% Eggless</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Every cake guaranteed eggless — perfect for vegetarian families.</p>
+      </div>
+      <div>
+        <div style="font-size: 40px; margin-bottom: 10px;">⚡</div>
+        <strong style="display: block; font-size: 15px; margin-bottom: 6px;">Quick Confirmation</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">We confirm your order within minutes on WhatsApp.</p>
+      </div>
+      <div>
+        <div style="font-size: 40px; margin-bottom: 10px;">🎨</div>
+        <strong style="display: block; font-size: 15px; margin-bottom: 6px;">Custom Options</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">Want a custom look? Tell us and we'll make it happen!</p>
+      </div>
+      <div>
+        <div style="font-size: 40px; margin-bottom: 10px;">🚚</div>
+        <strong style="display: block; font-size: 15px; margin-bottom: 6px;">Trichy Delivery</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">We deliver fresh cakes across all Trichy areas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<a href="https://wa.me/918610636589?text=Hi%20ToonCakes!%20I%20have%20a%20question." class="whatsapp-float" target="_blank" title="Contact Us on WhatsApp" aria-label="Contact Us"><i class="fab fa-whatsapp"></i></a>
+
+<!-- ====== JAVASCRIPT ====== -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // ---- URL params ----
+  const params    = new URLSearchParams(window.location.search);
+  const cakeName  = params.get('name')     || 'Eggless Cake';
+  const cakePrice = parseInt(params.get('price') || '699', 10);
+  const cakeEmoji = params.get('emoji')    || '🎂';
+  const cakeSlug  = params.get('cake')     || 'cake';
+  const cakeCat   = params.get('category') || 'Cake';
+  const cakeId    = params.get('id')       || '';
+
+  let selectedKg = 1;
+
+  // ---- Delivery map state ----
+  const TC_LAT = 10.760818;   // ToonCakes kitchen latitude  (Google Maps: maps.app.goo.gl/f6VFzLmLkMPtKJqx5)
+  const TC_LNG = 78.676316;   // ToonCakes kitchen longitude
+  let deliveryMap    = null;
+  let deliveryMarker = null;
+  let distanceLine   = null;
+  let deliveryDistKm = 0;
+  let deliveryCharge = 0;
+  let locationPinned = false;
+
+  // ---- Populate display ----
+  document.getElementById('cake-emoji').textContent        = cakeEmoji;
+  document.getElementById('cake-display-name').textContent = cakeName;
+  document.getElementById('cake-display-price').textContent = '₹' + cakePrice.toLocaleString('en-IN') + ' / kg';
+  document.getElementById('order-heading').innerHTML = 'Order Your <span style="color:var(--pink);">' + cakeName + '</span>';
+  document.getElementById('bc-cake-name').textContent = cakeName;
+  document.title = 'Order ' + cakeName + ' | ToonCakes Trichy';
+
+  // Load product image from admin-saved menu data
+  if (cakeId) {
+    try {
+      const menuCakes = JSON.parse(localStorage.getItem('tc_menu_cakes') || '[]');
+      const found = menuCakes.find(function(c){ return c.id === cakeId; });
+      if (found && found.image) {
+        const imgEl = document.getElementById('cake-img');
+        imgEl.src   = found.image;
+        imgEl.alt   = cakeName;
+        imgEl.style.display = 'block';
+        document.getElementById('cake-emoji').style.display = 'none';
+      }
+    } catch(e) {}
+  }
+
+  // ---- Validation helpers ----
+  // Local (India) date as YYYY-MM-DD — toISOString() would give the UTC date
+  function localDateStr(offsetDays) {
+    const d = new Date();
+    d.setDate(d.getDate() + (offsetDays || 0));
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  // Accepts "98765 43210", "+91 98765-43210", "098765 43210" → "9876543210"; anything else → null
+  function cleanIndianMobile(raw) {
+    let digits = String(raw || '').replace(/\D/g, '');
+    if (digits.length === 12 && digits.startsWith('91')) digits = digits.slice(2);
+    if (digits.length === 11 && digits.startsWith('0'))  digits = digits.slice(1);
+    return /^[6-9]\d{9}$/.test(digits) ? digits : null;
+  }
+
+  const MIN_ORDER_DATE = localDateStr(1);   // orders need at least one day's notice
+  document.getElementById('deliveryDate').min = MIN_ORDER_DATE;
+
+  [0.5, 1, 1.5, 2, 2.5].forEach(kg => {
+    const el = document.getElementById('p-' + kg);
+    if (el) el.textContent = '₹' + Math.round(cakePrice * kg);
+  });
+
+  // ---- Price calculator ----
+  function updateCalc() {
+    const isDelivery = document.getElementById('radioDelivery').checked;
+    document.getElementById('calc-per-kg').textContent = '₹' + cakePrice.toLocaleString('en-IN');
+    document.getElementById('calc-weight').textContent  = selectedKg + ' kg';
+
+    const cakeAmt = selectedKg === 3 ? 0 : Math.round(cakePrice * selectedKg);
+
+    let delivText;
+    if (!isDelivery) {
+      delivText = 'Free (Self Pickup)';
+      deliveryCharge = 0;
+    } else if (!locationPinned) {
+      delivText = 'Pin your location ↓';
+    } else {
+      delivText = deliveryCharge === 0 ? 'Free (within 7 km) 🎉' : '₹' + deliveryCharge;
+    }
+    document.getElementById('calc-delivery').textContent = delivText;
+
+    const fee      = isDelivery && locationPinned ? deliveryCharge : 0;
+    const totalAmt = cakeAmt + fee;
+    document.getElementById('calc-total').textContent =
+      selectedKg === 3 ? 'Quote on WhatsApp' : '₹' + totalAmt.toLocaleString('en-IN');
+
+    // 3 kg+ is priced by quote, so the button sends the request on WhatsApp instead of going to payment
+    const btn = document.getElementById('orderSubmitBtn');
+    if (btn) {
+      btn.innerHTML = selectedKg === 3
+        ? '<i class="fab fa-whatsapp"></i> &nbsp;Send Order Request on WhatsApp'
+        : '<i class="fas fa-lock"></i> &nbsp;Confirm &amp; Pay for Order';
+      btn.style.background = selectedKg === 3 ? '#25D366' : '';
+    }
+  }
+  updateCalc();
+
+  function selectKg(el, kg) {
+    document.querySelectorAll('.kg-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedKg = kg;
+    updateCalc();
+  }
+
+  // ---- Delivery distance helpers ----
+  function haversineKm(lat1, lng1, lat2, lng2) {
+    const R = 6371, toR = Math.PI / 180;
+    const dLat = (lat2 - lat1) * toR;
+    const dLng = (lng2 - lng1) * toR;
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(lat1 * toR) * Math.cos(lat2 * toR) * Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function calcDeliveryFee(km) {
+    if (km <= 7)  return 0;
+    if (km <= 10) return 50;
+    if (km <= 15) return 80;
+    if (km <= 20) return 120;
+    if (km <= 25) return 150;
+    return -1; // WhatsApp only
+  }
+
+  // ---- Map tiles ----
+  // OpenStreetMap first (must send our site as Referer, per their tile policy).
+  // OSM can block a site/network without notice and then serves an
+  // "Access blocked" image (HTTP 403) — so we test one tile first and
+  // switch to Esri's free street map if OSM refuses.
+  const OSM_TILES  = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+  const ESRI_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}';
+
+  function addMapTiles(map) {
+    const useEsri = () => L.tileLayer(ESRI_TILES, {
+      attribution: 'Tiles © <a href="https://www.esri.com">Esri</a> — Esri, HERE, Garmin, OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(map);
+    const useOsm = () => L.tileLayer(OSM_TILES, {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      referrerPolicy: 'strict-origin-when-cross-origin'
+    }).addTo(map);
+
+    // Opened straight from a folder (file://) there is no site to send, so OSM blocks it
+    if (location.protocol === 'file:') { useEsri(); return; }
+
+    const probe = OSM_TILES.replace('{z}', '13').replace('{x}', '5862').replace('{y}', '3770');
+    fetch(probe, { referrerPolicy: 'strict-origin-when-cross-origin', cache: 'no-store' })
+      .then(r => (r.ok ? useOsm() : useEsri()))
+      .catch(useEsri);
+  }
+
+  // ---- Map initialisation ----
+  function initDeliveryMap() {
+    if (deliveryMap) { deliveryMap.invalidateSize(); return; }
+
+    deliveryMap = L.map('deliveryMap').setView([TC_LAT, TC_LNG], 13);
+    addMapTiles(deliveryMap);
+
+    // Fixed ToonCakes marker
+    const shopIcon = L.divIcon({
+      html: '<div style="background:#E8356D;color:white;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:19px;border:3px solid white;box-shadow:0 2px 10px rgba(0,0,0,0.35);">🎂</div>',
+      className: '', iconSize: [38, 38], iconAnchor: [19, 19]
+    });
+    L.marker([TC_LAT, TC_LNG], { icon: shopIcon })
+      .addTo(deliveryMap)
+      .bindPopup('<strong>🎂 ToonCakes</strong><br/><span style="font-size:12px;">Our kitchen — delivery starts here!</span>', { maxWidth: 200 })
+      .openPopup();
+
+    deliveryMap.on('click', e => placeDeliveryPin(e.latlng.lat, e.latlng.lng));
+  }
+
+  function placeDeliveryPin(lat, lng) {
+    const pinIcon = L.divIcon({
+      html: '<div style="background:#6A1545;color:white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:17px;border:3px solid white;box-shadow:0 2px 10px rgba(0,0,0,0.35);">📍</div>',
+      className: '', iconSize: [36, 36], iconAnchor: [18, 36]
+    });
+
+    if (deliveryMarker) {
+      deliveryMarker.setLatLng([lat, lng]);
+    } else {
+      deliveryMarker = L.marker([lat, lng], { icon: pinIcon, draggable: true })
+        .addTo(deliveryMap)
+        .bindPopup('<span style="font-size:12px;">Your delivery location<br/>Drag to adjust</span>');
+      deliveryMarker.on('dragend', () => {
+        const p = deliveryMarker.getLatLng();
+        updateDeliveryInfo(p.lat, p.lng);
+      });
+    }
+    updateDeliveryInfo(lat, lng);
+  }
+
+  function updateDeliveryInfo(lat, lng) {
+    const dist = haversineKm(TC_LAT, TC_LNG, lat, lng);
+    deliveryDistKm = dist;
+    const fee = calcDeliveryFee(dist);
+
+    // Dashed line from shop to pin
+    if (distanceLine) deliveryMap.removeLayer(distanceLine);
+    distanceLine = L.polyline([[TC_LAT, TC_LNG], [lat, lng]], {
+      color: fee === -1 ? '#EF4444' : '#E8356D',
+      weight: 2, dashArray: '6 4', opacity: 0.8
+    }).addTo(deliveryMap);
+
+    const infoBox  = document.getElementById('deliveryInfoBox');
+    const warnBox  = document.getElementById('whatsappOnlyBox');
+    const distEl   = document.getElementById('distDisplay');
+    const chargeEl = document.getElementById('chargeDisplay');
+
+    if (fee === -1) {
+      // Beyond 25 km — online ordering not available
+      infoBox.style.display  = 'none';
+      warnBox.style.display  = 'block';
+      locationPinned  = false;
+      deliveryCharge  = 0;
+    } else {
+      warnBox.style.display = 'none';
+      infoBox.style.display = 'flex';
+      distEl.textContent = dist.toFixed(1) + ' km from ToonCakes';
+
+      if (fee === 0) {
+        chargeEl.innerHTML = '<span style="color:#16A34A;font-weight:700;">FREE 🎉</span>';
+        infoBox.style.borderColor = '#86EFAC';
+        infoBox.style.background  = '#F0FFF4';
+      } else {
+        chargeEl.innerHTML = '<span style="color:#B45309;font-weight:700;">₹' + fee + '</span>';
+        infoBox.style.borderColor = '#FCD34D';
+        infoBox.style.background  = '#FFFBF0';
+      }
+      deliveryCharge = fee;
+      locationPinned = true;
+    }
+    updateCalc();
+  }
+
+  // ---- Location search: OSM Nominatim, falling back to Photon (also free, no key) ----
+  // Both return [{ lat, lon, display_name }]
+  async function geocode(query) {
+    try {
+      const url = 'https://nominatim.openstreetmap.org/search?q='
+        + encodeURIComponent(query + ', Tiruchirappalli, Tamil Nadu, India')
+        + '&format=json&limit=5&addressdetails=1';
+      const r = await fetch(url, { referrerPolicy: 'strict-origin-when-cross-origin' });
+      if (!r.ok) throw new Error('Nominatim ' + r.status);
+      return await r.json();
+    } catch (e) {
+      const url = 'https://photon.komoot.io/api/?q=' + encodeURIComponent(query + ', Tiruchirappalli')
+        + '&limit=5&lat=' + TC_LAT + '&lon=' + TC_LNG;
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('Photon ' + r.status);
+      const json = await r.json();
+      return (json.features || []).map(f => {
+        const p = f.properties || {};
+        const parts = [p.name, p.street, p.district, p.city || p.county, p.state, p.postcode]
+          .filter((v, i, a) => v && a.indexOf(v) === i);
+        return { lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], display_name: parts.join(', ') };
+      });
+    }
+  }
+
+  async function searchLocation() {
+    const query = document.getElementById('mapSearchInput').value.trim();
+    if (!query) return;
+
+    const box = document.getElementById('searchResultsBox');
+    box.style.display = 'block';
+    box.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:var(--text-muted);">🔍 Searching…</div>';
+
+    try {
+      const data = await geocode(query);
+
+      if (!data.length) {
+        box.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:var(--text-muted);">No results found. Try a different area name or click on the map directly.</div>';
+        return;
+      }
+      box.innerHTML = '';
+      data.forEach(item => {
+        const d = document.createElement('div');
+        d.className = 'search-result-item';
+        d.innerHTML = '<span style="margin-right:6px;">📍</span>' + item.display_name;
+        d.onclick = () => {
+          const lat = parseFloat(item.lat), lng = parseFloat(item.lon);
+          deliveryMap.setView([lat, lng], 15);
+          placeDeliveryPin(lat, lng);
+          box.style.display = 'none';
+          document.getElementById('mapSearchInput').value = item.display_name.split(',')[0];
+          const addr = document.getElementById('deliveryAddress');
+          if (!addr.value) addr.value = item.display_name;
+        };
+        box.appendChild(d);
+      });
+    } catch {
+      box.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#EF4444;">Search failed. Please click on the map to pin your location.</div>';
+    }
+  }
+
+  // ---- Lat/long collapsible panel ----
+  function toggleCoordsPanel() {
+    const panel  = document.getElementById('coordsPanel');
+    const icon   = document.getElementById('coordsToggleIcon');
+    const isOpen = panel.style.display !== 'none';
+    panel.style.display = isOpen ? 'none' : 'block';
+    icon.textContent    = isOpen ? '＋' : '－';
+  }
+
+  // ---- Pin by lat/long entry ----
+  function pinByCoords() {
+    const latVal = document.getElementById('coordLat').value.trim();
+    const lngVal = document.getElementById('coordLng').value.trim();
+    const errEl  = document.getElementById('coordError');
+
+    const lat = parseFloat(latVal);
+    const lng = parseFloat(lngVal);
+
+    if (!latVal || !lngVal || isNaN(lat) || isNaN(lng)) {
+      errEl.textContent = '⚠️ Please enter valid numbers for both latitude and longitude.';
+      errEl.style.display = 'block';
+      return;
+    }
+    if (lat < 8 || lat > 14 || lng < 76 || lng > 82) {
+      errEl.textContent = '⚠️ Those coordinates appear to be outside Tamil Nadu. Please check and re-enter.';
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+    deliveryMap.setView([lat, lng], 15);
+    placeDeliveryPin(lat, lng);
+  }
+
+  // Close search dropdown on outside click
+  document.addEventListener('click', e => {
+    const box = document.getElementById('searchResultsBox');
+    if (box && !box.contains(e.target) && e.target.id !== 'mapSearchInput') {
+      box.style.display = 'none';
+    }
+  });
+
+  // ---- Toggle delivery / pickup ----
+  function toggleDeliveryAddress() {
+    const isDelivery = document.getElementById('radioDelivery').checked;
+    document.getElementById('addressGroup').style.display = isDelivery ? 'block' : 'none';
+    if (isDelivery) {
+      setTimeout(() => initDeliveryMap(), 150);
+    } else {
+      locationPinned = false;
+      deliveryCharge = 0;
+    }
+    updateCalc();
+  }
+
+  // Mobile nav
+  function toggleMobileNav() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+
+  // ---- Confirm & Pay ----
+  function payOnline() {
+    const cakeMsg   = document.getElementById('cakeMessage').value.trim();
+    const delivDate = document.getElementById('deliveryDate').value;
+    const delivTime = document.getElementById('deliveryTime').value;
+    const delivType = document.querySelector('input[name="deliveryType"]:checked').value;
+    const address   = document.getElementById('deliveryAddress').value.trim();
+    const custName  = document.getElementById('customerName').value.trim();
+    const custPhone = document.getElementById('customerPhone').value.trim();
+    const notes     = document.getElementById('specialNotes').value.trim();
+
+    const dateEl  = document.getElementById('deliveryDate');
+    const phoneEl = document.getElementById('customerPhone');
+    const fail = (msg, el) => { alert(msg); if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } };
+
+    if (!delivDate) { fail('Please choose a delivery date!', dateEl); return; }
+    if (delivDate < MIN_ORDER_DATE) {
+      fail('Please choose a date from tomorrow (' + MIN_ORDER_DATE.split('-').reverse().join('-') + ') onwards.\n\nFor a same-day cake, please call or WhatsApp us.', dateEl);
+      return;
+    }
+    if (!delivTime) { fail('Please choose a preferred delivery time!', document.getElementById('deliveryTime')); return; }
+    if (!custName)  { fail('Please enter your name!', document.getElementById('customerName')); return; }
+    if (!custPhone) { fail('Please enter your WhatsApp number!', phoneEl); return; }
+    const mobile = cleanIndianMobile(custPhone);
+    if (!mobile) {
+      fail('Please enter a valid 10-digit mobile number (for example 98765 43210).\n\nWe send your order updates on WhatsApp to this number.', phoneEl);
+      return;
+    }
+
+    // 3 kg and above: no online price — send the request on WhatsApp for a quote
+    if (selectedKg === 3) {
+      const lines = [
+        '🎂 *Cake Order Request — 3 kg or more*',
+        '',
+        '*Cake:* ' + cakeName,
+        '*Weight:* 3 kg or more (please share a quote)',
+        '*Date:* ' + delivDate.split('-').reverse().join('-'),
+        '*Time:* ' + delivTime,
+        '*Delivery / Pickup:* ' + delivType,
+        (delivType === 'Home Delivery' && address) ? '*Address:* ' + address : null,
+        cakeMsg ? '*Message on cake:* ' + cakeMsg : null,
+        notes   ? '*Notes:* ' + notes : null,
+        '',
+        '*Name:* ' + custName,
+        '*Phone:* ' + mobile
+      ].filter(line => line !== null);
+      window.open('https://wa.me/918610636589?text=' + encodeURIComponent(lines.join('\n')), '_blank');
+      return;
+    }
+
+    if (delivType === 'Home Delivery') {
+      if (!locationPinned) {
+        alert('Please pin your delivery location on the map so we can calculate the delivery charge.');
+        document.getElementById('deliveryMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      if (deliveryDistKm > 25) {
+        alert('Your location is more than 25 km from ToonCakes. Please order via WhatsApp for this distance.');
+        return;
+      }
+      if (!address) { alert('Please enter your full delivery address!'); return; }
+    }
+
+    const cakeAmt  = selectedKg === 3 ? 0 : Math.round(cakePrice * selectedKg);
+    const shipFee  = delivType === 'Home Delivery' ? deliveryCharge : 0;
+    const totalAmt = cakeAmt + shipFee;
+
+    const orderData = {
+      type:             'cake',
+      cake:             cakeName,
+      items:            cakeName + ' — ' + selectedKg + 'kg',
+      cakeAmount:       cakeAmt,
+      deliveryCharge:   shipFee,
+      deliveryDistance: delivType === 'Home Delivery' ? parseFloat(deliveryDistKm.toFixed(1)) : 0,
+      deliveryType:     delivType,
+      address:          address,
+      amount:           totalAmt,
+      total:            totalAmt,
+      name:             custName,
+      phone:            mobile,
+      date:             delivDate,
+      time:             delivTime,
+      cakeMessage:      cakeMsg,
+      notes:            notes,
+      note:             cakeName + ' — ' + selectedKg + 'kg'
+    };
+
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(orderData))));
+    window.location.href = 'payment.html#order=' + encoded;
+  }
+
+  // Init map on load since Home Delivery is pre-selected
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => initDeliveryMap(), 300);
+  });
+</script>
+<script src="site-nav.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>

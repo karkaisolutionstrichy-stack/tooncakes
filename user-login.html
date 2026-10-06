@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Sign Up | ToonCakes Trichy</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Google Identity Services — Sign In with Google -->
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script src="user-auth.js"></script>
+  <!-- EmailJS — free email API for sending password-reset PINs (emailjs.com) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <style>
+    body { background: linear-gradient(135deg, #2D0B20 0%, #6A1545 55%, #E8356D 100%); min-height: 100vh; }
+
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px 48px;
+    }
+
+    /* Logo bar */
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .auth-logo a {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .auth-logo img { width: 52px; height: 52px; border-radius: 12px; }
+    .auth-logo .auth-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: white;
+      line-height: 1.1;
+    }
+    .auth-logo .auth-tagline { font-size: 12px; color: rgba(255,255,255,0.65); }
+
+    /* Card */
+    .auth-card {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+
+    /* Tabs */
+    .auth-tabs {
+      display: flex;
+      border-bottom: 2px solid #f0eaf5;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 18px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #999;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .auth-tab.active { color: #6A1545; }
+    .auth-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #E8356D, #6A1545);
+      border-radius: 3px 3px 0 0;
+    }
+
+    /* Panels */
+    .auth-panel { display: none; padding: 28px 28px 32px; }
+    .auth-panel.active { display: block; }
+
+    /* Profile panel */
+    #panel-profile { display: none; padding: 28px; text-align: center; }
+
+    /* Section title */
+    .auth-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #2D0B20;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .auth-subtitle {
+      font-size: 13px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* Form controls */
+    .auth-group { margin-bottom: 16px; }
+    .auth-label { display: block; font-size: 12px; font-weight: 700; color: #6A1545; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .auth-input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid #f0eaf5;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      color: #2D0B20;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .auth-input:focus { border-color: #E8356D; }
+
+    .auth-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 13px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+    .auth-btn-primary {
+      background: linear-gradient(135deg, #E8356D, #6A1545);
+      color: white;
+      box-shadow: 0 4px 20px rgba(232,53,109,0.35);
+    }
+    .auth-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(232,53,109,0.45); }
+    .auth-btn-primary:active { transform: none; }
+
+    /* Google button */
+    .auth-google-btn {
+      width: 100%;
+      padding: 13px;
+      border: 2px solid #e0d8ea;
+      border-radius: 13px;
+      background: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+      margin-bottom: 20px;
+    }
+    .auth-google-btn:hover { border-color: #E8356D; background: #fff5f8; }
+    .auth-google-btn img { width: 20px; height: 20px; }
+
+    /* Divider */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0 18px;
+      color: #ccc;
+      font-size: 12px;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #f0eaf5;
+    }
+
+    /* Error/success msg */
+    .auth-msg {
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+      line-height: 1.5;
+    }
+    .auth-msg.error   { background: #FFF5F5; color: #DC2626; border: 1.5px solid #FCA5A5; }
+    .auth-msg.success { background: #F0FFF4; color: #166534; border: 1.5px solid #86EFAC; }
+
+    /* Switch link */
+    .auth-switch { font-size: 13px; color: #888; text-align: center; margin-top: 8px; }
+    .auth-switch a { color: #E8356D; font-weight: 700; cursor: pointer; text-decoration: none; }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    /* Profile section */
+    .profile-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6A1545, #E8356D);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; margin: 0 auto 16px;
+      overflow: hidden;
+    }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: #2D0B20; margin-bottom: 4px; }
+    .profile-email { font-size: 13px; color: #888; margin-bottom: 20px; }
+    .profile-detail {
+      background: #fdf5ff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: left;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .profile-detail-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .profile-detail-row span:first-child { color: #6A1545; font-weight: 700; min-width: 60px; }
+
+    /* Terms */
+    .auth-terms { font-size: 11px; color: #aaa; text-align: center; margin-top: -6px; margin-bottom: 16px; line-height: 1.5; }
+
+    @media (max-width: 480px) {
+      .auth-panel { padding: 22px 20px 28px; }
+      .auth-card { border-radius: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrapper">
+
+  <!-- Logo -->
+  <div class="auth-logo">
+    <a href="index.html">
+      <img src="Toon%20Cakes%20Logo.png" alt="ToonCakes" onerror="this.style.display='none'" />
+      <div>
+        <div class="auth-brand">ToonCakes</div>
+        <div class="auth-tagline">100% Eggless · Trichy</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Auth Card -->
+  <div class="auth-card" id="authCard">
+
+    <!-- Profile Panel (shown when already logged in) -->
+    <div id="panel-profile">
+      <div class="profile-avatar" id="profileAvatar">👤</div>
+      <div class="profile-name" id="profileName">—</div>
+      <div class="profile-email" id="profileEmail">—</div>
+      <div class="profile-detail">
+        <div class="profile-detail-row">
+          <span>📞 Phone</span>
+          <span id="profilePhone" style="color:#555;">—</span>
+        </div>
+        <div class="profile-detail-row">
+          <span>📅 Joined</span>
+          <span id="profileJoined" style="color:#555;">—</span>
+        </div>
+      </div>
+      <button onclick="TC_AUTH.logout()" class="auth-btn auth-btn-primary" style="background:linear-gradient(135deg,#dc2626,#991b1b);">
+        🚪 Logout
+      </button>
+      <a href="index.html" style="display:block;text-align:center;font-size:13px;color:#6A1545;text-decoration:none;margin-top:12px;">
+        ← Back to Home
+      </a>
+    </div>
+
+    <!-- Login / Register tabs (shown when logged out) -->
+    <div id="authLoginArea">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login"    onclick="switchTab('login')">🔑 Login</button>
+        <button class="auth-tab"        id="tab-register" onclick="switchTab('register')">✨ Create Account</button>
+      </div>
+
+      <!-- ── LOGIN PANEL ── -->
+      <div class="auth-panel active" id="panel-login">
+        <h2 class="auth-title">Welcome Back! 🎂</h2>
+        <p class="auth-subtitle">Log in to access classes, recipes, offers &amp; more.</p>
+
+        <!-- Google Sign-In -->
+        <button class="auth-google-btn" id="googleLoginBtn" onclick="triggerGoogleLogin()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+          Continue with Google
+        </button>
+        <p style="text-align:center;font-size:11px;color:#22C55E;font-weight:700;margin:-8px 0 12px;">✨ No passwords to remember!</p>
+
+        <div class="auth-divider">or log in with email</div>
+
+        <div id="loginMsg" class="auth-msg"></div>
+
+        <div class="auth-group">
+          <label class="auth-label" for="loginEmail">Email Address</label>
+          <input type="email" class="auth-input" id="loginEmail" placeholder="you@email.com"
+                 onkeydown="if(event.key==='Enter')submitLogin()" />
+        </div>
+        <div class="auth-group">
+          <label class="auth-label" for="loginPassword">Password</label>
+          <input type="password" class="auth-input" id="loginPassword" placeholder="Your password"
+                 onkeydown="if(event.key==='Enter')submitLogin()" />
+        </div>
+
+        <button class="auth-btn auth-btn-primary" onclick="submitLogin()">
+          🔑 Login to ToonCakes
+        </button>
+
+        <div style="text-align:center;margin:-2px 0 10px;">
+          <a onclick="openFPModal()" style="font-size:12px;color:#E8356D;font-weight:600;cursor:pointer;text-decoration:none;">
+            🔐 Forgot your password?
+          </a>
+        </div>
+
+        <div class="auth-switch">
+          Don't have an account? <a onclick="switchTab('register')">Create one free →</a>
+        </div>
+      </div>
+
+      <!-- ── REGISTER PANEL ── -->
+      <div class="auth-panel" id="panel-register">
+        <h2 class="auth-title">Join ToonCakes! 🎉</h2>
+        <p class="auth-subtitle">Create a free account to access classes, recipes, exclusive offers &amp; coupons.</p>
+
+        <!-- Google Sign-In -->
+        <button class="auth-google-btn" id="googleRegBtn" onclick="triggerGoogleLogin()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+          Sign up with Google
+        </button>
+        <p style="text-align:center;font-size:11px;color:#22C55E;font-weight:700;margin:-8px 0 12px;">✨ Easiest — no password ever!</p>
+
+        <div class="auth-divider">or sign up with email</div>
+
+        <div id="registerMsg" class="auth-msg"></div>
+
+        <div class="auth-group">
+          <label class="auth-label" for="regName">Full Name <span style="color:#E8356D;">*</span></label>
+          <input type="text" class="auth-input" id="regName" placeholder="Your full name" />
+        </div>
+        <div class="auth-group">
+          <label class="auth-label" for="regEmail">Email Address <span style="color:#E8356D;">*</span></label>
+          <input type="email" class="auth-input" id="regEmail" placeholder="you@email.com" />
+        </div>
+        <div class="auth-group">
+          <label class="auth-label" for="regPhone">Phone / WhatsApp</label>
+          <input type="tel" class="auth-input" id="regPhone" placeholder="+91 98765 43210" />
+        </div>
+        <div class="auth-group">
+          <label class="auth-label" for="regPassword">Password <span style="color:#E8356D;">*</span></label>
+          <input type="password" class="auth-input" id="regPassword" placeholder="Min. 6 characters" />
+        </div>
+        <div class="auth-group">
+          <label class="auth-label" for="regConfirm">Confirm Password <span style="color:#E8356D;">*</span></label>
+          <input type="password" class="auth-input" id="regConfirm" placeholder="Re-enter password"
+                 onkeydown="if(event.key==='Enter')submitRegister()" />
+        </div>
+
+        <!-- Account Recovery (Option B) -->
+        <div style="background:#F5F0FF;border-radius:14px;padding:16px;margin-bottom:16px;">
+          <div style="font-size:12px;font-weight:700;color:#6A1545;margin-bottom:12px;">
+            🔐 Account Recovery &nbsp;<span style="font-size:10px;font-weight:500;color:#aaa;">Recommended — helps if you forget your password</span>
+          </div>
+          <div class="auth-group" style="margin-bottom:10px;">
+            <label class="auth-label">Security Question</label>
+            <select class="auth-input" id="regSecQ" style="cursor:pointer;">
+              <option value="">— Choose a question —</option>
+              <option value="What was your first pet's name?">What was your first pet's name?</option>
+              <option value="What was the name of your first school?">What was the name of your first school?</option>
+              <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+              <option value="What is your favourite cake flavour?">What is your favourite cake flavour?</option>
+              <option value="What city were you born in?">What city were you born in?</option>
+              <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+            </select>
+          </div>
+          <div class="auth-group" style="margin-bottom:0;">
+            <label class="auth-label">Your Answer</label>
+            <input type="text" class="auth-input" id="regSecA" placeholder="Your answer (not case-sensitive)" autocomplete="off" />
+          </div>
+        </div>
+
+        <!-- WhatsApp opt-in -->
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:16px;font-size:13px;color:#444;line-height:1.5;">
+          <input type="checkbox" id="regWaOptIn" style="width:16px;height:16px;accent-color:#25D366;flex-shrink:0;margin-top:2px;" />
+          <span>📱 <strong>Yes!</strong> Send me order updates &amp; exclusive cake offers on WhatsApp</span>
+        </label>
+
+        <p class="auth-terms">
+          By creating an account you agree to our Terms of Service. Your data is stored locally on your device and used only to personalise your ToonCakes experience.
+        </p>
+
+        <button class="auth-btn auth-btn-primary" onclick="submitRegister()">
+          ✨ Create My Account — Free!
+        </button>
+
+        <div class="auth-switch">
+          Already have an account? <a onclick="switchTab('login')">Log in →</a>
+        </div>
+      </div>
+    </div><!-- /authLoginArea -->
+
+  </div><!-- /auth-card -->
+
+  <!-- Back link -->
+  <a href="index.html" style="color:rgba(255,255,255,0.6);font-size:13px;margin-top:20px;text-decoration:none;">
+    ← Back to ToonCakes Home
+  </a>
+
+</div><!-- /auth-wrapper -->
+
+<!-- Hidden Google GSI div (renders button invisibly; we use our own styled button) -->
+<div id="g_id_onload"
+     data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+     data-callback="handleGoogleToken"
+     data-auto_prompt="false"
+     style="display:none;">
+</div>
+<div class="g_id_signin"
+     data-type="standard"
+     data-size="large"
+     data-theme="outline"
+     data-text="continue_with"
+     data-shape="pill"
+     data-logo_alignment="left"
+     style="display:none;">
+</div>
+
+<script>
+  const _returnUrl = new URLSearchParams(window.location.search).get('return') || 'index.html';
+
+  /* ── Check if already logged in ── */
+  window.addEventListener('DOMContentLoaded', () => {
+    if (TC_AUTH.isLoggedIn()) {
+      showProfilePanel();
+    }
+    // If hash is #profile, show profile tab directly
+    if (window.location.hash === '#profile' && TC_AUTH.isLoggedIn()) {
+      showProfilePanel();
+    }
+    // Check for tab param
+    const tab = new URLSearchParams(window.location.search).get('tab');
+    if (tab === 'register') switchTab('register');
+  });
+
+  function showProfilePanel() {
+    document.getElementById('authLoginArea').style.display = 'none';
+    const pp = document.getElementById('panel-profile');
+    pp.style.display = 'block';
+    const u = TC_AUTH.getUser();
+    if (!u) return;
+    // Avatar
+    const avEl = document.getElementById('profileAvatar');
+    avEl.innerHTML = u.avatar ? `<img src="${u.avatar}" alt="${u.name}" />` : '👤';
+    document.getElementById('profileName').textContent  = u.name;
+    document.getElementById('profileEmail').textContent = u.email;
+    document.getElementById('profilePhone').textContent = u.phone || 'Not provided';
+    // Joined date from users array
+    const users  = JSON.parse(localStorage.getItem('tc_users') || '[]');
+    const stored = users.find(x => x.id === u.userId);
+    if (stored) {
+      document.getElementById('profileJoined').textContent =
+        new Date(stored.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+    }
+  }
+
+  /* ── Tab switch ── */
+  function switchTab(name) {
+    document.querySelectorAll('.auth-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-'   + name).classList.add('active');
+    document.getElementById('panel-' + name).classList.add('active');
+    clearMsgs();
+  }
+
+  function clearMsgs() {
+    ['loginMsg','registerMsg'].forEach(id => {
+      const el = document.getElementById(id);
+      el.style.display = 'none'; el.className = 'auth-msg';
+    });
+  }
+
+  function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    el.textContent  = text;
+    el.className    = 'auth-msg ' + type;
+    el.style.display = 'block';
+  }
+
+  /* ── Login submit ── */
+  function submitLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pw    = document.getElementById('loginPassword').value;
+    if (!email || !pw) { showMsg('loginMsg', 'Please enter your email and password.', 'error'); return; }
+    const result = TC_AUTH.login(email, pw);
+    if (result.ok) {
+      showMsg('loginMsg', '✅ Logged in! Redirecting…', 'success');
+      setTimeout(() => window.location.href = decodeURIComponent(_returnUrl), 900);
+    } else {
+      showMsg('loginMsg', result.msg, 'error');
+    }
+  }
+
+  /* ── Register submit ── */
+  function submitRegister() {
+    const name    = document.getElementById('regName').value.trim();
+    const email   = document.getElementById('regEmail').value.trim();
+    const phone   = document.getElementById('regPhone').value.trim();
+    const pw      = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+    const secQ    = document.getElementById('regSecQ').value;
+    const secA    = document.getElementById('regSecA').value.trim();
+    const waOptIn = document.getElementById('regWaOptIn').checked;
+    if (!name || !email || !pw)           { showMsg('registerMsg', 'Please fill in all required fields.', 'error'); return; }
+    if (pw !== confirm)                    { showMsg('registerMsg', 'Passwords do not match.', 'error'); return; }
+    if ((secQ && !secA) || (!secQ && secA)) { showMsg('registerMsg', 'Please select both a security question and provide your answer.', 'error'); return; }
+    const result = TC_AUTH.register(name, email, phone, pw, secQ || null, secA || null, waOptIn);
+    if (result.ok) {
+      showMsg('registerMsg', '🎉 Account created! Welcome to ToonCakes!', 'success');
+      setTimeout(() => window.location.href = decodeURIComponent(_returnUrl), 1100);
+    } else {
+      showMsg('registerMsg', result.msg, 'error');
+    }
+  }
+
+  /* ── Google login button ── */
+  function triggerGoogleLogin() {
+    // Try to trigger the hidden GSI button, fall back to prompt
+    if (window.google && google.accounts && google.accounts.id) {
+      google.accounts.id.prompt();
+    } else {
+      alert('Google Sign-In is loading — please wait a moment and try again, or use email/password below.');
+    }
+  }
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     FORGOT PASSWORD MODAL
+═══════════════════════════════════════════════ -->
+<div id="fpModal"
+     style="display:none;position:fixed;inset:0;background:rgba(15,5,30,0.78);z-index:9999;
+            align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);">
+  <div style="background:white;border-radius:22px;width:100%;max-width:400px;
+              box-shadow:0 24px 80px rgba(0,0,0,0.45);overflow:hidden;">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#6A1545,#E8356D);padding:20px 24px 18px;
+                display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.65);text-transform:uppercase;
+                    letter-spacing:1px;margin-bottom:3px;">Account Recovery</div>
+        <div style="font-family:'Playfair Display',serif;font-size:19px;font-weight:800;color:white;">
+          🔐 Forgot Password
+        </div>
+      </div>
+      <button onclick="closeFPModal()"
+              style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;
+                     height:32px;border-radius:50%;font-size:15px;cursor:pointer;line-height:1;">✕</button>
+    </div>
+    <!-- Body (rendered by JS) -->
+    <div id="fpBody" style="padding:24px 26px 28px;"></div>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────
+   EmailJS Config — create a free account at emailjs.com
+   1. Add an Email Service  → copy Service ID
+   2. Create an Email Template with variables:
+        {{to_email}}  {{user_name}}  {{reset_pin}}
+      → copy Template ID
+   3. Account → API Keys → copy Public Key
+   Replace the placeholders below with your real values.
+───────────────────────────────────────────────────────── */
+const EMAILJS_SERVICE_ID  = 'YOUR_EMAILJS_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'YOUR_EMAILJS_TEMPLATE_ID';
+const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
+
+/* ── State ── */
+let _fpEmail = '', _fpToken = '', _fpName = '';
+
+/* ── Helpers ── */
+function openFPModal() {
+  document.getElementById('fpModal').style.display = 'flex';
+  renderFPStep1();
+}
+function closeFPModal() {
+  document.getElementById('fpModal').style.display = 'none';
+}
+function fpMsg(msg, type) {
+  const el = document.getElementById('fpMsg');
+  if (!el) return;
+  el.textContent   = msg;
+  el.className     = 'auth-msg ' + (type || 'error');
+  el.style.display = 'block';
+}
+function escH(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Step 1: Enter email ── */
+function renderFPStep1() {
+  _fpEmail = ''; _fpToken = ''; _fpName = '';
+  document.getElementById('fpBody').innerHTML = `
+    <p style="font-size:14px;color:#666;line-height:1.65;margin-bottom:20px;">
+      Enter your registered email and we'll help you regain access to your ToonCakes account.
+    </p>
+    <div id="fpMsg" class="auth-msg" style="display:none;"></div>
+    <div class="auth-group">
+      <label class="auth-label">Registered Email</label>
+      <input type="email" class="auth-input" id="fpEmailInput" placeholder="you@email.com"
+             onkeydown="if(event.key==='Enter')fpCheckEmail()" />
+    </div>
+    <button class="auth-btn auth-btn-primary" onclick="fpCheckEmail()">Next →</button>
+    <div style="text-align:center;margin-top:6px;">
+      <button onclick="closeFPModal()"
+              style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer;">Cancel</button>
+    </div>`;
+  /* Pre-fill from login field */
+  const li = document.getElementById('loginEmail');
+  const fi = document.getElementById('fpEmailInput');
+  if (li && fi && li.value) fi.value = li.value;
+}
+
+function fpCheckEmail() {
+  const email = document.getElementById('fpEmailInput').value.trim();
+  if (!email) { fpMsg('Please enter your email address.', 'error'); return; }
+  const r = TC_AUTH.requestPasswordReset(email);
+  if (!r.ok) { fpMsg(r.msg, 'error'); return; }
+  _fpEmail = email;
+  _fpName  = r.name || email;
+  renderFPStep2(r);
+}
+
+/* ── Step 2: Choose recovery method ── */
+function renderFPStep2(r) {
+  let html = `
+    <p style="font-size:13px;color:#666;margin-bottom:16px;line-height:1.55;">
+      How would you like to recover access to<br/>
+      <strong style="color:#2D0B20;">${escH(_fpEmail)}</strong>?
+    </p>
+    <div id="fpMsg" class="auth-msg" style="display:none;"></div>`;
+
+  if (r.isGoogle) {
+    html += `<div style="background:#FFF7ED;border:1.5px solid #FCD34D;border-radius:12px;
+                         padding:12px 14px;margin-bottom:14px;font-size:13px;color:#92400E;line-height:1.5;">
+      ℹ️ This account uses <strong>Google Sign-In</strong> — use the Google button below to log in, no password needed!
+    </div>`;
+  }
+
+  /* Option B — Security question */
+  if (r.hasSecQ) {
+    html += `<button onclick="renderFPStep3a()" class="auth-btn"
+               style="background:#F5F0FF;color:#6A1545;border:2px solid #EDE9FE;margin-bottom:10px;
+                      display:flex;align-items:center;gap:12px;justify-content:flex-start;padding:14px 18px;">
+      <span style="font-size:22px;">🔐</span>
+      <div style="text-align:left;">
+        <div style="font-weight:700;font-size:14px;">Answer my security question</div>
+        <div style="font-size:11px;color:#9CA3AF;margin-top:2px;">Instant — no email needed</div>
+      </div>
+    </button>`;
+  }
+
+  /* Option D — Email PIN */
+  html += `<button onclick="renderFPStep3b()" class="auth-btn"
+             style="background:#F0FFF4;color:#166534;border:2px solid #86EFAC;margin-bottom:10px;
+                    display:flex;align-items:center;gap:12px;justify-content:flex-start;padding:14px 18px;">
+    <span style="font-size:22px;">📧</span>
+    <div style="text-align:left;">
+      <div style="font-weight:700;font-size:14px;">Send a PIN to my email</div>
+      <div style="font-size:11px;color:#6B7280;margin-top:2px;">6-digit code sent to ${escH(_fpEmail)}</div>
+    </div>
+  </button>`;
+
+  /* Option C — Google */
+  html += `<button onclick="fpUseGoogle()" class="auth-google-btn" style="margin-bottom:0;">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+    Sign in with Google instead
+  </button>
+  <div style="text-align:center;margin-top:10px;">
+    <button onclick="renderFPStep1()"
+            style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer;">← Back</button>
+  </div>`;
+
+  document.getElementById('fpBody').innerHTML = html;
+}
+
+/* ── Helper: back to step 2 ── */
+function fpGoBack2() {
+  const r = TC_AUTH.requestPasswordReset(_fpEmail);
+  if (r && r.ok) renderFPStep2(r);
+}
+
+/* ── Step 3a: Security question (Option B) ── */
+function renderFPStep3a() {
+  const r = TC_AUTH.requestPasswordReset(_fpEmail);
+  document.getElementById('fpBody').innerHTML = `
+    <div style="background:#F5F0FF;border-radius:12px;padding:14px 16px;margin-bottom:20px;">
+      <div style="font-size:10px;font-weight:800;color:#6A1545;text-transform:uppercase;
+                  letter-spacing:0.8px;margin-bottom:6px;">Your Security Question</div>
+      <div style="font-size:15px;font-weight:700;color:#2D0B20;">${escH(r.secQuestion)}</div>
+    </div>
+    <div id="fpMsg" class="auth-msg" style="display:none;"></div>
+    <div class="auth-group">
+      <label class="auth-label">Your Answer</label>
+      <input type="text" class="auth-input" id="fpSecAnswer" placeholder="Enter your answer"
+             autocomplete="off" onkeydown="if(event.key==='Enter')fpVerifySecAnswer()" />
+    </div>
+    <button class="auth-btn auth-btn-primary" onclick="fpVerifySecAnswer()">Verify Answer →</button>
+    <div style="text-align:center;margin-top:6px;">
+      <button onclick="fpGoBack2()"
+              style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer;">← Back</button>
+    </div>`;
+}
+
+function fpVerifySecAnswer() {
+  const ans = document.getElementById('fpSecAnswer').value;
+  if (!ans.trim()) { fpMsg('Please enter your answer.', 'error'); return; }
+  const r = TC_AUTH.verifySecAnswer(_fpEmail, ans);
+  if (!r.ok) { fpMsg(r.msg, 'error'); return; }
+  _fpToken = r.token;
+  renderFPStep4();
+}
+
+/* ── Step 3b: Email PIN (Option D) ── */
+function renderFPStep3b() {
+  const pin = Math.floor(100000 + Math.random() * 900000);
+  TC_AUTH.storeResetPin(_fpEmail, pin);
+
+  document.getElementById('fpBody').innerHTML = `
+    <div id="fpMsg" class="auth-msg" style="display:none;"></div>
+    <div style="text-align:center;margin-bottom:22px;">
+      <div style="font-size:42px;margin-bottom:10px;">📧</div>
+      <div style="font-size:14px;color:#555;line-height:1.65;">
+        A 6-digit PIN is being sent to<br/>
+        <strong style="color:#2D0B20;">${escH(_fpEmail)}</strong>
+      </div>
+      <div id="fpPinStatus" style="font-size:12px;color:#999;margin-top:8px;">Sending…</div>
+    </div>
+    <div class="auth-group">
+      <label class="auth-label">Enter 6-Digit PIN</label>
+      <input type="number" class="auth-input" id="fpPinInput"
+             placeholder="_ _ _ _ _ _"
+             style="font-size:24px;font-weight:800;letter-spacing:10px;text-align:center;"
+             maxlength="6" onkeydown="if(event.key==='Enter')fpVerifyPin()" />
+    </div>
+    <button class="auth-btn auth-btn-primary" onclick="fpVerifyPin()">Verify PIN →</button>
+    <div style="text-align:center;margin-top:6px;font-size:12px;color:#999;">
+      Valid for 10 min. &nbsp;
+      <a onclick="renderFPStep3b()" style="color:#E8356D;cursor:pointer;font-weight:700;">Resend PIN</a>
+    </div>
+    <div style="text-align:center;margin-top:6px;">
+      <button onclick="fpGoBack2()"
+              style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer;">← Back</button>
+    </div>`;
+
+  /* Send via EmailJS */
+  if (window.emailjs && EMAILJS_SERVICE_ID !== 'YOUR_EMAILJS_SERVICE_ID') {
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email:  _fpEmail,
+      user_name: _fpName,
+      reset_pin: String(pin),
+    }, EMAILJS_PUBLIC_KEY)
+    .then(() => {
+      const el = document.getElementById('fpPinStatus');
+      if (el) el.innerHTML = '<span style="color:#166534;font-weight:600;">✅ PIN sent! Check your inbox (and spam).</span>';
+    })
+    .catch(() => {
+      const el = document.getElementById('fpPinStatus');
+      if (el) el.innerHTML = '<span style="color:#DC2626;">⚠️ Email failed. Try <a href="https://wa.me/918610636589" target="_blank" style="color:#E8356D;">WhatsApp support</a>.</span>';
+    });
+  } else {
+    const el = document.getElementById('fpPinStatus');
+    if (el) el.innerHTML = '<span style="color:#D97706;">⚠️ Email service not configured yet. <a href="https://wa.me/918610636589" target="_blank" style="color:#E8356D;">Reset via WhatsApp</a>.</span>';
+  }
+}
+
+function fpVerifyPin() {
+  const pin = (document.getElementById('fpPinInput').value || '').trim();
+  if (pin.length !== 6) { fpMsg('Please enter the 6-digit PIN.', 'error'); return; }
+  const r = TC_AUTH.verifyEmailPin(_fpEmail, pin);
+  if (!r.ok) { fpMsg(r.msg, 'error'); return; }
+  _fpToken = r.token;
+  renderFPStep4();
+}
+
+/* ── Step 4: Set new password ── */
+function renderFPStep4() {
+  document.getElementById('fpBody').innerHTML = `
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:40px;margin-bottom:8px;">🔓</div>
+      <div style="font-size:14px;color:#555;line-height:1.6;">
+        Identity verified! Set a new password for<br/>
+        <strong style="color:#2D0B20;">${escH(_fpEmail)}</strong>
+      </div>
+    </div>
+    <div id="fpMsg" class="auth-msg" style="display:none;"></div>
+    <div class="auth-group">
+      <label class="auth-label">New Password</label>
+      <input type="password" class="auth-input" id="fpNewPw" placeholder="Min. 6 characters" />
+    </div>
+    <div class="auth-group">
+      <label class="auth-label">Confirm New Password</label>
+      <input type="password" class="auth-input" id="fpNewPw2" placeholder="Re-enter password"
+             onkeydown="if(event.key==='Enter')fpDoReset()" />
+    </div>
+    <button class="auth-btn auth-btn-primary" onclick="fpDoReset()">🔒 Reset Password</button>`;
+}
+
+function fpDoReset() {
+  const pw  = document.getElementById('fpNewPw').value;
+  const pw2 = document.getElementById('fpNewPw2').value;
+  if (!pw)           { fpMsg('Please enter a new password.', 'error'); return; }
+  if (pw.length < 6) { fpMsg('Password must be at least 6 characters.', 'error'); return; }
+  if (pw !== pw2)    { fpMsg('Passwords do not match.', 'error'); return; }
+  const r = TC_AUTH.resetPassword(_fpEmail, _fpToken, pw);
+  if (!r.ok) { fpMsg(r.msg, 'error'); return; }
+  /* Success */
+  document.getElementById('fpBody').innerHTML = `
+    <div style="text-align:center;padding:10px 0 4px;">
+      <div style="font-size:54px;margin-bottom:12px;">🎉</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:#6A1545;margin-bottom:8px;">
+        Password Reset!
+      </h3>
+      <p style="font-size:14px;color:#666;line-height:1.6;margin-bottom:24px;">
+        Your password has been updated.<br/>You can now log in with your new password.
+      </p>
+      <button onclick="closeFPModal();switchTab('login')" class="auth-btn auth-btn-primary">
+        🔑 Log in Now
+      </button>
+    </div>`;
+}
+
+/* Option C — just redirect to Google */
+function fpUseGoogle() {
+  closeFPModal();
+  triggerGoogleLogin();
+}
+
+/* Close on backdrop click */
+document.getElementById('fpModal').addEventListener('click', function(e) {
+  if (e.target === this) closeFPModal();
+});
+</script>
+</body>
+</html>

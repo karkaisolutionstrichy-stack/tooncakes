@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eggless Cakes Menu | ToonCakes Trichy | Order Online</title>
+  <meta name="description" content="Browse ToonCakes' full menu of 100% eggless cakes in Trichy. Birthday, wedding, anniversary, kids, fondant cakes and more. Order online with secure payment." />
+  <meta name="keywords" content="eggless cake menu Trichy, birthday cake Tiruchirappalli, wedding cake Trichy, custom cake order Trichy, fondant cake Trichy, kids cake Trichy, eggless cake price Trichy, homemade cake Trichy, cloud kitchen cake Trichy" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<script src="seed-data.js"></script>
+</head>
+<body>
+
+<!-- ====== NAVIGATION ====== -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <span class="logo-icon"><img src="Toon%20Cakes%20Logo.png" alt="ToonCakes Logo" /></span>
+    <span class="logo-text">
+      <span class="logo-name">ToonCakes</span>
+      <span class="logo-tag">100% Eggless · Trichy</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="cakes.html" class="active">Our Cakes</a></li>
+    <li><a href="desserts.html">Desserts</a></li>
+    <li><a href="bulk-order.html">Bulk Orders</a></li>
+    <li><a href="customize.html">Customize</a></li>
+    <li><a href="classes.html">Classes</a></li>
+    <li><a href="recipes.html">Recipes</a></li>
+    <li><a href="https://wa.me/918610636589?text=Hi%20ToonCakes!%20I%20want%20to%20order%20a%20cake." class="nav-cta" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Home</a>
+  <a href="cakes.html">🎂 Our Cakes</a>
+  <a href="desserts.html">🍫 Desserts</a>
+  <a href="bulk-order.html">📦 Bulk Orders</a>
+  <a href="customize.html">🎨 Customize</a>
+  <a href="classes.html">👩‍🍳 Classes</a>
+  <a href="recipes.html">📄 Recipes</a>
+  <a href="index.html#contact">📞 Contact</a>
+  <a href="review.html">⭐ Leave a Review</a>
+  <a href="https://wa.me/918610636589" target="_blank">💬 WhatsApp Order</a>
+</div>
+
+<!-- ====== PAGE HERO ====== -->
+<section class="page-hero">
+  <h1>Our Eggless Cake Menu</h1>
+  <p>100% fresh, 100% eggless &amp; Pure Vegetarian. Order your perfect cake for any occasion in Tiruchirappalli.</p>
+  <div style="margin-top:16px; display:inline-flex; align-items:center; gap:10px; background:rgba(34,197,94,0.18); border:1.5px solid rgba(74,222,128,0.55); border-radius:50px; padding:8px 22px;">
+    <span class="veg-mark"></span>
+    <span style="color:#BBF7D0; font-size:13px; font-weight:700;">100% Pure Vegetarian — No Eggs · No Animal Products</span>
+  </div>
+</section>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <div class="container">
+    <a href="index.html">Home</a> <span>/</span> Our Cakes
+  </div>
+</div>
+
+<!-- ====== NOTICE ====== -->
+<div style="background:#F0FFF4; padding:12px 24px; text-align:center; border-bottom:2px solid #4ADE80;">
+  <p style="font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;">
+    <span style="display:inline-flex; align-items:center; gap:6px; color:#15803D;"><span class="veg-mark"></span> 100% Pure Veg</span>
+    <span style="color:#6B7280;">|</span>
+    <span style="color:#15803D;">🥚 100% Eggless</span>
+    <span style="color:#6B7280;">|</span>
+    <span style="color:#15803D;">🚚 Delivery across Trichy</span>
+    <span style="color:#6B7280;">|</span>
+    <span style="color:var(--pink-dark);">📞 <a href="https://wa.me/918610636589" style="color:var(--pink); text-decoration:underline;">+91 86106 36589</a></span>
+  </p>
+</div>
+
+<!-- ====== CAKES SECTION ====== -->
+<section class="section">
+  <div class="container">
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" onclick="filterCakes('all', this)">All Cakes</button>
+      <button class="filter-tab" onclick="filterCakes('birthday', this)">🎉 Birthday</button>
+      <button class="filter-tab" onclick="filterCakes('wedding', this)">💍 Wedding</button>
+      <button class="filter-tab" onclick="filterCakes('anniversary', this)">❤️ Anniversary</button>
+      <button class="filter-tab" onclick="filterCakes('kids', this)">🦄 Kids Theme</button>
+      <button class="filter-tab" onclick="filterCakes('special', this)">✨ Special</button>
+      <button class="filter-tab" onclick="filterCakes('fondant', this)">🎨 Fondant</button>
+    </div>
+
+    <!-- Cakes Grid -->
+    <div class="cakes-grid" id="cakesGrid">
+
+      <!-- ===== BIRTHDAY CAKES ===== -->
+      <div class="cake-card" data-category="birthday chocolate">
+        <div class="cake-card-img">
+          <span class="cake-emoji">🎂</span>
+          <div class="cake-badge">Best Seller</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Classic Chocolate Birthday</div>
+          <p class="cake-card-desc">Rich moist chocolate sponge with silky ganache and chocolate cream frosting.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹699</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=classic-chocolate&name=Classic%20Chocolate%20Birthday%20Cake&price=699&emoji=🎂&category=Birthday" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="birthday vanilla">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FFF3E0, #FFE0B2);">
+          <span class="cake-emoji">🍰</span>
+          <div class="cake-badge">Popular</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Vanilla Fresh Cream</div>
+          <p class="cake-card-desc">Light fluffy vanilla sponge with fresh whipped cream and seasonal fruit toppings.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹649</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=vanilla-fresh-cream&name=Vanilla%20Fresh%20Cream%20Cake&price=649&emoji=🍰&category=Birthday" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="birthday strawberry">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FCE4EC, #F8BBD9);">
+          <span class="cake-emoji">🍓</span>
+          <div class="cake-badge">Trending</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Strawberry Dream</div>
+          <p class="cake-card-desc">Fresh strawberry layers with cream cheese frosting and strawberry compote. Girls' favourite!</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹749</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=strawberry-dream&name=Strawberry%20Dream%20Cake&price=749&emoji=🍓&category=Birthday" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="birthday red-velvet">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FFEBEE, #FFCDD2);">
+          <span class="cake-emoji">🔴</span>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Red Velvet Bliss</div>
+          <p class="cake-card-desc">Velvety red sponge with rich cream cheese frosting — a luxury birthday treat.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹799</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=red-velvet-bliss&name=Red%20Velvet%20Bliss%20Cake&price=799&emoji=🔴&category=Birthday" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="birthday butterscotch">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FFF8E1, #FFECB3);">
+          <span class="cake-emoji">🍯</span>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Butterscotch Caramel</div>
+          <p class="cake-card-desc">Sweet butterscotch cake with caramel sauce drizzle and praline bits. Crowd pleaser!</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹699</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=butterscotch-caramel&name=Butterscotch%20Caramel%20Cake&price=699&emoji=🍯&category=Birthday" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="birthday blackforest">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #2d0b0b, #4a1010);">
+          <span class="cake-emoji" style="filter: drop-shadow(0 4px 12px rgba(255,255,255,0.3));">🍒</span>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Black Forest Special</div>
+          <p class="cake-card-desc">Classic black forest with dark chocolate sponge, whipped cream, and cherry toppings.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹799</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=black-forest&name=Black%20Forest%20Special%20Cake&price=799&emoji=🍒&category=Birthday" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WEDDING CAKES ===== -->
+      <div class="cake-card" data-category="wedding">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FFF9F0, #FFE8CC);">
+          <span class="cake-emoji">💒</span>
+          <div class="cake-badge">Wedding</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Elegant Floral Wedding</div>
+          <p class="cake-card-desc">Stunning tiered wedding cake with edible floral decorations. A beautiful centerpiece!</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,499</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=elegant-floral-wedding&name=Elegant%20Floral%20Wedding%20Cake&price=1499&emoji=💒&category=Wedding" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="wedding">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FCE4EC, #F48FB1);">
+          <span class="cake-emoji">💍</span>
+          <div class="cake-badge">Wedding</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Rose Gold Tiered</div>
+          <p class="cake-card-desc">Gorgeous 3-tier rose gold cake with metallic effect and fresh rose decorations.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,799</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=rose-gold-tiered&name=Rose%20Gold%20Tiered%20Wedding%20Cake&price=1799&emoji=💍&category=Wedding" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ANNIVERSARY CAKES ===== -->
+      <div class="cake-card" data-category="anniversary">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FCE4EC, #EF9A9A);">
+          <span class="cake-emoji">❤️</span>
+          <div class="cake-badge">Anniversary</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Heart Shape Romance</div>
+          <p class="cake-card-desc">Beautiful heart-shaped cake with red velvet sponge and rose decoration. Perfect for couples!</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹849</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=heart-shape-romance&name=Heart%20Shape%20Romance%20Cake&price=849&emoji=❤️&category=Anniversary" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="anniversary">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FFF8E1, #FFD54F);">
+          <span class="cake-emoji">🥂</span>
+          <div class="cake-badge">Anniversary</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Golden Celebration</div>
+          <p class="cake-card-desc">Elegant gold-themed cake with edible gold leaf, perfect for milestone anniversaries.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,199</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=golden-celebration&name=Golden%20Celebration%20Cake&price=1199&emoji=🥂&category=Anniversary" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== KIDS THEME CAKES ===== -->
+      <div class="cake-card" data-category="kids">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #E3F2FD, #90CAF9);">
+          <span class="cake-emoji">🦄</span>
+          <div class="cake-badge">Kids' Fav</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Unicorn Magic</div>
+          <p class="cake-card-desc">Magical rainbow unicorn cake with colorful swirls and fondant unicorn horn and ears.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹999</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=unicorn-magic&name=Unicorn%20Magic%20Cake&price=999&emoji=🦄&category=Kids%20Theme" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="kids">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #E8F5E9, #A5D6A7);">
+          <span class="cake-emoji">🚗</span>
+          <div class="cake-badge">Kids' Fav</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Cars &amp; Superheroes</div>
+          <p class="cake-card-desc">Custom cartoon/superhero themed cake — choose your child's favourite character!</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,099</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=cartoon-theme&name=Cartoon%20Theme%20Cake&price=1099&emoji=🚗&category=Kids%20Theme" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="kids">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #F3E5F5, #CE93D8);">
+          <span class="cake-emoji">🌈</span>
+          <div class="cake-badge">Kids' Fav</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Rainbow Layer Cake</div>
+          <p class="cake-card-desc">Stunning 6-layer rainbow sponge cake — a surprise delight when you cut it open!</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,199</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=rainbow-layer&name=Rainbow%20Layer%20Cake&price=1199&emoji=🌈&category=Kids%20Theme" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== FONDANT CAKES ===== -->
+      <div class="cake-card" data-category="fondant">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FCE4EC, #E91E8C);">
+          <span class="cake-emoji">🎨</span>
+          <div class="cake-badge">Fondant Art</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Fondant Sculpted Cake</div>
+          <p class="cake-card-desc">Hand-sculpted fondant art with intricate details. Completely personalised for your event theme!</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,299</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=fondant-sculpted&name=Fondant%20Sculpted%20Cake&price=1299&emoji=🎨&category=Fondant" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="fondant">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #EDE9FE, #7C3AED);">
+          <span class="cake-emoji">🌸</span>
+          <div class="cake-badge">Floral Fondant</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Floral Fondant Cake</div>
+          <p class="cake-card-desc">Elegant fondant flowers handcrafted petal by petal. A showstopper for weddings and anniversaries.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,199</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=fondant-floral&name=Floral%20Fondant%20Cake&price=1199&emoji=🌸&category=Fondant" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SPECIAL CAKES ===== -->
+      <div class="cake-card" data-category="special">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #FCE4EC, #FF80AB);">
+          <span class="cake-emoji">🎊</span>
+          <div class="cake-badge">Pinata</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Pinata Surprise Cake</div>
+          <p class="cake-card-desc">Break open to reveal candies inside! The most fun and shareable cake — loved by all ages.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,299</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=pinata-surprise&name=Pinata%20Surprise%20Cake&price=1299&emoji=🎊&category=Special" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="special">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #F3E5F5, #AB47BC);">
+          <span class="cake-emoji">🔢</span>
+          <div class="cake-badge">Number</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Number Shape Cake</div>
+          <p class="cake-card-desc">Trendy number-shaped cake for milestone birthdays — 1, 18, 21, 25, 50 and more!</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹1,099</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=number-shape&name=Number%20Shape%20Cake&price=1099&emoji=🔢&category=Special" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="special">
+        <div class="cake-card-img" style="background: linear-gradient(135deg, #E1F5FE, #81D4FA);">
+          <span class="cake-emoji">🌸</span>
+          <div class="cake-badge">Half Saree</div>
+          <div class="eggless-mark"><span class="veg-mark" style="background:transparent; border-color:white;"></span> Pure Veg</div>
+        </div>
+        <div class="cake-card-body">
+          <div class="cake-card-name">Half Saree / Puberty Cake</div>
+          <p class="cake-card-desc">Beautiful floral and traditional designs for half saree ceremony and puberty celebrations.</p>
+          <div class="cake-card-price">
+            <span class="from">From</span><span class="price">₹949</span><span class="per">/kg</span>
+          </div>
+          <div class="cake-card-footer">
+            <a href="order.html?cake=half-saree&name=Half%20Saree%20Celebration%20Cake&price=949&emoji=🌸&category=Special" class="btn-order">🛒 Order Now</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end cakes-grid -->
+
+    <!-- No results message (hidden by default) -->
+    <div id="noResults" class="hidden" style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
+      <div style="font-size: 60px; margin-bottom: 16px;">🔍</div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 10px;">No cakes in this category yet!</h3>
+      <p>Check back soon or <a href="customize.html" style="color: var(--pink);">order a custom cake</a>.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ====== CUSTOM CAKE CTA ====== -->
+<section style="background: linear-gradient(135deg, #6A1545, #E8356D); padding: 70px 24px; text-align: center; color: white;">
+  <div class="container">
+    <div style="font-size: 56px; margin-bottom: 16px;">🎨</div>
+    <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 40px); margin-bottom: 14px;">Don't See What You Want?</h2>
+    <p style="color: rgba(255,255,255,0.85); font-size: 16px; max-width: 520px; margin: 0 auto 32px;">
+      We specialise in <strong>100% custom eggless cakes</strong> — tell us your dream design and we'll bake it to perfection! Pricing based on complexity.
+    </p>
+    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <a href="customize.html" class="btn btn-gold">
+        🎨 Design My Custom Cake
+      </a>
+      <a href="https://wa.me/918610636589?text=Hi%20ToonCakes!%20I%20need%20a%20custom%20cake." class="btn btn-outline-white" target="_blank">
+        💬 Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">🎂 ToonCakes</div>
+      <p>Trichy's favourite 100% eggless cake shop. Made fresh, delivered with love across Tiruchirappalli.</p>
+      <div class="social-links">
+        <a href="https://www.instagram.com/tooncakestrichy/" target="_blank" class="social-link">📷</a>
+        <a href="https://wa.me/918610636589" target="_blank" class="social-link">💬</a>
+        <a href="https://share.google/VXE60txL4wqdslQ7z" target="_blank" class="social-link">🔍</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cakes.html">Our Cakes</a></li>
+        <li><a href="customize.html">Customize Cake</a></li>
+        <li><a href="classes.html">Baking Classes</a></li>
+        <li><a href="recipes.html">Recipe PDFs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Cake Types</h4>
+      <ul>
+        <li><a href="#" onclick="filterCakes('birthday',null)">Birthday Cakes</a></li>
+        <li><a href="#" onclick="filterCakes('wedding',null)">Wedding Cakes</a></li>
+        <li><a href="#" onclick="filterCakes('anniversary',null)">Anniversary Cakes</a></li>
+        <li><a href="#" onclick="filterCakes('kids',null)">Kids Theme Cakes</a></li>
+        <li><a href="#" onclick="filterCakes('fondant',null)">Fondant Cakes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="footer-contact-item"><span class="icon">📞</span><span>+91 86106 36589</span></div>
+      <div class="footer-contact-item"><span class="icon">📍</span><span>Tiruchirappalli, TN</span></div>
+      <div class="footer-contact-item"><span class="icon">🕐</span><span>9 AM – 9 PM Daily</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 ToonCakes Trichy. All Rights Reserved.</span>
+    <span><a href="https://www.instagram.com/tooncakestrichy/" target="_blank">@tooncakestrichy</a></span>
+  </div>
+</footer>
+
+<a href="https://wa.me/918610636589?text=Hi%20ToonCakes!%20I%20want%20to%20order%20a%20cake." class="whatsapp-float" target="_blank" title="WhatsApp Order">💬</a>
+
+<script>
+  function toggleMobileNav() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+
+  // Filter cakes by category
+  function filterCakes(category, btn) {
+    // Update active tab
+    if (btn) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    const cards = document.querySelectorAll('.cake-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cats = card.dataset.category || '';
+      if (category === 'all' || cats.includes(category)) {
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    document.getElementById('noResults').classList.toggle('hidden', visibleCount > 0);
+  }
+
+  // Read URL param on load
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get('filter');
+    if (filter) {
+      const tab = [...document.querySelectorAll('.filter-tab')].find(t =>
+        t.textContent.toLowerCase().includes(filter.toLowerCase())
+      );
+      filterCakes(filter, tab);
+    }
+  });
+</script>
+
+<script>
+// Inject admin-added cakes (photo-based, new model)
+(function injectAdminCakes() {
+  const cakes = JSON.parse(localStorage.getItem('tc_menu_cakes') || '[]').filter(c => c.active);
+  if (!cakes.length) return;
+  const grid = document.getElementById('cakesGrid');
+  if (!grid) return;
+  grid.innerHTML = ''; // Replace hardcoded cards — all items now come from Menu Manager
+  const fragment = document.createDocumentFragment();
+  cakes.forEach(c => {
+    const slug     = c.name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    const orderUrl = `order.html?cake=${slug}&id=${encodeURIComponent(c.id)}&name=${encodeURIComponent(c.name + ' Cake')}&price=${c.price}&category=${encodeURIComponent(c.category)}`;
+    const el = document.createElement('div');
+    el.className = 'cake-card';
+    el.dataset.category = c.category;
+    el.innerHTML = `
+      <div class="cake-card-img" style="${c.image ? `background:url('${c.image}') center/cover no-repeat` : 'background:linear-gradient(135deg,#FCE4EC,#F8BBD9)'};">
+        ${c.badge ? `<div class="cake-badge">${c.badge}</div>` : ''}
+        <div class="eggless-mark"><span class="veg-mark" style="background:transparent;border-color:white;"></span> Pure Veg</div>
+      </div>
+      <div class="cake-card-body">
+        <div class="cake-card-name">${c.name}</div>
+        <p class="cake-card-desc">${c.desc}</p>
+        <div class="cake-card-price">
+          <span class="from">From</span><span class="price">₹${c.price}</span><span class="per">/kg</span>
+        </div>
+        <div class="cake-card-footer">
+          <a href="${orderUrl}" class="btn-order">🛒 Order Now</a>
+        </div>
+      </div>`;
+    fragment.appendChild(el);
+  });
+  grid.appendChild(fragment);
+  const filter = new URLSearchParams(window.location.search).get('filter') || 'all';
+  if (typeof filterCakes === 'function') filterCakes(filter, null);
+})();
+</script>
+<script src="menu-search.js"></script>
+<script src="site-nav.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>

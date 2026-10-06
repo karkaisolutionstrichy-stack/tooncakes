@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share Your Experience | ToonCakes Trichy | Leave a Review</title>
+  <meta name="description" content="Share your ToonCakes experience! Leave a review and get a 10% discount coupon on your next order. We'd love to hear from you!" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ====== REVIEW PAGE STYLES ====== */
+
+    .review-hero {
+      background: linear-gradient(135deg, #6A1545 0%, #E8356D 60%, #FF8FAB 100%);
+      padding: 60px 24px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .review-hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%);
+      border-radius: 50%;
+    }
+
+    .review-hero h1 {
+      font-size: clamp(26px, 4vw, 44px);
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .review-hero p {
+      color: rgba(255,255,255,0.85);
+      font-size: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .coupon-teaser {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Progress Steps */
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 36px;
+      gap: 0;
+    }
+
+    .prog-step {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--cream-dark);
+      border: 2px solid var(--cream-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+    }
+
+    .prog-step.active {
+      background: var(--pink);
+      border-color: var(--pink);
+      color: white;
+      box-shadow: 0 4px 16px rgba(232, 53, 109, 0.4);
+    }
+
+    .prog-step.done {
+      background: #22C55E;
+      border-color: #22C55E;
+      color: white;
+    }
+
+    .prog-line {
+      width: 60px;
+      height: 3px;
+      background: var(--cream-dark);
+      transition: var(--transition);
+    }
+
+    .prog-line.done {
+      background: #22C55E;
+    }
+
+    /* Review form container */
+    .review-container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 50px 24px 80px;
+    }
+
+    .review-step {
+      display: none;
+    }
+
+    .review-step.active {
+      display: block;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--text);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .step-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    /* ====== STAR RATING ====== */
+    .star-rating-wrap {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .stars-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .star-btn {
+      font-size: 52px;
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease;
+      filter: grayscale(1) opacity(0.35);
+      background: none;
+      border: none;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .star-btn.lit {
+      filter: grayscale(0) opacity(1);
+      transform: scale(1.08);
+    }
+
+    .star-btn:hover {
+      transform: scale(1.2);
+      filter: grayscale(0) opacity(1);
+    }
+
+    .rating-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--text-muted);
+      min-height: 32px;
+      transition: var(--transition);
+    }
+
+    .rating-emoji {
+      font-size: 48px;
+      display: block;
+      margin: 12px auto;
+      min-height: 60px;
+      transition: var(--transition);
+    }
+
+    /* ====== PHOTO UPLOAD ====== */
+    .photo-upload-area {
+      border: 2px dashed var(--cream-dark);
+      border-radius: var(--radius);
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--cream);
+      position: relative;
+    }
+
+    .photo-upload-area:hover,
+    .photo-upload-area.drag-over {
+      border-color: var(--pink);
+      background: var(--pink-light);
+    }
+
+    .photo-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .photo-previews {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .photo-preview-item {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    .photo-preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Consent checkboxes */
+    .consent-box {
+      background: var(--cream);
+      border: 1px solid var(--cream-dark);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .consent-box:hover {
+      border-color: var(--pink);
+    }
+
+    .consent-box input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--pink);
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .consent-box-text strong {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .consent-box-text span {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ====== SUCCESS SCREEN ====== */
+    .success-screen {
+      display: none;
+      text-align: center;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    .success-screen.active {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 80px;
+      display: block;
+      margin-bottom: 20px;
+      animation: bounceIn 0.6s ease;
+    }
+
+    @keyframes bounceIn {
+      0%   { transform: scale(0.5); opacity: 0; }
+      70%  { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .coupon-card {
+      background: linear-gradient(135deg, #6A1545, #E8356D);
+      border-radius: 20px;
+      padding: 32px;
+      color: white;
+      margin: 28px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .coupon-card::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 140px;
+      height: 140px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+
+    .coupon-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
+
+    .coupon-code-display {
+      font-family: 'Courier New', monospace;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      background: rgba(255,255,255,0.15);
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: 2px dashed rgba(255,255,255,0.4);
+      margin: 12px 0;
+      display: inline-block;
+    }
+
+    .coupon-note {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 10px;
+    }
+
+    .copy-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 10px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 12px;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .action-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      text-align: left;
+    }
+
+    .action-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .action-card .ac-icon {
+      font-size: 36px;
+      flex-shrink: 0;
+    }
+
+    .action-card .ac-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .action-card .ac-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Navigation buttons */
+    .step-nav {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn-back {
+      background: var(--cream-dark);
+      color: var(--text-muted);
+      border: none;
+      padding: 14px 24px;
+      border-radius: 50px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-back:hover { background: var(--cream-dark); filter: brightness(0.95); }
+
+    .btn-next {
+      flex: 1;
+      background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 6px 20px rgba(232, 53, 109, 0.35);
+    }
+
+    .btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(232, 53, 109, 0.5);
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #22C55E, #16A34A);
+      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
+    }
+
+    .btn-submit:hover {
+      box-shadow: 0 10px 30px rgba(34, 197, 94, 0.5);
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: none;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Form card */
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 36px;
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 480px) {
+      .form-card { padding: 24px 18px; }
+      .star-btn { font-size: 40px; }
+      .coupon-code-display { font-size: 22px; }
+      .prog-line { width: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== NAVIGATION ====== -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <span class="logo-icon"><img src="Toon%20Cakes%20Logo.png" alt="ToonCakes Logo" /></span>
+    <span class="logo-text">
+      <span class="logo-name">ToonCakes</span>
+      <span class="logo-tag">100% Eggless · Trichy</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="cakes.html">Our Cakes</a></li>
+    <li><a href="customize.html">Customize</a></li>
+    <li><a href="classes.html">Classes</a></li>
+    <li><a href="recipes.html">Recipes</a></li>
+    <li><a href="https://wa.me/918610636589" class="nav-cta" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Home</a>
+  <a href="cakes.html">🎂 Our Cakes</a>
+  <a href="index.html#contact">📞 Contact</a>
+  <a href="https://wa.me/918610636589" target="_blank">💬 WhatsApp</a>
+</div>
+
+<!-- ====== HERO ====== -->
+<section class="review-hero">
+  <div style="position: relative; z-index: 1;">
+    <div style="font-size: 60px; margin-bottom: 16px;">⭐</div>
+    <h1>How Was Your<br /><span style="font-family: 'Dancing Script', cursive; color: var(--gold);">ToonCakes Experience?</span></h1>
+    <p>Your feedback helps us bake better — and it helps other cake lovers find us!</p>
+    <div class="coupon-teaser">
+      🎁 Complete this review → Get <strong>10% OFF</strong> your next order!
+    </div>
+  </div>
+</section>
+
+<!-- ====== REVIEW FORM ====== -->
+<div class="review-container">
+
+  <!-- Progress Bar -->
+  <div class="progress-wrap" id="progressBar">
+    <div class="prog-step active" id="ps1">1</div>
+    <div class="prog-line" id="pl1"></div>
+    <div class="prog-step" id="ps2">2</div>
+    <div class="prog-line" id="pl2"></div>
+    <div class="prog-step" id="ps3">3</div>
+    <div class="prog-line" id="pl3"></div>
+    <div class="prog-step" id="ps4">4</div>
+  </div>
+
+  <!-- ==============================
+       STEP 1: STAR RATING
+  =============================== -->
+  <div class="review-step active" id="step1">
+    <div class="form-card">
+      <h2 class="step-title">Rate Your Experience</h2>
+      <p class="step-subtitle">Tap the stars to rate us — how did we do?</p>
+
+      <div class="star-rating-wrap">
+        <div class="stars-row">
+          <button class="star-btn" data-val="1" onclick="selectStar(1)" title="Poor">⭐</button>
+          <button class="star-btn" data-val="2" onclick="selectStar(2)" title="Average">⭐</button>
+          <button class="star-btn" data-val="3" onclick="selectStar(3)" title="Good">⭐</button>
+          <button class="star-btn" data-val="4" onclick="selectStar(4)" title="Very Good">⭐</button>
+          <button class="star-btn" data-val="5" onclick="selectStar(5)" title="Excellent">⭐</button>
+        </div>
+        <span class="rating-emoji" id="ratingEmoji"></span>
+        <div class="rating-label" id="ratingLabel">Tap a star to begin</div>
+      </div>
+
+      <div id="step1Error" style="display:none; background:#FFEBEE; color:#C62828; padding:12px 16px; border-radius:10px; font-size:14px; text-align:center; margin-bottom:16px;">
+        Please select a star rating to continue!
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-next" onclick="nextStep(1)">Next — Write Your Review →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       STEP 2: REVIEW TEXT
+  =============================== -->
+  <div class="review-step" id="step2">
+    <div class="form-card">
+      <h2 class="step-title">Tell Us More</h2>
+      <p class="step-subtitle">What did you love? Which cake did you order?</p>
+
+      <div class="form-group">
+        <label class="form-label" for="reviewText">Your Review <span>*</span></label>
+        <textarea
+          class="form-control"
+          id="reviewText"
+          rows="5"
+          placeholder='e.g. "Ordered a birthday cake for my daughter — it was absolutely beautiful and delicious! The eggless chocolate cake was so moist. The customization was perfect and delivery was on time. Highly recommended!"'
+          maxlength="500"
+        ></textarea>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:6px; text-align:right;">
+          <span id="charCount">0</span>/500 characters
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reviewOccasion">What was the occasion?</label>
+        <select class="form-control" id="reviewOccasion">
+          <option value="Birthday">🎉 Birthday Cake</option>
+          <option value="Wedding">💍 Wedding Cake</option>
+          <option value="Anniversary">❤️ Anniversary Cake</option>
+          <option value="Baby Shower">🍼 Baby Shower</option>
+          <option value="Kids Theme">🦄 Kids Theme Cake</option>
+          <option value="Custom Cake">🎨 Custom Cake</option>
+          <option value="Baking Class">👩‍🍳 Baking Class</option>
+          <option value="Recipe PDF">📄 Recipe PDF</option>
+          <option value="Other">✨ Other</option>
+        </select>
+      </div>
+
+      <div id="step2Error" style="display:none; background:#FFEBEE; color:#C62828; padding:12px 16px; border-radius:10px; font-size:14px; margin-bottom:16px;">
+        Please write your review before continuing!
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(2)">← Back</button>
+        <button class="btn-next" onclick="nextStep(2)">Next — Add Photos →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       STEP 3: PHOTOS
+  =============================== -->
+  <div class="review-step" id="step3">
+    <div class="form-card">
+      <h2 class="step-title">Add Photos <span style="font-size:18px; color:var(--text-muted); font-family:'Poppins',sans-serif;">(Optional)</span></h2>
+      <p class="step-subtitle">Share photos of your cake — it helps others and looks great on our Instagram!</p>
+
+      <div class="photo-upload-area" id="uploadArea"
+           ondragover="handleDragOver(event)"
+           ondragleave="handleDragLeave(event)"
+           ondrop="handleDrop(event)">
+        <input
+          type="file"
+          id="photoInput"
+          accept="image/*,video/*"
+          multiple
+          onchange="handleFileSelect(event)"
+        />
+        <div style="font-size:44px; margin-bottom:10px;">📸</div>
+        <div style="font-weight:600; font-size:15px; color:var(--text); margin-bottom:6px;">
+          Tap to upload photos or videos
+        </div>
+        <div style="font-size:13px; color:var(--text-muted);">
+          Up to 5 photos/1 video · JPG, PNG, MP4 accepted · Max 10MB each
+        </div>
+      </div>
+
+      <div class="photo-previews" id="photoPreviews"></div>
+
+      <div class="step-nav" style="margin-top: 28px;">
+        <button class="btn-back" onclick="prevStep(3)">← Back</button>
+        <button class="btn-next" onclick="nextStep(3)">Next — Your Details →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       STEP 4: DETAILS + SUBMIT
+  =============================== -->
+  <div class="review-step" id="step4">
+    <div class="form-card">
+      <h2 class="step-title">Almost Done! 🎉</h2>
+      <p class="step-subtitle">Add your details to receive your <strong style="color:var(--pink);">10% discount coupon</strong></p>
+
+      <div class="form-group">
+        <label class="form-label" for="reviewerName">Your Name <span>*</span></label>
+        <input type="text" class="form-control" id="reviewerName" placeholder="Your name (will appear on the review)" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reviewerPhone">
+          WhatsApp Number <span>*</span>
+          <span style="font-weight:400; font-size:12px; color:var(--text-muted);">(Coupon sent here)</span>
+        </label>
+        <input type="tel" class="form-control" id="reviewerPhone" placeholder="+91 86106 36589" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reviewerArea">Your Area in Trichy <span style="font-weight:400; font-size:12px;">(Optional)</span></label>
+        <input type="text" class="form-control" id="reviewerArea" placeholder='e.g. "Thillai Nagar", "Srirangam"' />
+      </div>
+
+      <!-- Permissions -->
+      <p style="font-size:14px; font-weight:600; color:var(--text); margin-bottom:14px; margin-top:8px;">
+        📋 Review Permissions <span style="font-weight:400; color:var(--text-muted);">(helps us grow!)</span>
+      </p>
+
+      <label class="consent-box" for="consentInstagram">
+        <input type="checkbox" id="consentInstagram" checked />
+        <div class="consent-box-text">
+          <strong>📸 Post on Instagram</strong>
+          <span>Allow ToonCakes to share your review as an Instagram post (with your first name only). We'll create a beautiful branded post — <em>you'll be credited!</em></span>
+        </div>
+      </label>
+
+      <label class="consent-box" for="consentGoogle">
+        <input type="checkbox" id="consentGoogle" checked />
+        <div class="consent-box-text">
+          <strong>⭐ Share on Google Business</strong>
+          <span>Allow ToonCakes to display your review on our Google Business Profile. Helps other customers in Trichy find us!</span>
+        </div>
+      </label>
+
+      <label class="consent-box" for="consentWebsite">
+        <input type="checkbox" id="consentWebsite" checked />
+        <div class="consent-box-text">
+          <strong>🌐 Show on ToonCakes Website</strong>
+          <span>Allow your review to appear in the testimonials section on our website.</span>
+        </div>
+      </label>
+
+      <div id="step4Error" style="display:none; background:#FFEBEE; color:#C62828; padding:12px 16px; border-radius:10px; font-size:14px; margin-bottom:16px;">
+        Please enter your name and WhatsApp number!
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(4)">← Back</button>
+        <button class="btn-next btn-submit" id="submitBtn" onclick="submitReview()">
+          <span id="submitText">🎁 Submit & Get My Coupon</span>
+          <div class="spinner" id="submitSpinner"></div>
+        </button>
+      </div>
+
+      <p style="font-size:12px; color:var(--text-muted); margin-top:14px; text-align:center; line-height:1.6;">
+        🔒 Your phone number is only used to send your coupon via WhatsApp.<br/>
+        Reviews are shared only after ToonCakes team verifies them.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==============================
+       SUCCESS SCREEN
+  =============================== -->
+  <div class="success-screen" id="successScreen">
+    <div class="form-card">
+      <span class="success-icon">🎉</span>
+      <h2 class="step-title">Thank You, <span id="successName" style="color:var(--pink);">Friend</span>!</h2>
+      <p class="step-subtitle">Your review has been received and will be verified by our team. Here is your reward!</p>
+
+      <!-- Coupon Card -->
+      <div class="coupon-card">
+        <div class="coupon-label">🎁 Your 10% Discount Coupon</div>
+        <div class="coupon-code-display" id="couponDisplay">TOON10-XXXXXX</div>
+        <div class="coupon-note">Valid for your next cake order at ToonCakes Trichy</div>
+        <div style="font-size:12px; opacity:0.7; margin-top:6px;">Show this coupon when placing your next WhatsApp order</div>
+        <button class="copy-btn" onclick="copyCoupon()">
+          📋 Copy Coupon Code
+        </button>
+      </div>
+
+      <!-- Action Cards -->
+      <div class="success-actions">
+        <!-- Google Review -->
+        <!-- EDIT: Replace the Google review link with your actual Google Place review URL -->
+        <a href="https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID" target="_blank" class="action-card" style="border-left: 4px solid #4285F4;">
+          <span class="ac-icon">⭐</span>
+          <div>
+            <div class="ac-title">Also Leave a Google Review!</div>
+            <div class="ac-sub">Help others find ToonCakes on Google Maps — takes just 30 seconds! 🙏</div>
+          </div>
+          <i class="fas fa-chevron-right" style="color:var(--text-muted); margin-left:auto;"></i>
+        </a>
+
+        <!-- Order again -->
+        <a href="cakes.html" class="action-card" style="border-left: 4px solid var(--pink);">
+          <span class="ac-icon">🎂</span>
+          <div>
+            <div class="ac-title">Order Your Next Cake!</div>
+            <div class="ac-sub">Browse our cake menu and use your coupon for 10% off 🎉</div>
+          </div>
+          <i class="fas fa-chevron-right" style="color:var(--text-muted); margin-left:auto;"></i>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/tooncakestrichy/" target="_blank" class="action-card" style="border-left: 4px solid #E1306C;">
+          <span class="ac-icon">📸</span>
+          <div>
+            <div class="ac-title">Follow @tooncakestrichy</div>
+            <div class="ac-sub">See our latest cakes, offers, and baking tips on Instagram!</div>
+          </div>
+          <i class="fas fa-chevron-right" style="color:var(--text-muted); margin-left:auto;"></i>
+        </a>
+      </div>
+
+      <div style="margin-top: 28px; padding: 20px; background: var(--cream); border-radius: var(--radius-sm); font-size: 13px; color: var(--text-muted); text-align: center; line-height: 1.7;">
+        💬 Your coupon code has also been included in the WhatsApp message sent to ToonCakes.<br/>
+        <strong style="color:var(--text);">Screenshot this page to save your coupon code!</strong>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end review-container -->
+
+<a href="https://wa.me/918610636589?text=Hi%20ToonCakes!" class="whatsapp-float" target="_blank">💬</a>
+
+<!-- ====== JAVASCRIPT ====== -->
+<script>
+  // ============================================================
+  // CONFIGURATION — EDIT THESE VALUES
+  // ============================================================
+  const OWNER_WHATSAPP = '918610636589';     // Your WhatsApp number (no + or spaces)
+  const ADMIN_URL = 'admin.html';             // Path to admin page
+  const GOOGLE_REVIEW_URL = 'https://share.google/VXE60txL4wqdslQ7z'; // Your Google review link
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  let currentStep = 1;
+  let selectedRating = 0;
+  let uploadedPhotos = [];   // Array of { name, dataURL, size }
+
+  const ratingMeta = {
+    1: { emoji: '😔', label: 'Poor — We will improve!' },
+    2: { emoji: '😐', label: 'Average — We can do better.' },
+    3: { emoji: '🙂', label: 'Good — Thank you!' },
+    4: { emoji: '😊', label: 'Very Good — We\'re happy to hear that!' },
+    5: { emoji: '🤩', label: 'Excellent — You made our day!' }
+  };
+
+  // ============================================================
+  // STAR RATING
+  // ============================================================
+  function selectStar(val) {
+    selectedRating = val;
+    document.querySelectorAll('.star-btn').forEach(btn => {
+      btn.classList.toggle('lit', parseInt(btn.dataset.val) <= val);
+    });
+    document.getElementById('ratingEmoji').textContent  = ratingMeta[val].emoji;
+    document.getElementById('ratingLabel').textContent  = ratingMeta[val].label;
+    document.getElementById('step1Error').style.display = 'none';
+  }
+
+  // Hover preview
+  document.querySelectorAll('.star-btn').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      const v = parseInt(btn.dataset.val);
+      document.querySelectorAll('.star-btn').forEach(b =>
+        b.classList.toggle('lit', parseInt(b.dataset.val) <= v)
+      );
+    });
+    btn.addEventListener('mouseleave', () => {
+      document.querySelectorAll('.star-btn').forEach(b =>
+        b.classList.toggle('lit', parseInt(b.dataset.val) <= selectedRating)
+      );
+    });
+  });
+
+  // ============================================================
+  // STEP NAVIGATION
+  // ============================================================
+  function nextStep(from) {
+    // Validate
+    if (from === 1) {
+      if (!selectedRating) {
+        document.getElementById('step1Error').style.display = 'block';
+        return;
+      }
+    }
+    if (from === 2) {
+      if (!document.getElementById('reviewText').value.trim()) {
+        document.getElementById('step2Error').style.display = 'block';
+        return;
+      }
+    }
+    goToStep(from + 1);
+  }
+
+  function prevStep(from) {
+    goToStep(from - 1);
+  }
+
+  function goToStep(step) {
+    document.querySelectorAll('.review-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + step).classList.add('active');
+    currentStep = step;
+    updateProgress(step);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress(step) {
+    for (let i = 1; i <= 4; i++) {
+      const ps = document.getElementById('ps' + i);
+      ps.classList.remove('active', 'done');
+      if (i < step)  ps.classList.add('done'), ps.textContent = '✓';
+      if (i === step) ps.classList.add('active');
+      if (i > step)  ps.textContent = i;
+    }
+    for (let i = 1; i <= 3; i++) {
+      const pl = document.getElementById('pl' + i);
+      pl.classList.toggle('done', i < step);
+    }
+  }
+
+  // ============================================================
+  // PHOTO UPLOAD — COMPRESS & PREVIEW
+  // ============================================================
+  function handleDragOver(e) {
+    e.preventDefault();
+    document.getElementById('uploadArea').classList.add('drag-over');
+  }
+
+  function handleDragLeave(e) {
+    document.getElementById('uploadArea').classList.remove('drag-over');
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('uploadArea').classList.remove('drag-over');
+    processFiles(e.dataTransfer.files);
+  }
+
+  function handleFileSelect(e) {
+    processFiles(e.target.files);
+  }
+
+  function processFiles(files) {
+    const maxPhotos = 5;
+    Array.from(files).forEach(file => {
+      if (uploadedPhotos.length >= maxPhotos) return;
+      if (file.type.startsWith('image/')) {
+        compressAndAddImage(file);
+      } else if (file.type.startsWith('video/')) {
+        // Videos stored with placeholder icon
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadedPhotos.push({ name: file.name, dataURL: null, isVideo: true, size: file.size });
+          renderPreviews();
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    });
+  }
+
+  function compressAndAddImage(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 900;
+        let w = img.width, h = img.height;
+        if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+        if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        uploadedPhotos.push({
+          name: file.name,
+          dataURL: canvas.toDataURL('image/jpeg', 0.78),
+          isVideo: false,
+          size: file.size
+        });
+        renderPreviews();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function renderPreviews() {
+    const wrap = document.getElementById('photoPreviews');
+    wrap.innerHTML = '';
+    uploadedPhotos.forEach((photo, idx) => {
+      const div = document.createElement('div');
+      div.className = 'photo-preview-item';
+      div.innerHTML = photo.isVideo
+        ? `<div style="background:#1A0A0F; width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:28px; color:white;">🎥</div>`
+        : `<img src="${photo.dataURL}" alt="Photo ${idx+1}" />`;
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'photo-remove-btn';
+      removeBtn.innerHTML = '✕';
+      removeBtn.onclick = () => { uploadedPhotos.splice(idx, 1); renderPreviews(); };
+      div.appendChild(removeBtn);
+      wrap.appendChild(div);
+    });
+  }
+
+  // Char counter
+  document.getElementById('reviewText').addEventListener('input', function() {
+    document.getElementById('charCount').textContent = this.value.length;
+    document.getElementById('step2Error').style.display = 'none';
+  });
+
+  // ============================================================
+  // COUPON GENERATOR
+  // ============================================================
+  function generateCoupon() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = 'TOON10-';
+    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    return code;
+  }
+
+  // ============================================================
+  // SUBMIT REVIEW
+  // ============================================================
+  function submitReview() {
+    const name  = document.getElementById('reviewerName').value.trim();
+    const phone = document.getElementById('reviewerPhone').value.trim();
+
+    if (!name || !phone) {
+      document.getElementById('step4Error').style.display = 'block';
+      return;
+    }
+
+    // Show loading
+    document.getElementById('submitText').style.display = 'none';
+    document.getElementById('submitSpinner').style.display = 'block';
+
+    const coupon = generateCoupon();
+    const reviewId = Date.now().toString();
+
+    const reviewData = {
+      id: reviewId,
+      timestamp: new Date().toISOString(),
+      status: 'pending',
+      rating: selectedRating,
+      text: document.getElementById('reviewText').value.trim(),
+      occasion: document.getElementById('reviewOccasion').value,
+      name,
+      phone,
+      area: document.getElementById('reviewerArea').value.trim(),
+      coupon,
+      photoCount: uploadedPhotos.length,
+      consentInstagram: document.getElementById('consentInstagram').checked,
+      consentGoogle: document.getElementById('consentGoogle').checked,
+      consentWebsite: document.getElementById('consentWebsite').checked
+    };
+
+    // Save review to localStorage (photos stored separately by id)
+    const allReviews = JSON.parse(localStorage.getItem('tc_reviews') || '[]');
+    allReviews.push(reviewData);
+    localStorage.setItem('tc_reviews', JSON.stringify(allReviews));
+
+    // Save photos separately (keyed by review id)
+    if (uploadedPhotos.length > 0) {
+      localStorage.setItem('tc_photos_' + reviewId, JSON.stringify(
+        uploadedPhotos.map(p => ({ name: p.name, dataURL: p.dataURL, isVideo: p.isVideo }))
+      ));
+    }
+
+    // Build admin import code (text data only — small enough for WhatsApp)
+    const importPayload = btoa(unescape(encodeURIComponent(JSON.stringify(reviewData))));
+
+    // Build WhatsApp message to owner
+    const stars = '⭐'.repeat(selectedRating);
+    const waMsg = [
+      `⭐ *New ToonCakes Review!*`,
+      ``,
+      `${stars} (${selectedRating}/5)`,
+      ``,
+      `👤 *Name:* ${name}`,
+      `📱 *Phone:* ${phone}`,
+      reviewData.area ? `📍 *Area:* ${reviewData.area}` : '',
+      `🎂 *Occasion:* ${reviewData.occasion}`,
+      ``,
+      `💬 *Review:*`,
+      `"${reviewData.text}"`,
+      ``,
+      `📸 *Photos attached:* ${uploadedPhotos.length}`,
+      `✅ Instagram consent: ${reviewData.consentInstagram ? 'Yes' : 'No'}`,
+      `✅ Google consent:    ${reviewData.consentGoogle ? 'Yes' : 'No'}`,
+      ``,
+      `🎁 *Coupon given:* ${coupon}`,
+      ``,
+      `📋 *Import to Admin — paste this code in admin.html > Import:*`,
+      importPayload,
+      ``,
+      `_Submitted ${new Date().toLocaleString('en-IN')}_`
+    ].filter(v => v !== undefined).join('\n');
+
+    // Small delay for UX, then open WhatsApp and show success
+    setTimeout(() => {
+      // Open WhatsApp to owner
+      window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(waMsg)}`, '_blank');
+
+      // Update Google review link
+      document.querySelector('.success-actions a[href*="google"]').href = GOOGLE_REVIEW_URL;
+
+      // Show success
+      document.getElementById('submitText').style.display = 'inline';
+      document.getElementById('submitSpinner').style.display = 'none';
+      document.getElementById('step4').classList.remove('active');
+      document.getElementById('progressBar').style.display = 'none';
+
+      document.getElementById('couponDisplay').textContent = coupon;
+      document.getElementById('successName').textContent = name.split(' ')[0];
+      document.getElementById('successScreen').classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1200);
+  }
+
+  // ============================================================
+  // COPY COUPON
+  // ============================================================
+  function copyCoupon() {
+    const code = document.getElementById('couponDisplay').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => { btn.textContent = '📋 Copy Coupon Code'; }, 2500);
+    }).catch(() => {
+      alert('Coupon code: ' + code + '\n\nPlease copy it manually.');
+    });
+  }
+
+  // Mobile nav
+  function toggleMobileNav() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+</script>
+
+<script src="site-nav.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>

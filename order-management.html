@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToonCakes — Order Management</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ── Base ── */
+    body { background: #F0EBF4; font-family: 'Nunito', sans-serif; margin: 0; }
+
+    /* ── Login ── */
+    .om-login {
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, #2D0B20, #6A1545, #E8356D);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; padding: 20px;
+    }
+    .om-login-box {
+      background: white; border-radius: 24px; padding: 48px 40px;
+      max-width: 380px; width: 100%; text-align: center;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+    }
+    .om-login-box input {
+      width: 100%; padding: 14px 18px; border: 2px solid #E5E7EB;
+      border-radius: 12px; font-size: 16px; text-align: center;
+      letter-spacing: 3px; outline: none; box-sizing: border-box; margin-bottom: 16px;
+    }
+    .om-login-box input:focus { border-color: #E8356D; }
+
+    /* ── Main layout ── */
+    .om-wrap { display: none; min-height: 100vh; padding-bottom: 40px; }
+
+    /* ── Header ── */
+    .om-header {
+      background: linear-gradient(135deg, #2D0B20, #6A1545);
+      padding: 14px 24px; display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    .om-logo { color: white; font-size: 18px; font-weight: 800; }
+    .om-logo span { color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 500; margin-left: 8px; }
+    .om-header-btn {
+      background: rgba(255,255,255,0.15); color: white; border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background .15s;
+    }
+    .om-header-btn:hover { background: rgba(255,255,255,0.25); }
+    .om-header-btn.primary { background: linear-gradient(135deg,#1E40AF,#3B82F6); border-color: transparent; }
+
+    /* ── Body ── */
+    .om-body { max-width: 1100px; margin: 0 auto; padding: 28px 20px 0; }
+
+    /* ── Stats row ── */
+    .om-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 14px; margin-bottom: 24px;
+    }
+    .om-stat {
+      background: white; border-radius: 14px; padding: 16px 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      border-top: 4px solid var(--plum, #6A1545); text-align: center;
+    }
+    .om-stat-num { font-size: 28px; font-weight: 800; font-family: 'Playfair Display', serif; color: #6A1545; }
+    .om-stat-lbl { font-size: 11px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; }
+
+    /* ── Sub-tabs ── */
+    .om-tabs {
+      display: flex; gap: 6px; background: white; padding: 8px;
+      border-radius: 14px; margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .om-tab-btn {
+      flex: 1; padding: 12px; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      background: transparent; color: #6B7280; transition: all .2s;
+    }
+    .om-tab-btn.active {
+      background: linear-gradient(135deg, #6A1545, #E8356D);
+      color: white; box-shadow: 0 4px 14px rgba(232,53,109,0.35);
+    }
+
+    /* ── Panel ── */
+    .om-panel { display: none; }
+    .om-panel.active { display: block; }
+
+    /* ── Filter bar ── */
+    .om-filter-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
+    }
+    .om-filter-bar h2 {
+      font-family: 'Playfair Display', serif; font-size: 20px;
+      color: #2D0B20; margin: 0;
+    }
+    .om-filter-bar p { font-size: 13px; color: #6B7280; margin: 2px 0 0; }
+
+    /* ── Status legend ── */
+    .status-legend {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;
+    }
+
+    /* ── Order card ── */
+    .order-card {
+      background: white; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.07); margin-bottom: 16px;
+    }
+    .order-card-body {
+      padding: 18px 20px;
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 16px; flex-wrap: wrap;
+    }
+    .order-card-left { flex: 1; min-width: 220px; }
+    .order-card-right { text-align: right; flex-shrink: 0; }
+    .order-card-actions {
+      padding: 12px 20px 16px; background: #FAFAFA;
+      border-top: 1px solid #F0F0F0;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+
+    /* ── Enrol request card ── */
+    .req-card {
+      background: white; border-radius: 14px; padding: 14px 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap; margin-bottom: 12px;
+    }
+
+    /* ── Empty state ── */
+    .om-empty {
+      background: white; border-radius: 16px; padding: 48px;
+      text-align: center; color: #9CA3AF;
+    }
+    .om-empty div { font-size: 48px; margin-bottom: 16px; }
+
+    /* ── Btn helpers ── */
+    .btn { display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .15s; }
+    .btn-primary { background:linear-gradient(135deg,#6A1545,#E8356D);color:white; }
+    .btn-secondary { background:#F3F4F6;color:#374151; }
+    .form-control { border:2px solid #E5E7EB;border-radius:10px;padding:9px 14px;font-size:14px;font-family:inherit;outline:none;width:100%;box-sizing:border-box; }
+    .form-control:focus { border-color:#E8356D; }
+
+    /* ── Section divider ── */
+    .section-divider {
+      border: none; border-top: 2px solid #E5E7EB; margin: 32px 0 24px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════════════════ -->
+<div class="om-login" id="omLogin">
+  <div class="om-login-box">
+    <div style="font-size:52px;margin-bottom:8px;">🎂</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:22px;color:#2D0B20;margin-bottom:6px;">Order Management</h2>
+    <p style="font-size:13px;color:#6B7280;margin-bottom:28px;">ToonCakes Admin — enter your password</p>
+    <input type="password" id="omPwInput" placeholder="••••••••••" onkeydown="if(event.key==='Enter')omLogin()" />
+    <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:14px;" onclick="omLogin()">
+      🔓 Enter
+    </button>
+    <div id="omLoginErr" style="display:none;margin-top:12px;color:#DC2626;font-size:13px;font-weight:600;">
+      ❌ Wrong password. Please try again.
+    </div>
+    <div style="margin-top:20px;">
+      <a href="admin.html" style="font-size:13px;color:#9CA3AF;text-decoration:none;">← Back to Admin Panel</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MAIN WRAP
+══════════════════════════════════════════════════════ -->
+<div class="om-wrap" id="omWrap">
+
+  <!-- ── Header ── -->
+  <div class="om-header">
+    <div class="om-logo">🎂 ToonCakes <span>Order Management</span></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="om-header-btn primary" onclick="window.location.href='admin.html'">← Admin Panel</button>
+      <button class="om-header-btn" onclick="omLogout()">🔒 Logout</button>
+    </div>
+  </div>
+
+  <div class="om-body">
+
+    <!-- ── Stats ── -->
+    <div class="om-stats">
+      <div class="om-stat" style="border-top-color:#E8356D;">
+        <div class="om-stat-num" id="omStatNew" style="color:#E8356D;">0</div>
+        <div class="om-stat-lbl">📬 New Orders</div>
+      </div>
+      <div class="om-stat" style="border-top-color:#6A1545;">
+        <div class="om-stat-num" id="omStatTotal">0</div>
+        <div class="om-stat-lbl">📦 Total Orders</div>
+      </div>
+      <div class="om-stat" style="border-top-color:#D97706;">
+        <div class="om-stat-num" id="omStatRevCake" style="color:#D97706;font-size:20px;">₹0</div>
+        <div class="om-stat-lbl">🎂 Cake Revenue</div>
+      </div>
+      <div class="om-stat" style="border-top-color:#7C3AED;">
+        <div class="om-stat-num" id="omStatRevCourse" style="color:#7C3AED;font-size:20px;">₹0</div>
+        <div class="om-stat-lbl">🎓 Course Revenue</div>
+      </div>
+      <div class="om-stat" style="border-top-color:#16A34A;">
+        <div class="om-stat-num" id="omStatRevTotal" style="color:#16A34A;font-size:20px;">₹0</div>
+        <div class="om-stat-lbl">💰 Total Revenue</div>
+      </div>
+    </div>
+
+    <!-- ── Sub-tabs ── -->
+    <div class="om-tabs">
+      <button class="om-tab-btn active" id="omTab-cakes" onclick="omOpenTab('cakes', this)">
+        🎂 Cakes &amp; Desserts
+      </button>
+      <button class="om-tab-btn" id="omTab-courses" onclick="omOpenTab('courses', this)">
+        🎓 Classes &amp; Recipes
+      </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB 1 — CAKES & DESSERTS
+    ══════════════════════════════════════════ -->
+    <div class="om-panel active" id="omPanel-cakes">
+
+      <div class="om-filter-bar">
+        <div>
+          <h2>🎂 Cake &amp; Dessert Orders</h2>
+          <p>Manage all cake and dessert orders. Update status to automatically send WhatsApp notifications.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <select id="cakeFilterStatus" class="form-control" style="width:auto;font-size:13px;" onchange="renderCakeOrders()">
+            <option value="all">All Orders</option>
+            <option value="Order Placed">Order Placed</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Being Prepared">Being Prepared</option>
+            <option value="Ready for Pickup">Ready for Pickup</option>
+            <option value="Out for Delivery">Out for Delivery</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+          <button onclick="renderCakeOrders()" class="btn btn-secondary" style="padding:9px 16px;font-size:13px;">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- Status legend -->
+      <div class="status-legend">
+        <span style="background:#FEF9C3;color:#854D0E;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">📬 Order Placed</span>
+        <span style="background:#DBEAFE;color:#1D4ED8;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">✅ Confirmed</span>
+        <span style="background:#EDE9FE;color:#5B21B6;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">👩‍🍳 Being Prepared</span>
+        <span style="background:#FEE2E2;color:#DC2626;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">🛍️ Ready for Pickup</span>
+        <span style="background:#FEF3C7;color:#D97706;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">🚚 Out for Delivery</span>
+        <span style="background:#DCFCE7;color:#166534;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">🎉 Delivered</span>
+      </div>
+
+      <div id="cakeOrdersGrid"></div>
+      <div id="cakeOrdersEmpty" class="om-empty" style="display:none;">
+        <div>🎂</div>
+        <p style="font-size:15px;">No cake or dessert orders yet.<br>Orders placed via the payment page will appear here.</p>
+      </div>
+
+    </div><!-- /omPanel-cakes -->
+
+    <!-- ══════════════════════════════════════════
+         TAB 2 — CLASSES & RECIPES
+    ══════════════════════════════════════════ -->
+    <div class="om-panel" id="omPanel-courses">
+
+      <!-- ── Paid course orders ── -->
+      <div class="om-filter-bar">
+        <div>
+          <h2>🎓 Class &amp; Recipe Orders</h2>
+          <p>Manage paid class and recipe purchases. Send access details via WhatsApp after payment confirmation.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <select id="courseFilterStatus" class="form-control" style="width:auto;font-size:13px;" onchange="renderCourseOrders()">
+            <option value="all">All Orders</option>
+            <option value="Order Placed">Order Placed</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Being Prepared">Access Being Prepared</option>
+            <option value="Ready for Pickup">Access Ready</option>
+            <option value="Delivered">Access Sent</option>
+          </select>
+          <button onclick="renderCourseOrders()" class="btn btn-secondary" style="padding:9px 16px;font-size:13px;">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- Status legend -->
+      <div class="status-legend">
+        <span style="background:#FEF9C3;color:#854D0E;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">📬 Order Placed</span>
+        <span style="background:#DBEAFE;color:#1D4ED8;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">✅ Confirmed</span>
+        <span style="background:#EDE9FE;color:#5B21B6;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">📦 Access Being Prepared</span>
+        <span style="background:#DCFCE7;color:#166534;font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;">🎉 Access Sent</span>
+      </div>
+
+      <div id="courseOrdersGrid"></div>
+      <div id="courseOrdersEmpty" class="om-empty" style="display:none;">
+        <div>🎓</div>
+        <p style="font-size:15px;">No paid class or recipe orders yet.</p>
+      </div>
+
+      <!-- ── Free enrolment requests ── -->
+      <hr class="section-divider" />
+      <div style="margin-bottom:20px;">
+        <h2 style="font-family:'Playfair Display',serif;font-size:20px;color:#2D0B20;margin:0 0 4px;">📄 Free Enrolment Requests</h2>
+        <p style="font-size:13px;color:#6B7280;margin:0 0 16px;">Students who enrolled in free classes or requested free recipes.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+          <button onclick="filterRequests('all')" id="reqFilter-all" class="btn btn-primary" style="font-size:12px;padding:7px 16px;">All</button>
+          <button onclick="filterRequests('recipe')" id="reqFilter-recipe" class="btn btn-secondary" style="font-size:12px;padding:7px 16px;">📄 Recipes</button>
+          <button onclick="filterRequests('class')" id="reqFilter-class" class="btn btn-secondary" style="font-size:12px;padding:7px 16px;">🎓 Classes</button>
+        </div>
+        <div id="reqGrid"></div>
+        <div id="reqEmpty" class="om-empty" style="display:none;padding:28px;">
+          <div style="font-size:36px;">📋</div>
+          <p style="font-size:14px;margin:0;">No free enrolment requests yet.</p>
+        </div>
+      </div>
+
+    </div><!-- /omPanel-courses -->
+
+  </div><!-- /om-body -->
+</div><!-- /om-wrap -->
+
+
+<script>
+// ================================================================
+// CONFIG — read from localStorage (same keys as admin.html)
+// ================================================================
+var OM_CFG = {
+  password:  localStorage.getItem('tc_admin_password') || 'ToonAdmin2025',
+  whatsapp:  localStorage.getItem('tc_admin_whatsapp') || '918610636589',
+};
+
+// ================================================================
+// AUTH
+// ================================================================
+function omLogin() {
+  var val = document.getElementById('omPwInput').value;
+  if (val === OM_CFG.password) {
+    sessionStorage.setItem('om_auth', '1');
+    document.getElementById('omLogin').style.display = 'none';
+    document.getElementById('omWrap').style.display  = 'block';
+    omRenderAll();
+  } else {
+    document.getElementById('omLoginErr').style.display = 'block';
+    document.getElementById('omPwInput').value = '';
+  }
+}
+
+function omLogout() {
+  sessionStorage.removeItem('om_auth');
+  document.getElementById('omWrap').style.display  = 'none';
+  document.getElementById('omLogin').style.display = 'flex';
+  document.getElementById('omPwInput').value = '';
+  document.getElementById('omLoginErr').style.display = 'none';
+}
+
+// Auto-login if session already active
+(function() {
+  if (sessionStorage.getItem('om_auth') === '1') {
+    document.getElementById('omLogin').style.display = 'none';
+    document.getElementById('omWrap').style.display  = 'block';
+    omRenderAll();
+  }
+})();
+
+// ================================================================
+// DATA HELPERS
+// ================================================================
+function getOrders() {
+  return JSON.parse(localStorage.getItem('tc_orders') || '[]');
+}
+function saveOrders(orders) {
+  localStorage.setItem('tc_orders', JSON.stringify(orders));
+}
+
+function isCakeOrder(o) {
+  return !o.type || o.type === 'order' || o.type === 'cake' || o.type === 'dessert';
+}
+function isCourseOrder(o) {
+  return o.type === 'class' || o.type === 'recipe';
+}
+
+function waLink(phone, msg) {
+  var p   = (phone || '').replace(/\D/g, '');
+  var num = p.length === 10 ? '91' + p : p;
+  return 'https://wa.me/' + num + '?text=' + encodeURIComponent(msg);
+}
+
+function escH(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('en-IN', {
+    day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'
+  });
+}
+
+// ================================================================
+// STATUS CONFIG
+// ================================================================
+var ORDER_STATUS_FLOW = [
+  'Order Placed','Confirmed','Being Prepared',
+  'Ready for Pickup','Out for Delivery','Delivered'
+];
+
+var ORDER_STATUS_STYLE = {
+  'Order Placed':    { bg:'#FEF9C3', color:'#854D0E', icon:'📬' },
+  'Confirmed':       { bg:'#DBEAFE', color:'#1D4ED8', icon:'✅' },
+  'Being Prepared':  { bg:'#EDE9FE', color:'#5B21B6', icon:'👩‍🍳' },
+  'Ready for Pickup':{ bg:'#FEE2E2', color:'#DC2626', icon:'🛍️' },
+  'Out for Delivery':{ bg:'#FEF3C7', color:'#D97706', icon:'🚚' },
+  'Delivered':       { bg:'#DCFCE7', color:'#166534', icon:'🎉' },
+};
+
+// WhatsApp message templates
+function orderWaMsg(status, orderId, firstName) {
+  var map = {
+    'Order Placed':
+      '📬 *ToonCakes — Order Received!*\n\nHi ' + firstName + '! We\'ve received your order 🎉\n\n🔖 *Order ID: ' + orderId + '*\n\nWe\'ll confirm it shortly. Stay tuned! 🎂\n\n— ToonCakes Trichy',
+    'Confirmed':
+      '✅ *ToonCakes — Order Confirmed!*\n\nHi ' + firstName + '! Great news — your order is confirmed 🎂\n\n🔖 *Order ID: ' + orderId + '*\n\nOur bakers will start preparing your cake soon!\n\n— ToonCakes Trichy',
+    'Being Prepared':
+      '👩‍🍳 *ToonCakes — Baking in Progress!*\n\nHi ' + firstName + '! Your cake is being freshly baked with love right now! 🎂✨\n\n🔖 *Order ID: ' + orderId + '*\n\nWe\'ll notify you when it\'s ready!\n\n— ToonCakes Trichy',
+    'Ready for Pickup':
+      '🛍️ *ToonCakes — Ready for Pickup!*\n\nHi ' + firstName + '! Your cake is ready and waiting for you! 🎂🎉\n\n🔖 *Order ID: ' + orderId + '*\n\nPlease pick it up at the earliest.\n\n— ToonCakes Trichy',
+    'Out for Delivery':
+      '🚚 *ToonCakes — Out for Delivery!*\n\nHi ' + firstName + '! Your cake is on the way! 🎂🚀\n\n🔖 *Order ID: ' + orderId + '*\n\nExpected delivery: 30–60 minutes. Keep your phone handy! 📱\n\n— ToonCakes Trichy',
+    'Delivered':
+      '🎉 *ToonCakes — Delivered!*\n\nHi ' + firstName + '! We hope you love your ToonCakes treat! 🎂❤️\n\n🔖 *Order ID: ' + orderId + '*\n\n⭐ We\'d love to hear from you! Leave us a quick review:\n👉 https://tooncakes.netlify.app/review.html\n\nThank you for choosing ToonCakes Trichy! 🙏',
+  };
+  return map[status] || map['Order Placed'];
+}
+
+function courseWaMsg(status, orderId, firstName, courseName) {
+  var map = {
+    'Order Placed':
+      '📬 *ToonCakes — Order Received!*\n\nHi ' + firstName + '! 🎉 We\'ve received your payment for *' + courseName + '*.\n\n🔖 *Order ID: ' + orderId + '*\n\nWe\'ll verify payment and send access details shortly!\n\n— ToonCakes Trichy',
+    'Confirmed':
+      '✅ *ToonCakes — Payment Confirmed!*\n\nHi ' + firstName + '! Your payment for *' + courseName + '* is confirmed! 🎂\n\n🔖 *Order ID: ' + orderId + '*\n\nWe are preparing your course access. You\'ll receive it very soon!\n\n— ToonCakes Trichy',
+    'Being Prepared':
+      '📦 *ToonCakes — Access Being Prepared!*\n\nHi ' + firstName + '! We\'re preparing your access for *' + courseName + '* ✨\n\n🔖 *Order ID: ' + orderId + '*\n\nYou\'ll receive the link shortly. Stay tuned! 🎓\n\n— ToonCakes Trichy',
+    'Ready for Pickup':
+      '🎓 *ToonCakes — Access Ready!*\n\nHi ' + firstName + '! Your access to *' + courseName + '* is ready! 🎉\n\n🔖 *Order ID: ' + orderId + '*\n\nLogin at: https://tooncakes.netlify.app/classes.html\n\n— ToonCakes Trichy',
+    'Out for Delivery':
+      '🚀 *ToonCakes — Access Sent!*\n\nHi ' + firstName + '! We\'ve sent your access for *' + courseName + '*!\n\n🔖 *Order ID: ' + orderId + '*\n\nCheck your dashboard: https://tooncakes.netlify.app/user-dashboard.html\n\n— ToonCakes Trichy',
+    'Delivered':
+      '🎉 *ToonCakes — All Set!*\n\nHi ' + firstName + '! You\'re all set for *' + courseName + '*! 🎂❤️\n\n🔖 *Order ID: ' + orderId + '*\n\nEnjoying the course? Leave us a review! ⭐\n\nThank you for choosing ToonCakes Trichy! 🙏',
+  };
+  return map[status] || map['Order Placed'];
+}
+
+// ================================================================
+// TAB SWITCHING
+// ================================================================
+function omOpenTab(name, btn) {
+  document.querySelectorAll('.om-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.om-panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('omPanel-' + name).classList.add('active');
+}
+
+// ================================================================
+// STATS
+// ================================================================
+function omUpdateStats() {
+  var all        = getOrders();
+  var cakeOrders = all.filter(isCakeOrder);
+  var courseOrds = all.filter(isCourseOrder);
+  var newOrds    = all.filter(function(o){ return o.status === 'Order Placed'; });
+
+  var revCake   = cakeOrders.reduce(function(s,o){ return s + (o.amount||0); }, 0);
+  var revCourse = courseOrds.reduce(function(s,o){ return s + (o.amount||0); }, 0);
+
+  document.getElementById('omStatNew').textContent      = newOrds.length;
+  document.getElementById('omStatTotal').textContent    = all.length;
+  document.getElementById('omStatRevCake').textContent  = '₹' + revCake.toLocaleString('en-IN');
+  document.getElementById('omStatRevCourse').textContent= '₹' + revCourse.toLocaleString('en-IN');
+  document.getElementById('omStatRevTotal').textContent = '₹' + (revCake + revCourse).toLocaleString('en-IN');
+}
+
+// ================================================================
+// BUILD ORDER CARD (shared)
+// ================================================================
+function buildOrderCard(order, isCourse) {
+  var st   = ORDER_STATUS_STYLE[order.status] || { bg:'#F3F4F6', color:'#374151', icon:'📦' };
+  var dt   = fmtDate(order.orderDate);
+  var sid  = escH(order.id);
+
+  var payLabels = { razorpay:'💳 Card/Netbanking', upi:'📱 UPI', cod:'💵 Cash on Delivery' };
+  var pLabel    = payLabels[order.payMethod] || ('💳 ' + (order.payMethod || 'Online'));
+
+  var statusFlow = isCourse
+    ? ['Order Placed','Confirmed','Being Prepared','Ready for Pickup','Out for Delivery','Delivered']
+    : ORDER_STATUS_FLOW;
+
+  var statusOpts = statusFlow.map(function(s){
+    return '<option value="' + s + '"' + (s === order.status ? ' selected' : '') + '>' + s + '</option>';
+  }).join('');
+
+  var itemsStr = Array.isArray(order.items)
+    ? order.items.map(function(i){ return (i.name || i) + (i.qty ? ' ×' + i.qty : ''); }).join(', ')
+    : (order.items || order.cake || order.note || 'ToonCakes Order');
+
+  // Type badge
+  var typeBadge = '';
+  if (order.type === 'class')  typeBadge = '<span style="background:#EDE9FE;color:#5B21B6;font-size:11px;font-weight:700;padding:2px 10px;border-radius:50px;">🎓 Class</span> ';
+  if (order.type === 'recipe') typeBadge = '<span style="background:#FCE7F3;color:#9D174D;font-size:11px;font-weight:700;padding:2px 10px;border-radius:50px;">📹 Recipe</span> ';
+
+  // Status history
+  var histHTML = '';
+  if (order.statusHistory && order.statusHistory.length > 1) {
+    histHTML = '<div style="margin-top:10px;padding-top:10px;border-top:1px solid #F0F0F0;">' +
+      '<div style="font-size:11px;color:#9CA3AF;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">Status History</div>' +
+      order.statusHistory.map(function(h) {
+        var hs  = ORDER_STATUS_STYLE[h.status] || { icon:'·', color:'#6B7280' };
+        var hdt = new Date(h.time).toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+        return '<div style="font-size:11px;color:' + hs.color + ';margin-bottom:3px;">' + hs.icon + ' <strong>' + h.status + '</strong> · ' + hdt + '</div>';
+      }).join('') +
+    '</div>';
+  }
+
+  var updateFn = isCourse ? 'updateCourseStatus' : 'updateCakeStatus';
+  var sendFn   = isCourse ? 'sendCourseWA'       : 'sendCakeWA';
+
+  return (
+    '<div class="order-card" style="border-left:5px solid ' + st.color + ';" id="omc-' + sid + '">' +
+      '<div class="order-card-body">' +
+        '<div class="order-card-left">' +
+          '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">' +
+            '<span style="font-family:monospace;font-weight:800;font-size:13px;color:#E8356D;background:#FFF0F6;padding:3px 10px;border-radius:6px;">' + sid + '</span>' +
+            typeBadge +
+            '<span style="background:' + st.bg + ';color:' + st.color + ';font-size:11px;font-weight:700;padding:3px 12px;border-radius:50px;">' + st.icon + ' ' + escH(order.status) + '</span>' +
+          '</div>' +
+          '<div style="font-weight:700;font-size:16px;margin-bottom:3px;">' + escH(order.name || 'Customer') + '</div>' +
+          '<div style="font-size:13px;color:#6B7280;margin-bottom:8px;">' +
+            '📱 ' + escH(order.phone || '—') +
+            (order.occasion ? ' · 🎉 ' + escH(order.occasion) : '') +
+            (order.date     ? ' · 📅 ' + escH(order.date)     : '') +
+          '</div>' +
+          '<div style="font-size:13px;background:#F9FAFB;border-radius:8px;padding:8px 12px;">🛒 ' + escH(itemsStr) + '</div>' +
+          histHTML +
+        '</div>' +
+        '<div class="order-card-right">' +
+          '<div style="font-size:24px;font-weight:800;color:#6A1545;font-family:\'Playfair Display\',serif;">₹' + (order.amount || 0).toLocaleString('en-IN') + '</div>' +
+          '<div style="font-size:12px;color:#9CA3AF;margin-top:2px;">' + pLabel + '</div>' +
+          (order.payRef ? '<div style="font-size:11px;color:#9CA3AF;font-family:monospace;margin-top:2px;">' + escH(order.payRef) + '</div>' : '') +
+          '<div style="font-size:11px;color:#9CA3AF;margin-top:4px;">🕐 ' + dt + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="order-card-actions">' +
+        '<select id="osel-' + sid + '" class="form-control" style="flex:1;min-width:180px;max-width:260px;font-size:13px;">' +
+          statusOpts +
+        '</select>' +
+        '<button onclick="' + updateFn + '(\'' + sid + '\')" class="btn btn-primary" style="padding:9px 18px;font-size:13px;white-space:nowrap;">' +
+          '📲 Update &amp; Notify' +
+        '</button>' +
+        '<button onclick="' + sendFn + '(\'' + sid + '\')" class="btn" style="background:#25D366;color:white;padding:9px 14px;font-size:13px;white-space:nowrap;">' +
+          '💬 WhatsApp' +
+        '</button>' +
+        '<button onclick="deleteOrder(\'' + sid + '\')" class="btn" style="background:#FEE2E2;color:#DC2626;padding:9px 14px;font-size:13px;" title="Delete order">' +
+          '🗑️' +
+        '</button>' +
+      '</div>' +
+    '</div>'
+  );
+}
+
+// ================================================================
+// RENDER — CAKE ORDERS
+// ================================================================
+function renderCakeOrders() {
+  var filter  = document.getElementById('cakeFilterStatus').value;
+  var all     = getOrders().filter(isCakeOrder);
+  var orders  = (filter === 'all' ? all : all.filter(function(o){ return o.status === filter; }))
+                .sort(function(a,b){ return new Date(b.orderDate) - new Date(a.orderDate); });
+
+  var grid  = document.getElementById('cakeOrdersGrid');
+  var empty = document.getElementById('cakeOrdersEmpty');
+  if (!orders.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    grid.innerHTML = orders.map(function(o){ return buildOrderCard(o, false); }).join('');
+  }
+}
+
+function updateCakeStatus(orderId) {
+  var sel = document.getElementById('osel-' + orderId);
+  if (!sel) return;
+  var newStatus = sel.value;
+  var orders = getOrders();
+  var order  = orders.find(function(o){ return o.id === orderId; });
+  if (!order) return;
+  if (newStatus === order.status) { alert('Order is already "' + order.status + '". Select a different status.'); return; }
+  order.status = newStatus;
+  order.statusHistory = order.statusHistory || [];
+  order.statusHistory.push({ status: newStatus, time: new Date().toISOString() });
+  saveOrders(orders);
+  omUpdateStats();
+  renderCakeOrders();
+  if (order.phone) {
+    var fn  = (order.name || 'there').split(' ')[0];
+    var msg = orderWaMsg(newStatus, orderId, fn);
+    window.open(waLink(order.phone, msg), '_blank');
+  }
+}
+
+function sendCakeWA(orderId) {
+  var order = getOrders().find(function(o){ return o.id === orderId; });
+  if (!order) return;
+  if (!order.phone) { alert('No phone number for this order.'); return; }
+  var fn  = (order.name || 'there').split(' ')[0];
+  var msg = orderWaMsg(order.status, orderId, fn);
+  window.open(waLink(order.phone, msg), '_blank');
+}
+
+// ================================================================
+// RENDER — COURSE ORDERS
+// ================================================================
+function renderCourseOrders() {
+  var filter  = document.getElementById('courseFilterStatus').value;
+  var all     = getOrders().filter(isCourseOrder);
+  var orders  = (filter === 'all' ? all : all.filter(function(o){ return o.status === filter; }))
+                .sort(function(a,b){ return new Date(b.orderDate) - new Date(a.orderDate); });
+
+  var grid  = document.getElementById('courseOrdersGrid');
+  var empty = document.getElementById('courseOrdersEmpty');
+  if (!orders.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    grid.innerHTML = orders.map(function(o){ return buildOrderCard(o, true); }).join('');
+  }
+}
+
+function updateCourseStatus(orderId) {
+  var sel = document.getElementById('osel-' + orderId);
+  if (!sel) return;
+  var newStatus = sel.value;
+  var orders = getOrders();
+  var order  = orders.find(function(o){ return o.id === orderId; });
+  if (!order) return;
+  if (newStatus === order.status) { alert('Order is already "' + order.status + '". Select a different status.'); return; }
+  order.status = newStatus;
+  order.statusHistory = order.statusHistory || [];
+  order.statusHistory.push({ status: newStatus, time: new Date().toISOString() });
+  saveOrders(orders);
+  omUpdateStats();
+  renderCourseOrders();
+  if (order.phone) {
+    var fn         = (order.name || 'there').split(' ')[0];
+    var courseName = order.items || order.note || 'your course';
+    var msg = courseWaMsg(newStatus, orderId, fn, courseName);
+    window.open(waLink(order.phone, msg), '_blank');
+  }
+}
+
+function sendCourseWA(orderId) {
+  var order = getOrders().find(function(o){ return o.id === orderId; });
+  if (!order) return;
+  if (!order.phone) { alert('No phone number for this order.'); return; }
+  var fn         = (order.name || 'there').split(' ')[0];
+  var courseName = order.items || order.note || 'your course';
+  var msg = courseWaMsg(order.status, orderId, fn, courseName);
+  window.open(waLink(order.phone, msg), '_blank');
+}
+
+// ================================================================
+// DELETE ORDER
+// ================================================================
+function deleteOrder(orderId) {
+  if (!confirm('Delete this order record? This cannot be undone.')) return;
+  saveOrders(getOrders().filter(function(o){ return o.id !== orderId; }));
+  omUpdateStats();
+  renderCakeOrders();
+  renderCourseOrders();
+}
+
+// ================================================================
+// FREE ENROLMENT REQUESTS
+// ================================================================
+var _reqList = [];
+var _reqCurrentFilter = 'all';
+
+function filterRequests(type) {
+  _reqCurrentFilter = type;
+  document.querySelectorAll('[id^="reqFilter-"]').forEach(function(b){
+    b.className = 'btn btn-secondary';
+    b.style.cssText = 'font-size:12px;padding:7px 16px;';
+  });
+  var active = document.getElementById('reqFilter-' + type);
+  if (active) { active.className = 'btn btn-primary'; active.style.cssText = 'font-size:12px;padding:7px 16px;'; }
+  renderRequests();
+}
+
+function renderRequests() {
+  var recipes = JSON.parse(localStorage.getItem('tc_recipe_requests') || '[]');
+  var classes = JSON.parse(localStorage.getItem('tc_registrations')   || '[]');
+  var all = recipes.map(function(r){ return Object.assign({}, r, { _type:'recipe' }); })
+    .concat(classes.map(function(c){ return Object.assign({}, c, { _type:'class' }); }))
+    .sort(function(a,b){ return new Date(b.timestamp||b.date||0) - new Date(a.timestamp||a.date||0); });
+
+  _reqList = all;
+
+  var filtered = _reqCurrentFilter === 'all' ? all : all.filter(function(r){ return r._type === _reqCurrentFilter; });
+
+  var grid  = document.getElementById('reqGrid');
+  var empty = document.getElementById('reqEmpty');
+  if (!filtered.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  grid.innerHTML = filtered.map(function(item, i) {
+    var isRec    = item._type === 'recipe';
+    var isSent   = item.status === 'sent';
+    var dt       = fmtDate(item.timestamp || item.date);
+    var subject  = isRec
+      ? ('📄 Recipe: ' + escH(item.recipe   || '—'))
+      : ('🎓 Class: '  + escH(item.className || item.cls || item.class || '—'));
+    var realIdx  = all.indexOf(item);
+
+    return (
+      '<div class="req-card" style="border-left:4px solid ' + (isRec ? '#E8356D' : '#6A1545') + ';">' +
+        '<div style="font-size:26px;">' + (isRec ? '📄' : '🎓') + '</div>' +
+        '<div style="flex:1;min-width:180px;">' +
+          '<div style="font-weight:700;font-size:14px;">' + escH(item.name || 'Customer') + '</div>' +
+          '<div style="font-size:12px;color:#6B7280;margin-top:2px;">📱 ' + escH(item.phone || '—') + ' · ' + subject + ' · 🕐 ' + dt + '</div>' +
+          (item.experience ? '<div style="font-size:11px;color:#9CA3AF;margin-top:2px;">Level: ' + escH(item.experience) + '</div>' : '') +
+          (item.note       ? '<div style="font-size:12px;color:#374151;margin-top:3px;font-style:italic;">"' + escH(item.note) + '"</div>' : '') +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+          '<span style="background:' + (isSent ? '#DCFCE7' : '#FEF3C7') + ';color:' + (isSent ? '#166534' : '#92400E') + ';font-size:11px;font-weight:700;padding:3px 12px;border-radius:50px;">' +
+            (isSent ? '✅ Sent' : '⏳ Pending') +
+          '</span>' +
+          (!isSent
+            ? '<button onclick="markReqSent(' + realIdx + ')" class="btn" style="background:#22C55E;color:white;padding:6px 14px;font-size:12px;white-space:nowrap;">✅ Mark Sent</button>' +
+              '<button onclick="sendReqWA(' + realIdx + ')"   class="btn" style="background:#25D366;color:white;padding:6px 14px;font-size:12px;white-space:nowrap;">💬 WhatsApp</button>'
+            : '') +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
+}
+
+function markReqSent(idx) {
+  var item = _reqList[idx]; if (!item) return;
+  var key   = item._type === 'recipe' ? 'tc_recipe_requests' : 'tc_registrations';
+  var items = JSON.parse(localStorage.getItem(key) || '[]');
+  var target = items.find(function(i){
+    return i.phone === item.phone && (i.recipe === item.recipe || i.class === item.class || i.className === item.className || i.cls === item.cls);
+  });
+  if (target) { target.status = 'sent'; localStorage.setItem(key, JSON.stringify(items)); renderRequests(); }
+}
+
+function sendReqWA(idx) {
+  var item = _reqList[idx]; if (!item || !item.phone) { alert('No phone number.'); return; }
+  var fn      = (item.name || 'there').split(' ')[0];
+  var subject = item.recipe || item.className || item.cls || item.class || '';
+  var msg;
+  if (item._type === 'recipe') {
+    msg = '📄 *Your ToonCakes Recipe!*\n\nHi ' + fn + '! 🎂\n\nHere\'s the *' + subject + '* recipe you requested. Enjoy baking! 🧁✨\n\nFor more recipes: https://tooncakes.netlify.app/recipes.html\n\n— ToonCakes Trichy';
+  } else {
+    msg = '🎓 *Class Registration — ToonCakes*\n\nHi ' + fn + '! 🎉 Welcome!\n\nYour registration for *' + subject + '* is confirmed.\nWe\'ll share class details (date, time & venue) very soon!\n\nQuestions? Just reply here 😊\n\n— ToonCakes Trichy';
+  }
+  window.open(waLink(item.phone, msg), '_blank');
+}
+
+// ================================================================
+// RENDER ALL
+// ================================================================
+function omRenderAll() {
+  omUpdateStats();
+  renderCakeOrders();
+  renderCourseOrders();
+  renderRequests();
+}
+</script>
+</body>
+</html>
